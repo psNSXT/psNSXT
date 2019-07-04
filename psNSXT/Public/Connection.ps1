@@ -86,7 +86,7 @@ function Connect-NSXT {
 
         $cred = $Credentials.username + ":" + $Credentials.GetNetworkCredential().Password
         $base64 = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($cred))
-        $headers = @{ Authorization = "Basic " + $base64 }
+        $headers = @{ Authorization = "Basic " + $base64; Accept = "application/json"; "Content-type" = "application/json"}
         $invokeParams = @{DisableKeepAlive = $false; UseBasicParsing = $true; SkipCertificateCheck = $SkipCertificateCheck }
 
 
