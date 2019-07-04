@@ -72,3 +72,59 @@ function Get-NSXTFabricVirtualMachines {
     End {
     }
 }
+
+function Set-NSXTFabricVirtualMachines {
+
+    <#
+        .SYNOPSIS
+        Set information about virtual machines
+
+        .DESCRIPTION
+        Returns information about all virtual machines
+
+        .EXAMPLE
+        Set-NSXTFabricVirtualMachines -external_id 5010d8d7-1d7e-f1df-dcd4-7919fadce87d -tag myTag
+
+        Configure MyTag to Virtual Machine with external id 5010d8d7-1d7e-f1df-dcd4-7919fadce87d
+
+    #>
+
+    Param(
+        [Parameter(Mandatory = $true)]
+        [string]$external_id,
+        [Parameter(Mandatory = $false)]
+        [string]$tag,
+        [Parameter(Mandatory = $false)]
+        [psobject]$connection=$DefaultNSXTConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+
+        $uri = 'api/v1/fabric/virtual-machines?action=update_tags'
+
+        #Create a Array Tag
+        $tags = @()
+        $atag = New-Object -TypeName PSObject @{
+            tag = $tag
+        }
+        $tags += $atag
+
+        #Create update tags object include external_id and tags
+        $update_tags = New-Object -TypeName PSObject
+        $update_tags | Add-member -name "external_id" -membertype NoteProperty -Value $external_id
+        $update_tags | Add-member -name "tags" -membertype NoteProperty -value $tags
+
+        $response = Invoke-NSXTRestMethod -uri $uri -method 'POST' -body $update_tags -connection $connection
+        $response.results
+
+        #Display update Virtual Machine
+        Get-NSXTFabricVirtualMachines -external_id $external_id
+    }
+
+    End {
+    }
+}
