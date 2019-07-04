@@ -125,3 +125,58 @@ function Connect-NSXT {
     End {
     }
 }
+
+function Disconnect-NSXT {
+
+    <#
+        .SYNOPSIS
+        Disconnect to a NSX-T
+
+        .DESCRIPTION
+        Disconnect the connection on NSX-T
+
+        .EXAMPLE
+        Disconnect-NSXT
+
+        Disconnect the connection
+
+        .EXAMPLE
+        Disconnect-NSXT -noconfirm
+
+        Disconnect the connection with no confirmation
+
+    #>
+
+    Param(
+        [Parameter(Mandatory = $false)]
+        [switch]$noconfirm
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        if ( -not ( $Noconfirm )) {
+            $message = "Remove NSX-T connection."
+            $question = "Proceed with removal of NSX-T connection ?"
+            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+
+            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+        }
+        else { $decision = 0 }
+        if ($decision -eq 0) {
+            Write-Progress -activity "Remove NSX-T connection"
+            write-progress -activity "Remove NSX-T connection" -completed
+            if (Test-Path variable:global:DefaultNSXTConnection) {
+                Remove-Variable -name DefaultNSXTConnection -scope global
+            }
+        }
+
+    }
+
+    End {
+    }
+}
