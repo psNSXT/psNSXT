@@ -18,9 +18,30 @@ function Get-NSXTFabricVirtualMachines {
 
         Display all Fabric Virtual Machines
 
+        .EXAMPLE
+        Get-NSXTFabricVirtualMachines -display_name myVM
+
+        Display Virtual Machines with display_name myVM
+
+        .EXAMPLE
+        Get-NSXTFabricVirtualMachines -external_id 501055b3-848a-eb82-2edf-af002c569585
+
+        Display Virtual Machines with host_id 501055b3-848a-eb82-2edf-af002c569585
+
+        .EXAMPLE
+        Get-NSXTFabricVirtualMachines -host_id 85ef4ac5-3492-44e5-831a-c03169b70dd45
+
+        Display Virtual Machines with host_id 85ef4ac5-3492-44e5-831a-c03169b70dd4
+
     #>
 
     Param(
+        [Parameter(Mandatory = $false)]
+        [string]$display_name,
+        [Parameter(Mandatory = $false)]
+        [string]$external_id,
+        [Parameter(Mandatory = $false)]
+        [string]$host_id,
         [Parameter(Mandatory = $false)]
         [psobject]$connection=$DefaultNSXTConnection
     )
@@ -31,6 +52,18 @@ function Get-NSXTFabricVirtualMachines {
     Process {
 
         $uri = 'api/v1/fabric/virtual-machines?'
+
+        if ( $PsBoundParameters.ContainsKey('display_name') ) {
+            $uri += "&display_name=$display_name"
+        }
+
+        if ( $PsBoundParameters.ContainsKey('external_id') ) {
+            $uri += "&external_id=$external_id"
+        }
+
+        if ( $PsBoundParameters.ContainsKey('host_id') ) {
+            $uri += "&host_id=$host_id"
+        }
 
         $response = Invoke-NSXTRestMethod -uri $uri -method 'GET' -connection $connection
         $response.results
