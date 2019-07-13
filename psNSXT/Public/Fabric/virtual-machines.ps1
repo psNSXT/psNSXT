@@ -43,7 +43,7 @@ function Get-NSXTFabricVirtualMachines {
         [Parameter(Mandatory = $false)]
         [string]$host_id,
         [Parameter(Mandatory = $false)]
-        [psobject]$connection=$DefaultNSXTConnection
+        [psobject]$connection = $DefaultNSXTConnection
     )
 
     Begin {
@@ -95,7 +95,7 @@ function Set-NSXTFabricVirtualMachines {
         [Parameter(Mandatory = $false)]
         [string]$tag,
         [Parameter(Mandatory = $false)]
-        [psobject]$connection=$DefaultNSXTConnection
+        [psobject]$connection = $DefaultNSXTConnection
     )
 
     Begin {
