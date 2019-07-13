@@ -83,15 +83,25 @@ function Set-NSXTFabricVirtualMachines {
         Returns information about all virtual machines
 
         .EXAMPLE
+        Get-NSXTFabricVirtualMachines -display_name myVM | Set-NSXTFabricVirtualMachines -tag myTag
+
+        Configure MyTag to Virtual Machine myVM
+
+        .EXAMPLE
         Set-NSXTFabricVirtualMachines -external_id 5010d8d7-1d7e-f1df-dcd4-7919fadce87d -tag myTag
 
         Configure MyTag to Virtual Machine with external id 5010d8d7-1d7e-f1df-dcd4-7919fadce87d
 
     #>
 
+    #[CmdLetBinding(DefaultParameterSetName = "Default")]
+
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = "external_id")]
         [string]$external_id,
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "VirtualMachines")]
+        #ValidateScript({ ValidateVirtualMachines $_ })]
+        [psobject]$VirtualMachines,
         [Parameter(Mandatory = $false)]
         [string]$tag,
         [Parameter(Mandatory = $false)]
@@ -103,6 +113,10 @@ function Set-NSXTFabricVirtualMachines {
 
     Process {
 
+        #if it is passed by pipeline, get external_id
+        if ($VirtualMachines) {
+            $external_id = $VirtualMachines.external_id
+        }
 
         $uri = 'api/v1/fabric/virtual-machines?action=update_tags'
 
