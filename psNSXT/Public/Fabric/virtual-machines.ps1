@@ -105,6 +105,8 @@ function Set-NSXTFabricVirtualMachines {
         [Parameter(Mandatory = $false)]
         [string]$tag,
         [Parameter(Mandatory = $false)]
+        [string]$scope,
+        [Parameter(Mandatory = $false)]
         [psobject]$connection = $DefaultNSXTConnection
     )
 
@@ -124,6 +126,7 @@ function Set-NSXTFabricVirtualMachines {
         $tags = @()
         $atag = New-Object -TypeName PSObject @{
             tag = $tag
+            scope = $scope
         }
         $tags += $atag
 
