@@ -93,6 +93,11 @@ function Set-NSXTFabricVirtualMachines {
         Configure Tag MyTag and scope MyScope to Virtual Machine myVM
 
         .EXAMPLE
+        Get-NSXTFabricVirtualMachines -display_name myVM | Set-NSXTFabricVirtualMachines -tag myTag1,myTag2 -scope myScope1,myScope2
+
+        Configure multiple Tag (MyTag and myTag2) and Scope (myScope1 and myScope2) to Virtual Machine myVM
+
+        .EXAMPLE
         Set-NSXTFabricVirtualMachines -external_id 5010d8d7-1d7e-f1df-dcd4-7919fadce87d -tag myTag
 
         Configure MyTag to Virtual Machine with external id 5010d8d7-1d7e-f1df-dcd4-7919fadce87d
@@ -108,9 +113,9 @@ function Set-NSXTFabricVirtualMachines {
         #ValidateScript({ ValidateVirtualMachines $_ })]
         [psobject]$VirtualMachines,
         [Parameter(Mandatory = $true)]
-        [string]$tag,
+        [string[]]$tag,
         [Parameter(Mandatory = $false)]
-        [string]$scope,
+        [string[]]$scope,
         [Parameter(Mandatory = $false)]
         [psobject]$connection = $DefaultNSXTConnection
     )
@@ -129,11 +134,22 @@ function Set-NSXTFabricVirtualMachines {
 
         #Create a Array Tag
         $tags = @()
-        $atag = New-Object -TypeName PSObject @{
-            tag = $tag
-            scope = $scope
+        $i = 0
+        foreach ($t in $tag) {
+            #Add tag to ArrayTag
+            $atag = New-Object -TypeName PSObject @{
+                tag = $t
+            }
+            #Check if there is a scope variable
+            if ( $PsBoundParameters.ContainsKey('scope') ) {
+                #And if is not null add scope value
+                if ($null -ne $scope[$i] ) {
+                    $atag.Add( "scope", $scope[$i])
+                }
+            }
+            $i++
+            $tags += $atag
         }
-        $tags += $atag
 
         #Create update tags object include external_id and tags
         $update_tags = New-Object -TypeName PSObject
