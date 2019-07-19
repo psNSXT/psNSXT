@@ -88,6 +88,11 @@ function Set-NSXTFabricVirtualMachines {
         Configure MyTag to Virtual Machine myVM
 
         .EXAMPLE
+        Get-NSXTFabricVirtualMachines -display_name myVM | Set-NSXTFabricVirtualMachines -tag myTag -scope myScope
+
+        Configure Tag MyTag and scope MyScope to Virtual Machine myVM
+
+        .EXAMPLE
         Set-NSXTFabricVirtualMachines -external_id 5010d8d7-1d7e-f1df-dcd4-7919fadce87d -tag myTag
 
         Configure MyTag to Virtual Machine with external id 5010d8d7-1d7e-f1df-dcd4-7919fadce87d
@@ -102,7 +107,7 @@ function Set-NSXTFabricVirtualMachines {
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "VirtualMachines")]
         #ValidateScript({ ValidateVirtualMachines $_ })]
         [psobject]$VirtualMachines,
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $true)]
         [string]$tag,
         [Parameter(Mandatory = $false)]
         [string]$scope,
