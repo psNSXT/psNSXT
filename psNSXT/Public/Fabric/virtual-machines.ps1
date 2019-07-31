@@ -102,6 +102,13 @@ function Set-NSXTFabricVirtualMachines {
 
         Configure MyTag to Virtual Machine with external id 5010d8d7-1d7e-f1df-dcd4-7919fadce87d
 
+        .EXAMPLE
+        $tags = @()
+        PS > $tags += @{ tag = "MyTag1"; scope = "myScope1" }
+        PS > $tags += @{ tag = "MyTag2" }
+        PS > Get-NSXTFabricVirtualMachines -display_name myVM | Set-NSXTFabricVirtualMachines -tag $tags
+
+        Configure $tags (a array of tags) to Virtual Machine myVM
     #>
 
     #[CmdLetBinding(DefaultParameterSetName = "Default")]
@@ -112,10 +119,12 @@ function Set-NSXTFabricVirtualMachines {
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "VirtualMachines")]
         #ValidateScript({ ValidateVirtualMachines $_ })]
         [psobject]$VirtualMachines,
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $false)]
         [string[]]$tag,
         [Parameter(Mandatory = $false)]
         [string[]]$scope,
+        [Parameter(Mandatory = $false)]
+        [psobject]$tags,
         [Parameter(Mandatory = $false)]
         [psobject]$connection = $DefaultNSXTConnection
     )
@@ -132,23 +141,30 @@ function Set-NSXTFabricVirtualMachines {
 
         $uri = 'api/v1/fabric/virtual-machines?action=update_tags'
 
-        #Create a Array Tag
-        $tags = @()
-        $i = 0
-        foreach ($t in $tag) {
-            #Add tag to ArrayTag
-            $atag = New-Object -TypeName PSObject @{
-                tag = $t
-            }
-            #Check if there is a scope variable
-            if ( $PsBoundParameters.ContainsKey('scope') ) {
-                #And if is not null add scope value
-                if ($null -ne $scope[$i] ) {
-                    $atag.Add( "scope", $scope[$i])
+        if ( $PsBoundParameters.ContainsKey('tag') -and $PsBoundParameters.ContainsKey('tags')) {
+            Throw "Can use on the same time tag and tags parameter"
+        }
+
+        #Set new tag(s)
+        if ($PsBoundParameters.ContainsKey('tag')) {
+            #Create a Array Tag
+            $tags = @()
+            $i = 0
+            foreach ($t in $tag) {
+                #Add tag to ArrayTag
+                $atag = New-Object -TypeName PSObject @{
+                    tag = $t
                 }
+                #Check if there is a scope variable
+                if ( $PsBoundParameters.ContainsKey('scope') ) {
+                    #And if is not null add scope value
+                    if ($null -ne $scope[$i] ) {
+                        $atag.Add( "scope", $scope[$i])
+                    }
+                }
+                $i++
+                $tags += $atag
             }
-            $i++
-            $tags += $atag
         }
 
         #Create update tags object include external_id and tags
