@@ -117,7 +117,7 @@ function Set-NSXTFabricVirtualMachines {
         [Parameter(Mandatory = $true, ParameterSetName = "external_id")]
         [string]$external_id,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "VirtualMachines")]
-        #ValidateScript({ ValidateVirtualMachines $_ })]
+        [ValidateScript({ Confirm-NSXTFabricVirtualMachines $_ })]
         [psobject]$VirtualMachines,
         [Parameter(Mandatory = $false)]
         [string[]]$tag,
