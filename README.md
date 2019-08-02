@@ -28,13 +28,14 @@ For example, you can manage Vlans with the following commands:
 
 # Instructions
 ### Install the module
-```powershell
 <!--
 # Automated installation (Powershell 5 and later):
     Install-Module psNSXT
 -->
+```powershell
 # Copy module from Github
    git clone https://github.com/alagoutte/psNSXT.git
+
 # Import the module
     Import-Module ./psNSXT/psNSXT
 
@@ -58,7 +59,7 @@ The first thing to do is to connect to a NSX-T Manager with the command `Connect
 ```
 
 ### Invoke API
-for example to get NSXT System Configuration
+for example to get NSX-T System Configuration
 
 ```powershell
 # get NSX-T Cluster Nodes Status using API
@@ -104,7 +105,7 @@ node_interface_properties : {@{admin_status=UP; interface_id=eth0; link_status=U
 
 # get NSX-T Capacity Usage using API
 
-(invoke-NSXTRestMethod -method "get" -uri "api/v1/capacity/usage").capacity_usage
+(Invoke-NSXTRestMethod -method "get" -uri "api/v1/capacity/usage").capacity_usage
 
 
 usage_type               : NUMBER_OF_VCENTER_CLUSTERS
