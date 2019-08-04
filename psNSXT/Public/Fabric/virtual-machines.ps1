@@ -182,3 +182,87 @@ function Set-NSXTFabricVirtualMachines {
     End {
     }
 }
+
+function Add-NSXTFabricVirtualMachines {
+
+    <#
+        .SYNOPSIS
+        Add information about virtual machines
+
+        .DESCRIPTION
+        Add tag to a virtual Machine
+
+        .EXAMPLE
+        Get-NSXTFabricVirtualMachines -display_name myVM | Add-NSXTFabricVirtualMachines -tag myTag
+
+        Add MyTag to Virtual Machine myVM
+
+        .EXAMPLE
+        Get-NSXTFabricVirtualMachines -display_name myVM | Add-NSXTFabricVirtualMachines -tag myTag -scope myScope
+
+        Add Tag MyTag and scope MyScope to Virtual Machine myVM
+
+        .EXAMPLE
+        Get-NSXTFabricVirtualMachines -display_name myVM | Add-NSXTFabricVirtualMachines -tag myTag1,myTag2 -scope myScope1,myScope2
+
+        Add multiple Tag (MyTag and myTag2) and Scope (myScope1 and myScope2) to Virtual Machine myVM
+
+    #>
+
+    Param(
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "VirtualMachines")]
+        [ValidateScript({ Confirm-NSXTFabricVirtualMachines $_ })]
+        [psobject]$VirtualMachines,
+        [Parameter(Mandatory = $false)]
+        [string[]]$tag,
+        [Parameter(Mandatory = $false)]
+        [string[]]$scope,
+        [Parameter(Mandatory = $false)]
+        [psobject]$connection = $DefaultNSXTConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        #if it is passed by pipeline, get external_id
+        $external_id = $VirtualMachines.external_id
+        $tags = $VirtualMachines.tags
+
+        $uri = 'api/v1/fabric/virtual-machines?action=update_tags'
+
+
+        #Add new tag(s)
+        $i = 0
+        foreach ($t in $tag) {
+            #Add tag to ArrayTag
+            $atag = New-Object -TypeName PSObject @{
+                tag = $t
+            }
+            #Check if there is a scope variable
+            if ( $PsBoundParameters.ContainsKey('scope') ) {
+                #And if is not null add scope value
+                if ($null -ne $scope[$i] ) {
+                    $atag.Add( "scope", $scope[$i])
+                }
+            }
+            $i++
+            $tags += $atag
+        }
+
+        #Create update tags object include external_id and tags
+        $update_tags = New-Object -TypeName PSObject
+        $update_tags | Add-member -name "external_id" -membertype NoteProperty -Value $external_id
+        $update_tags | Add-member -name "tags" -membertype NoteProperty -value $tags
+
+        $response = Invoke-NSXTRestMethod -uri $uri -method 'POST' -body $update_tags -connection $connection
+        $response.results
+
+        #Display update Virtual Machine
+        Get-NSXTFabricVirtualMachines -external_id $external_id
+    }
+
+    End {
+    }
+}
