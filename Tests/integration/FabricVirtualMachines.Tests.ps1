@@ -53,3 +53,61 @@ Describe  "Get Fabric Virtual Machines" {
         Confirm-NSXTFabricVirtualMachines $fvm | Should be $true
     }
 }
+Describe  "Configure Fabric Virtual Machines Tag (via Set-NSXTFabricVirtualMachines)" {
+    BeforeAll {
+        $fvm = Get-NSXTFabricVirtualMachines -display_name $vm
+        $script:display_name = $fvm.display_name
+        #Remove All tags..
+        $fvm | Set-NSXTFabricVirtualMachines -tags @()
+    }
+
+    It "Set a tag to VM" {
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Set-NSXTFabricVirtualMachines -tag tag1
+        $vm = Get-NSXTFabricVirtualMachines -display_name $display_name
+        $vm.tags.tag | Should Be "tag1"
+        $vm.tags.scope | Should BeNullOrEmpty
+    }
+
+    It "Set a tag and a scope to VM" {
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Set-NSXTFabricVirtualMachines -tag tag1 -scope scope1
+        $vm = Get-NSXTFabricVirtualMachines -display_name $display_name
+        $vm.tags.tag | Should Be "tag1"
+        $vm.tags.scope | Should Be "scope1"
+    }
+
+    It "Set two tag and two scope to VM" {
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Set-NSXTFabricVirtualMachines -tag tag1, tag2 -scope scope1, scope2
+        $vm = Get-NSXTFabricVirtualMachines -display_name $display_name
+        $vm.tags.tag[0] | Should Be "tag1"
+        $vm.tags.scope[0] | Should Be "scope1"
+        $vm.tags.tag[1] | Should Be "tag2"
+        $vm.tags.scope[1] | Should Be "scope2"
+    }
+
+    It "Set two tag and a scope to VM" {
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Set-NSXTFabricVirtualMachines -tag tag1, tag2 -scope scope1
+        $vm = Get-NSXTFabricVirtualMachines -display_name $display_name
+        $vm.tags.tag[0] | Should Be "tag1"
+        $vm.tags.scope[0] | Should Be "scope1"
+        $vm.tags.tag[1] | Should Be "tag2"
+        $vm.tags.scope[1] | Should BeNullOrEmpty
+    }
+
+    It "Set third tag and two scope (not scope for second) to VM" {
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Set-NSXTFabricVirtualMachines -tag tag1, tag2, tag3 -scope scope1, $null, scope3
+        $vm = Get-NSXTFabricVirtualMachines -display_name $display_name
+        $vm.tags.tag[0] | Should Be "tag1"
+        $vm.tags.scope[0] | Should Be "scope1"
+        $vm.tags.tag[2] | Should Be "tag2"
+        $vm.tags.scope[2] | Should BeNullOrEmpty
+        $vm.tags.tag[1] | Should Be "tag3"
+        $vm.tags.scope[1] | Should be "scope3"
+    }
+
+    AfterEach {
+        #Remove All tags..
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Set-NSXTFabricVirtualMachines -tags @()
+    }
+
+
+}
