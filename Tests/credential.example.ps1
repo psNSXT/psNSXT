@@ -9,3 +9,5 @@
 $ipaddress = "10.x.x.x"
 $login = "admin"
 $password = "VMware1!VMware1!"
+
+$vm = "MyNSXTVM"
