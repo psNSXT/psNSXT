@@ -118,6 +118,17 @@ Describe  "Configure Fabric Virtual Machines Tag (via Set-NSXTFabricVirtualMachi
         $tag3.scope | Should Be "scope3"
     }
 
+    It "Remove tag and scope" {
+        #Create a tag and scope
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Set-NSXTFabricVirtualMachines -tag tag1 -scope tag1
+        $vm = Get-NSXTFabricVirtualMachines -display_name $display_name
+        ($vm.tags).count | Should be 1
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Set-NSXTFabricVirtualMachines -tags @()
+        $vm = Get-NSXTFabricVirtualMachines -display_name $display_name
+        ($vm.tags).count | Should be 0
+        $vm.tags | should BeNullorEmpty
+    }
+
     AfterEach {
         #Remove All tags..
         Get-NSXTFabricVirtualMachines -display_name $display_name | Set-NSXTFabricVirtualMachines -tags @()
