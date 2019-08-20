@@ -47,4 +47,9 @@ Describe  "Get Fabric Virtual Machines" {
         $fvm = Get-NSXTFabricVirtualMachines -host_id $host_id
         $fvm.host_id | Should be $host_id
     }
+
+    It "Get Fabric Virtual Machines and confirm (via Confirm-NSXTFabricVirtualMachines)" {
+        $fvm = Get-NSXTFabricVirtualMachines -display_name $display_name
+        Confirm-NSXTFabricVirtualMachines $fvm | Should be $true
+    }
 }
