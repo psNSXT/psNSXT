@@ -135,6 +135,76 @@ Describe  "Configure Fabric Virtual Machines Tag (via Set-NSXTFabricVirtualMachi
         } | Should Throw "Can use on the same time tag and tags parameter"
     }
 
+    It "Set a tag to VM (using -tags)" {
+        $tags = @()
+        $tags += @{ tag = "tag1" }
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Set-NSXTFabricVirtualMachines -tags $tags
+        $vm = Get-NSXTFabricVirtualMachines -display_name $display_name
+        ($vm.tags).count | Should be 1
+        $tag1 = $vm.tags | Where-Object { $_.tag -eq "tag1" }
+        $tag1.tag | Should Be "tag1"
+        $tag1.scope | Should BeNullOrEmpty
+    }
+
+    It "Set a tag and a scope to VM (using -tags)" {
+        $tags = @()
+        $tags += @{ tag = "tag1" ; scope = "scope1" }
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Set-NSXTFabricVirtualMachines -tags $tags
+        $vm = Get-NSXTFabricVirtualMachines -display_name $display_name
+        ($vm.tags).count | Should be 1
+        $tag1 = $vm.tags | Where-Object { $_.tag -eq "tag1" }
+        $tag1.tag | Should Be "tag1"
+        $tag1.scope | Should Be "scope1"
+    }
+
+    It "Set two tag and two scope to VM (using -tags)" {
+        $tags = @()
+        $tags += @{ tag = "tag1" ; scope = "scope1" }
+        $tags += @{ tag = "tag2" ; scope = "scope2" }
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Set-NSXTFabricVirtualMachines -tags $tags
+        $vm = Get-NSXTFabricVirtualMachines -display_name $display_name
+        ($vm.tags).count | Should be 2
+        $tag1 = $vm.tags | Where-Object { $_.tag -eq "tag1" }
+        $tag1.tag | Should Be "tag1"
+        $tag1.scope | Should Be "scope1"
+        $tag2 = $vm.tags | Where-Object { $_.tag -eq "tag2" }
+        $tag2.tag | Should Be "tag2"
+        $tag2.scope | Should Be "scope2"
+    }
+
+    It "Set two tag and a scope to VM (using -tags)" {
+        $tags = @()
+        $tags += @{ tag = "tag1" ; scope = "scope1" }
+        $tags += @{ tag = "tag2" }
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Set-NSXTFabricVirtualMachines -tags $tags
+        $vm = Get-NSXTFabricVirtualMachines -display_name $display_name
+        ($vm.tags).count | Should be 2
+        $tag1 = $vm.tags | Where-Object { $_.tag -eq "tag1" }
+        $tag1.tag | Should Be "tag1"
+        $tag1.scope | Should Be "scope1"
+        $tag2 = $vm.tags | Where-Object { $_.tag -eq "tag2" }
+        $tag2.tag | Should Be "tag2"
+        $tag2.scope | Should BeNullOrEmpty
+    }
+
+    It "Set third tag and two scope (not scope for second) to VM (using -tags)" {
+        $tags = @()
+        $tags += @{ tag = "tag1" ; scope = "scope1" }
+        $tags += @{ tag = "tag2" }
+        $tags += @{ tag = "tag3" ; scope = "scope3" }
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Set-NSXTFabricVirtualMachines -tags $tags
+        $vm = Get-NSXTFabricVirtualMachines -display_name $display_name
+        ($vm.tags).count | Should be 3
+        $tag1 = $vm.tags | Where-Object { $_.tag -eq "tag1" }
+        $tag1.tag | Should Be "tag1"
+        $tag1.scope | Should Be "scope1"
+        $tag2 = $vm.tags | Where-Object { $_.tag -eq "tag2" }
+        $tag2.tag | Should Be "tag2"
+        $tag2.scope | Should BeNullOrEmpty
+        $tag3 = $vm.tags | Where-Object { $_.tag -eq "tag3" }
+        $tag3.tag | Should Be "tag3"
+        $tag3.scope | Should Be "scope3"
+    }
 
     AfterEach {
         #Remove All tags..
