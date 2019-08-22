@@ -129,6 +129,13 @@ Describe  "Configure Fabric Virtual Machines Tag (via Set-NSXTFabricVirtualMachi
         $vm.tags | should BeNullorEmpty
     }
 
+    It "Throw when use tag and -tags on same time" {
+        {
+            Get-NSXTFabricVirtualMachines -display_name $display_name | Set-NSXTFabricVirtualMachines -tag tag1 -tags @()
+        } | Should Throw "Can use on the same time tag and tags parameter"
+    }
+
+
     AfterEach {
         #Remove All tags..
         Get-NSXTFabricVirtualMachines -display_name $display_name | Set-NSXTFabricVirtualMachines -tags @()
