@@ -291,11 +291,15 @@ Try to connect using `Connect-NSXT -SkipCertificateCheck`
 
 # List of available command
 ```powershell
+Add-NSXTFabricVirtualMachines
+Confirm-NSXTFabricVirtualMachines
 Connect-NSXT
 Disconnect-NSXT
+Get-NSXTFabricVirtualMachines
 Invoke-NSXTRestMethod
 Set-NSXTCipherSSL
-Set-NSXTuntrustedSSL
+Set-NSXTFabricVirtualMachines
+Set-NSXTUntrustedSSL
 Show-NSXTException
 ```
 
