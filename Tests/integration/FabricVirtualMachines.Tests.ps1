@@ -213,3 +213,76 @@ Describe  "Configure Fabric Virtual Machines Tag (via Set-NSXTFabricVirtualMachi
 
 
 }
+
+Describe  "Add Fabric Virtual Machines Tag (via Add-NSXTFabricVirtualMachines)" {
+    BeforeAll {
+        $fvm = Get-NSXTFabricVirtualMachines -display_name $vm
+        $script:display_name = $fvm.display_name
+        #Remove All tags..
+        $fvm | Set-NSXTFabricVirtualMachines -tags @()
+    }
+
+    It "Add a tag to VM" {
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Add-NSXTFabricVirtualMachines -tag tag1
+        $vm = Get-NSXTFabricVirtualMachines -display_name $display_name
+        ($vm.tags).count | Should be 1
+        $tag1 = $vm.tags | Where-Object { $_.tag -eq "tag1" }
+        $tag1.tag | Should Be "tag1"
+        $tag1.scope | Should BeNullOrEmpty
+    }
+
+    It "Add a tag and a scope to VM" {
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Add-NSXTFabricVirtualMachines -tag tag1 -scope scope1
+        $vm = Get-NSXTFabricVirtualMachines -display_name $display_name
+        ($vm.tags).count | Should be 1
+        $tag1 = $vm.tags | Where-Object { $_.tag -eq "tag1" }
+        $tag1.tag | Should Be "tag1"
+        $tag1.scope | Should Be "scope1"
+    }
+
+    It "Add two tag and two scope to VM" {
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Add-NSXTFabricVirtualMachines -tag tag1, tag2 -scope scope1, scope2
+        $vm = Get-NSXTFabricVirtualMachines -display_name $display_name
+        ($vm.tags).count | Should be 2
+        $tag1 = $vm.tags | Where-Object { $_.tag -eq "tag1" }
+        $tag1.tag | Should Be "tag1"
+        $tag1.scope | Should Be "scope1"
+        $tag2 = $vm.tags | Where-Object { $_.tag -eq "tag2" }
+        $tag2.tag | Should Be "tag2"
+        $tag2.scope | Should Be "scope2"
+    }
+
+    It "Add two tag and a scope to VM" {
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Add-NSXTFabricVirtualMachines -tag tag1, tag2 -scope scope1
+        $vm = Get-NSXTFabricVirtualMachines -display_name $display_name
+        ($vm.tags).count | Should be 2
+        $tag1 = $vm.tags | Where-Object { $_.tag -eq "tag1" }
+        $tag1.tag | Should Be "tag1"
+        $tag1.scope | Should Be "scope1"
+        $tag2 = $vm.tags | Where-Object { $_.tag -eq "tag2" }
+        $tag2.tag | Should Be "tag2"
+        $tag2.scope | Should BeNullOrEmpty
+    }
+
+    It "Add third tag and two scope (not scope for second) to VM" {
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Add-NSXTFabricVirtualMachines -tag tag1, tag2, tag3 -scope scope1, $null, scope3
+        $vm = Get-NSXTFabricVirtualMachines -display_name $display_name
+        ($vm.tags).count | Should be 3
+        $tag1 = $vm.tags | Where-Object { $_.tag -eq "tag1" }
+        $tag1.tag | Should Be "tag1"
+        $tag1.scope | Should Be "scope1"
+        $tag2 = $vm.tags | Where-Object { $_.tag -eq "tag2" }
+        $tag2.tag | Should Be "tag2"
+        $tag2.scope | Should BeNullOrEmpty
+        $tag3 = $vm.tags | Where-Object { $_.tag -eq "tag3" }
+        $tag3.tag | Should Be "tag3"
+        $tag3.scope | Should Be "scope3"
+    }
+
+    AfterEach {
+        #Remove All tags..
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Set-NSXTFabricVirtualMachines -tags @()
+    }
+
+
+}
