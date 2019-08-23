@@ -279,6 +279,46 @@ Describe  "Add Fabric Virtual Machines Tag (via Add-NSXTFabricVirtualMachines)" 
         $tag3.scope | Should Be "scope3"
     }
 
+    It "Add a tag to VM with already a existant tag" {
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Add-NSXTFabricVirtualMachines -tag tag1
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Add-NSXTFabricVirtualMachines -tag tag2
+
+        $vm = Get-NSXTFabricVirtualMachines -display_name $display_name
+        ($vm.tags).count | Should be 2
+        $tag1 = $vm.tags | Where-Object { $_.tag -eq "tag1" }
+        $tag1.tag | Should Be "tag1"
+        $tag1.scope | Should BeNullOrEmpty
+        $tag2 = $vm.tags | Where-Object { $_.tag -eq "tag2" }
+        $tag2.tag | Should Be "tag2"
+        $tag2.scope | Should BeNullOrEmpty
+    }
+
+
+    It "Add a tag to VM with already a existant using the same name" {
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Add-NSXTFabricVirtualMachines -tag tag1
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Add-NSXTFabricVirtualMachines -tag tag1
+
+        $vm = Get-NSXTFabricVirtualMachines -display_name $display_name
+        ($vm.tags).count | Should be 1
+        $tag1 = $vm.tags | Where-Object { $_.tag -eq "tag1" }
+        $tag1.tag | Should Be "tag1"
+        $tag1.scope | Should BeNullOrEmpty
+    }
+
+    It "Add a tag to VM with already a existant using the same name (but with a another scope)" {
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Add-NSXTFabricVirtualMachines -tag tag1
+        Get-NSXTFabricVirtualMachines -display_name $display_name | Add-NSXTFabricVirtualMachines -tag tag1 -scope scope1
+
+        $vm = Get-NSXTFabricVirtualMachines -display_name $display_name
+        ($vm.tags).count | Should be 2
+        $tag1 = $vm.tags | Where-Object { $_.tag -eq "tag1" -and $_.scope -eq "" }
+        $tag1.tag | Should Be "tag1"
+        $tag1.scope | Should BeNullOrEmpty
+        $tag1 = $vm.tags | Where-Object { $_.tag -eq "tag1" -and $_.scope -eq "scope1" }
+        $tag1.tag | Should Be "tag1"
+        $tag1.scope | Should Be "scope1"
+    }
+
     AfterEach {
         #Remove All tags..
         Get-NSXTFabricVirtualMachines -display_name $display_name | Set-NSXTFabricVirtualMachines -tags @()
