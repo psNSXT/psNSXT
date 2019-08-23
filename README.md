@@ -196,6 +196,83 @@ if you get a warning about `Unable to connect` Look [Issue](#Issue)
 
 to get API uri, go to NSXT Swagger (https://NSXT-IP/policy/api.html)
 
+### Manage Tags on (Fabric) Virtual Machines
+
+You can Add or Set tag(s) /scope to Virtual Machines
+
+```powershell
+# For add a tag myTag to a VM named myVM
+Get-NSXTFabricVirtualMachines -display_name myVM | Add-NSXTFabricVirtualMachines -tag myTag
+
+host_id          : 0de21662-6ab1-4e10-a503-95fb3371e29e
+source           : @{target_id=0de21662-6ab1-4e10-a503-95fb3371e29e; target_display_name=nsxt-esxi1.lab.intra;
+                   target_type=HostNode; is_valid=True}
+external_id      : 5010d8d7-1d7e-f1df-dcd4-7919fadce87d
+power_state      : VM_STOPPED
+local_id_on_host : 1
+compute_ids      : {moIdOnHost:1, hostLocalId:1, locationId:, instanceUuid:5010d8d7-1d7e-f1df-dcd4-7919fadce87d…}
+type             : REGULAR
+guest_info       :
+resource_type    : VirtualMachine
+display_name     : myVM
+tags             : {@{scope=; tag=myTag}}
+_last_sync_time  : 1564995660193
+
+# For add a Second tag MyTag2 with scope myScope2
+Get-NSXTFabricVirtualMachines -display_name myTag | Add-NSXTFabricVirtualMachines -tag myTag2 -scope myScope2
+
+host_id          : 0de21662-6ab1-4e10-a503-95fb3371e29e
+source           : @{target_id=0de21662-6ab1-4e10-a503-95fb3371e29e; target_display_name=nsxt-esxi1.lab.intra;
+                   target_type=HostNode; is_valid=True}
+external_id      : 5010d8d7-1d7e-f1df-dcd4-7919fadce87d
+power_state      : VM_STOPPED
+local_id_on_host : 1
+compute_ids      : {moIdOnHost:1, hostLocalId:1, locationId:, instanceUuid:5010d8d7-1d7e-f1df-dcd4-7919fadce87d…}
+type             : REGULAR
+guest_info       :
+resource_type    : VirtualMachine
+display_name     : myVM
+tags             : {@{scope=myScope2; tag=myTag2}, @{scope=; tag=myTag1}}
+_last_sync_time  : 1564995660256
+
+#For (Re) Configure Tag
+
+Get-NSXTFabricVirtualMachines -display_name myTag | Set-NSXTFabricVirtualMachines -tag myTag3, MyTag4 -scope myScope3
+
+host_id          : 0de21662-6ab1-4e10-a503-95fb3371e29e
+source           : @{target_id=0de21662-6ab1-4e10-a503-95fb3371e29e; target_display_name=nsxt-esxi1.lab.intra;
+                   target_type=HostNode; is_valid=True}
+external_id      : 5010d8d7-1d7e-f1df-dcd4-7919fadce87d
+power_state      : VM_STOPPED
+local_id_on_host : 1
+compute_ids      : {moIdOnHost:1, hostLocalId:1, locationId:, instanceUuid:5010d8d7-1d7e-f1df-dcd4-7919fadce87d…}
+type             : REGULAR
+guest_info       :
+resource_type    : VirtualMachine
+display_name     : myVM
+tags             : {@{scope=myScope3; tag=myTag3}, @{scope=; tag=myTag4}}
+_last_sync_time  : 1564995660328
+
+#For Remove (Hack !) ALL Tag
+
+Get-NSXTFabricVirtualMachines -display_name myTag | Set-NSXTFabricVirtualMachines -tags @()
+
+host_id          : 0de21662-6ab1-4e10-a503-95fb3371e29e
+source           : @{target_id=0de21662-6ab1-4e10-a503-95fb3371e29e; target_display_name=nsxt-esxi1.lab.intra;
+                   target_type=HostNode; is_valid=True}
+external_id      : 5010d8d7-1d7e-f1df-dcd4-7919fadce87d
+power_state      : VM_STOPPED
+local_id_on_host : 1
+compute_ids      : {moIdOnHost:1, hostLocalId:1, locationId:, instanceUuid:5010d8d7-1d7e-f1df-dcd4-7919fadce87d…}
+type             : REGULAR
+guest_info       :
+resource_type    : VirtualMachine
+display_name     : myVM
+tags             : {}
+_last_sync_time  : 1564995660328
+```
+
+
 ### Disconnecting
 
 ```powershell
