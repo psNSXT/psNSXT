@@ -13,11 +13,11 @@ Tested with NSX-T (using 2.4.x release) on Windows/Linux/macOS
 # Usage
 
 All resource management functions are available with the Powershell verbs GET, ADD, SET, REMOVE.
+For example, you can manage Tag on (Fabric) Virtual Machines with the following commands:
+- `Get-NSXTFabricVirtualMachines`
+- `Add-NSXTFabricVirtualMachines`
+- `Set-NSXTFabricVirtualMachines`
 <!--
-For example, you can manage Vlans with the following commands:
-- `Get-NSXTVlans`
-- `Add-NSXTVlans`
-- `Set-NSXTVlans`
 - `Remove-NSXTVlans`
 -->
 
