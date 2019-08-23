@@ -12,7 +12,7 @@
 RootModule = 'PsNSXT.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.1'
+ModuleVersion = '0.1.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -24,7 +24,7 @@ GUID = '8b349962-982b-44b2-82c6-bf7cf7a14959'
 Author = 'Alexis La Goutte'
 
 # Company or vendor of this module
-CompanyName = 'Unknown'
+#CompanyName = 'Unknown'
 
 # Copyright statement for this module
 Copyright = '(c) Alexis La Goutte. All rights reserved.'
@@ -95,13 +95,13 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        # Tags = @()
+         Tags = @("VMware", "NSX", "NSXT", "NSX-T")
 
         # A URL to the license for this module.
-        # LicenseUri = ''
+         LicenseUri = 'https://github.com/alagoutte/psNSXT/blob/master/LICENSE'
 
         # A URL to the main website for this project.
-        # ProjectUri = ''
+         ProjectUri = 'https://github.com/alagoutte/psNSXT'
 
         # A URL to an icon representing this module.
         # IconUri = ''
