@@ -63,9 +63,9 @@ function Connect-NSXT {
         [switch]$SkipCertificateCheck = $false,
         [Parameter(Mandatory = $false)]
         [ValidateRange(1, 65535)]
-        [int]$port=443,
+        [int]$port = 443,
         [Parameter(Mandatory = $false)]
-        [boolean]$DefaultConnection=$true
+        [boolean]$DefaultConnection = $true
     )
 
     Begin {
@@ -73,7 +73,7 @@ function Connect-NSXT {
 
     Process {
 
-        $connection = @{server = ""; port = ""; headers = ""; invokeParams = ""}
+        $connection = @{server = ""; port = ""; headers = ""; invokeParams = "" }
 
         #If there is a password (and a user), create a credentials
         if ($Password) {
@@ -86,7 +86,7 @@ function Connect-NSXT {
 
         $cred = $Credentials.username + ":" + $Credentials.GetNetworkCredential().Password
         $base64 = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($cred))
-        $headers = @{ Authorization = "Basic " + $base64; Accept = "application/json"; "Content-type" = "application/json"}
+        $headers = @{ Authorization = "Basic " + $base64; Accept = "application/json"; "Content-type" = "application/json" }
         $invokeParams = @{DisableKeepAlive = $false; UseBasicParsing = $true; SkipCertificateCheck = $SkipCertificateCheck }
 
 
