@@ -11,7 +11,6 @@ Describe  "Connect to a NSX-T (using Basic)" {
         Disconnect-NSXT -noconfirm
     }
     It "Connect to NSX-T (using Basic) and check global variable" {
-        $mysecpassword = ConvertTo-SecureString $password -AsPlainText -Force
         Connect-NSXT $ipaddress -username $login -password $mysecpassword -SkipCertificateCheck
         $DefaultNSXTConnection | Should Not BeNullOrEmpty
         $DefaultNSXTConnection.server | Should be $ipaddress
@@ -29,7 +28,6 @@ Describe  "Connect to a NSX-T (using Basic)" {
     #This test only work with PowerShell 6 / Core (-SkipCertificateCheck don't change global variable but only Invoke-WebRequest/RestMethod)
     #This test will be fail, if there is valid certificate...
     It "Throw when try to use Invoke-NSXTRestMethod with don't use -SkipCertifiateCheck" -Skip:("Desktop" -eq $PSEdition) {
-        $mysecpassword = ConvertTo-SecureString $password -AsPlainText -Force
         Connect-NSXT $ipaddress -username $login -password $mysecpassword
         { Invoke-NSXTRestMethod -uri "api/v1/cluster/status" } | Should throw "Unable to connect (certificate)"
         Disconnect-NSXT -noconfirm
