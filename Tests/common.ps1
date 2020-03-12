@@ -4,7 +4,8 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-if ("Desktop" -eq $PSVersionTable.PsEdition) { # -BeOfType is not same on PowerShell Core and Desktop (get int with Desktop and long with Core for number)
+if ("Desktop" -eq $PSVersionTable.PsEdition) {
+    # -BeOfType is not same on PowerShell Core and Desktop (get int with Desktop and long with Core for number)
     $script:pester_longint = "int"
 }
 else {
