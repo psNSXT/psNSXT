@@ -6,8 +6,8 @@
 
 # Copy this file to credential.ps1 (on Tests folder) and change connection settings..
 
-$ipaddress = "10.x.x.x"
-$login = "admin"
-$password = "VMware1!VMware1!"
+$script:ipaddress = "10.x.x.x"
+$script:login = "admin"
+$script:password = "VMware1!VMware1!"
 
-$vm = "MyNSXTVM"
+$script:vm = "MyNSXTVM"
