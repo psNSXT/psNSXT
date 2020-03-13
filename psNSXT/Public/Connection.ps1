@@ -141,15 +141,14 @@ function Disconnect-NSXT {
         Disconnect the connection
 
         .EXAMPLE
-        Disconnect-NSXT -noconfirm
+        Disconnect-NSXT -confirm:$false
 
         Disconnect the connection with no confirmation
 
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
     Param(
-        [Parameter(Mandatory = $false)]
-        [switch]$noconfirm
     )
 
     Begin {
@@ -157,22 +156,12 @@ function Disconnect-NSXT {
 
     Process {
 
-        if ( -not ( $Noconfirm )) {
-            $message = "Remove NSX-T connection."
-            $question = "Proceed with removal of NSX-T connection ?"
-            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-
-            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-        }
-        else { $decision = 0 }
-        if ($decision -eq 0) {
+        if ($PSCmdlet.ShouldProcess($DefaultNSXTConnection.server, 'Proceed with removal of NSX-T connection ?')) {
             Write-Progress -activity "Remove NSX-T connection"
-            write-progress -activity "Remove NSX-T connection" -completed
             if (Test-Path variable:global:DefaultNSXTConnection) {
                 Remove-Variable -name DefaultNSXTConnection -scope global
             }
+            write-progress -activity "Remove NSX-T connection" -completed
         }
 
     }
