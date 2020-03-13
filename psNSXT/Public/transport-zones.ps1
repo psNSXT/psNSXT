@@ -161,3 +161,59 @@ function Get-NSXTTransportZones {
     End {
     }
 }
+
+function Remove-NSXTTransportZones {
+
+    <#
+        .SYNOPSIS
+        Remove a Transport Zone
+
+        .DESCRIPTION
+        Remove a Transport Zone
+
+        .EXAMPLE
+        $tz = Get-TransportZones -zone_id ff8140b0-010e-4e92-aa62-a55766f17da0
+        PS C:\>$tz | Remove-NSXTTransportZones
+
+        Remove Transport Zone with (zone) id ff8140b0-010e-4e92-aa62-a55766f17da0
+
+        .EXAMPLE
+        Remove-NSXTTransportZones -zone_id ff8140b0-010e-4e92-aa62-a55766f17da0 -confirm:$false
+
+        Remove Transport Zone with (zone) id ff8140b0-010e-4e92-aa62-a55766f17da0 with no confirmation
+    #>
+
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
+    Param(
+        [Parameter (Mandatory = $true, ParameterSetName = "zone_id")]
+        [string]$zone_id,
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "tz")]
+        [ValidateScript( { Confirm-NSXTTransportZones $_ })]
+        [psobject]$tz
+    )
+
+    Begin {
+        [Parameter(Mandatory = $false)]
+        [psobject]$connection = $DefaultNSXTConnection
+    }
+
+    Process {
+
+        #get tz id from vrf tz object
+        if ($tz) {
+            $zone_id = $tz.id
+            $name = " (" + $tz.display_name + ")"
+        }
+
+        $uri = "api/v1/transport-zones/$zone_id"
+
+        if ($PSCmdlet.ShouldProcess("TZ", "Remove Transport Zone ${zone_id} ${name}")) {
+            Write-Progress -activity "Remove TZ"
+            Invoke-NSXTRestMethod -method "DELETE" -uri $uri -connection $connection
+            Write-Progress -activity "Remove TZ" -completed
+        }
+    }
+
+    End {
+    }
+}
