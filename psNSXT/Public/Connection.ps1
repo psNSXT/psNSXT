@@ -59,7 +59,7 @@ function Connect-NSXT {
         [Parameter(Mandatory = $false)]
         [SecureString]$Password,
         [Parameter(Mandatory = $false)]
-        [PSCredential]$Credentials,
+        [PSCredential]$Credential,
         [switch]$SkipCertificateCheck = $false,
         [Parameter(Mandatory = $false)]
         [ValidateRange(1, 65535)]
@@ -75,16 +75,16 @@ function Connect-NSXT {
 
         $connection = @{server = ""; port = ""; headers = ""; invokeParams = "" }
 
-        #If there is a password (and a user), create a credentials
+        #If there is a password (and a user), create a credential
         if ($Password) {
-            $Credentials = New-Object System.Management.Automation.PSCredential($Username, $Password)
+            $Credential = New-Object System.Management.Automation.PSCredential($Username, $Password)
         }
-        #Not Credentials (and no password)
-        if ($null -eq $Credentials) {
-            $Credentials = Get-Credential -Message 'Please enter administrative credentials for your NSX-T'
+        #Not Credential (and no password)
+        if ($null -eq $Credential) {
+            $Credential = Get-Credential -Message 'Please enter administrative credential for your NSX-T'
         }
 
-        $cred = $Credentials.username + ":" + $Credentials.GetNetworkCredential().Password
+        $cred = $Credential.username + ":" + $Credential.GetNetworkCredential().Password
         $base64 = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($cred))
         $headers = @{ Authorization = "Basic " + $base64; Accept = "application/json"; "Content-type" = "application/json" }
         $invokeParams = @{DisableKeepAlive = $false; UseBasicParsing = $true; SkipCertificateCheck = $SkipCertificateCheck }
