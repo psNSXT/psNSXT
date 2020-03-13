@@ -8,7 +8,7 @@
 Describe  "Connect to a NSX-T (using Basic)" {
     BeforeAll {
         #Disconnect "default connection"
-        Disconnect-NSXT -noconfirm
+        Disconnect-NSXT -confirm:$false
     }
     It "Connect to NSX-T (using Basic) and check global variable" {
         Connect-NSXT $ipaddress -username $login -password $mysecpassword -SkipCertificateCheck
@@ -20,7 +20,7 @@ Describe  "Connect to a NSX-T (using Basic)" {
     }
 
     It "Disconnect to NSXT-T and check global variable" {
-        Disconnect-NSXT -noconfirm
+        Disconnect-NSXT -confirm:$false
         $DefaultNSXTConnection | Should -Be $null
     }
     #TODO: Connect using wrong login/password
@@ -30,7 +30,7 @@ Describe  "Connect to a NSX-T (using Basic)" {
     It "Throw when try to use Invoke-NSXTRestMethod with don't use -SkipCertifiateCheck" -Skip:("Desktop" -eq $PSEdition) {
         Connect-NSXT $ipaddress -username $login -password $mysecpassword
         { Invoke-NSXTRestMethod -uri "api/v1/cluster/status" } | Should throw "Unable to connect (certificate)"
-        Disconnect-NSXT -noconfirm
+        Disconnect-NSXT -confirm:$false
     }
     It "Throw when try to use Invoke-NSXTRestMethod and not connected" {
         { Invoke-NSXTRestMethod -uri "api/v1/cluster/status" } | Should throw "Not Connected. Connect to the NSX-T with Connect-NSXT"
