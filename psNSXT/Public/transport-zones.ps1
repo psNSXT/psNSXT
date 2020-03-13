@@ -162,6 +162,91 @@ function Get-NSXTTransportZones {
     }
 }
 
+function Set-NSXTTransportZones {
+
+    <#
+        .SYNOPSIS
+        Change settings of a Transport Zones
+
+        .DESCRIPTION
+        Change settings (name, description) of a Transport Zones
+
+        .EXAMPLE
+        Get-NSXTTransportZones -zone_id ff8140b0-010e-4e92-aa62-a55766f17da0 | Set-NSXTTransportZones -display_name "My New TZ Name"
+
+        Change name of Transport Zones ff8140b0-010e-4e92-aa62-a55766f17da0
+
+        .EXAMPLE
+        Get-NSXTTransportZones -zone_id ff8140b0-010e-4e92-aa62-a55766f17da0 | Set-NSXTTransportZones -description "My New TZ Name"
+
+        Change description of Transport Zones ff8140b0-010e-4e92-aa62-a55766f17da0
+
+        .EXAMPLE
+        Get-NSXTTransportZones -zone_id ff8140b0-010e-4e92-aa62-a55766f17da0 | Set-NSXTTransportZones -is_default
+
+        Enable default for Transport Zones ff8140b0-010e-4e92-aa62-a55766f17da0
+
+    #>
+
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
+    Param(
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateScript( { Confirm-NSXTTransportZones $_ })]
+        [psobject]$tz,
+        [Parameter(Mandatory = $false)]
+        [string]$display_name,
+        [Parameter(Mandatory = $false)]
+        [string]$description,
+        [Parameter(Mandatory = $false)]
+        [switch]$is_default,
+        [Parameter(Mandatory = $false)]
+        [psobject]$connection = $DefaultNSXTConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $zone_id = $tz.id
+        $zone_name = "(" + $tz.display_name + ")"
+
+        $uri = "api/v1/transport-zones/$zone_id"
+
+        if ( $PsBoundParameters.ContainsKey('display_name') ) {
+            $tz.display_name = $display_name
+        }
+
+        if ( $PsBoundParameters.ContainsKey('description') ) {
+            if ($null -eq $tz.description) {
+                $tz | Add-member -name "description" -membertype NoteProperty -Value ""
+            }
+            $tz.description = $description
+        }
+
+        if ( $PsBoundParameters.ContainsKey('is_default') ) {
+            if ( $is_default ) {
+                $tz.is_default = $true
+            }
+            else {
+                $tz.is_default = $false
+            }
+        }
+
+        if ($PSCmdlet.ShouldProcess("$zone_id $zone_name", 'Configure Transport Zones')) {
+            $response = Invoke-NSXTRestMethod -uri $uri -method 'PUT' -body $tz -connection $connection
+            $response.results
+        }
+
+        #Display update Transport Zones
+        Get-NSXTTransportZones -zone_id $zone_id
+    }
+
+    End {
+    }
+}
+
+
 function Remove-NSXTTransportZones {
 
     <#
