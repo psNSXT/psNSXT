@@ -112,12 +112,12 @@ function Set-NSXTFabricVirtualMachines {
     #>
 
     #[CmdLetBinding(DefaultParameterSetName = "Default")]
-
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
     Param(
         [Parameter(Mandatory = $true, ParameterSetName = "external_id")]
         [string]$external_id,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "VirtualMachines")]
-        [ValidateScript({ Confirm-NSXTFabricVirtualMachines $_ })]
+        [ValidateScript( { Confirm-NSXTFabricVirtualMachines $_ })]
         [psobject]$VirtualMachines,
         [Parameter(Mandatory = $false)]
         [string[]]$tag,
@@ -172,8 +172,10 @@ function Set-NSXTFabricVirtualMachines {
         $update_tags | Add-member -name "external_id" -membertype NoteProperty -Value $external_id
         $update_tags | Add-member -name "tags" -membertype NoteProperty -value $tags
 
-        $response = Invoke-NSXTRestMethod -uri $uri -method 'POST' -body $update_tags -connection $connection
-        $response.results
+        if ($PSCmdlet.ShouldProcess($external_id, 'Configure Tag and Scope on Fabric Virtual Machine')) {
+            $response = Invoke-NSXTRestMethod -uri $uri -method 'POST' -body $update_tags -connection $connection
+            $response.results
+        }
 
         #Display update Virtual Machine
         Get-NSXTFabricVirtualMachines -external_id $external_id
@@ -211,7 +213,7 @@ function Add-NSXTFabricVirtualMachines {
 
     Param(
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "VirtualMachines")]
-        [ValidateScript({ Confirm-NSXTFabricVirtualMachines $_ })]
+        [ValidateScript( { Confirm-NSXTFabricVirtualMachines $_ })]
         [psobject]$VirtualMachines,
         [Parameter(Mandatory = $false)]
         [string[]]$tag,

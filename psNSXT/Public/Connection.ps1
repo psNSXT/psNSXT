@@ -59,13 +59,13 @@ function Connect-NSXT {
         [Parameter(Mandatory = $false)]
         [SecureString]$Password,
         [Parameter(Mandatory = $false)]
-        [PSCredential]$Credentials,
+        [PSCredential]$Credential,
         [switch]$SkipCertificateCheck = $false,
         [Parameter(Mandatory = $false)]
         [ValidateRange(1, 65535)]
-        [int]$port=443,
+        [int]$port = 443,
         [Parameter(Mandatory = $false)]
-        [boolean]$DefaultConnection=$true
+        [boolean]$DefaultConnection = $true
     )
 
     Begin {
@@ -73,20 +73,20 @@ function Connect-NSXT {
 
     Process {
 
-        $connection = @{server = ""; port = ""; headers = ""; invokeParams = ""}
+        $connection = @{server = ""; port = ""; headers = ""; invokeParams = "" }
 
-        #If there is a password (and a user), create a credentials
+        #If there is a password (and a user), create a credential
         if ($Password) {
-            $Credentials = New-Object System.Management.Automation.PSCredential($Username, $Password)
+            $Credential = New-Object System.Management.Automation.PSCredential($Username, $Password)
         }
-        #Not Credentials (and no password)
-        if ($null -eq $Credentials) {
-            $Credentials = Get-Credential -Message 'Please enter administrative credentials for your NSX-T'
+        #Not Credential (and no password)
+        if ($null -eq $Credential) {
+            $Credential = Get-Credential -Message 'Please enter administrative credential for your NSX-T'
         }
 
-        $cred = $Credentials.username + ":" + $Credentials.GetNetworkCredential().Password
+        $cred = $Credential.username + ":" + $Credential.GetNetworkCredential().Password
         $base64 = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($cred))
-        $headers = @{ Authorization = "Basic " + $base64; Accept = "application/json"; "Content-type" = "application/json"}
+        $headers = @{ Authorization = "Basic " + $base64; Accept = "application/json"; "Content-type" = "application/json" }
         $invokeParams = @{DisableKeepAlive = $false; UseBasicParsing = $true; SkipCertificateCheck = $SkipCertificateCheck }
 
 
@@ -141,15 +141,14 @@ function Disconnect-NSXT {
         Disconnect the connection
 
         .EXAMPLE
-        Disconnect-NSXT -noconfirm
+        Disconnect-NSXT -confirm:$false
 
         Disconnect the connection with no confirmation
 
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
     Param(
-        [Parameter(Mandatory = $false)]
-        [switch]$noconfirm
     )
 
     Begin {
@@ -157,22 +156,12 @@ function Disconnect-NSXT {
 
     Process {
 
-        if ( -not ( $Noconfirm )) {
-            $message = "Remove NSX-T connection."
-            $question = "Proceed with removal of NSX-T connection ?"
-            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-
-            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-        }
-        else { $decision = 0 }
-        if ($decision -eq 0) {
+        if ($PSCmdlet.ShouldProcess($DefaultNSXTConnection.server, 'Proceed with removal of NSX-T connection ?')) {
             Write-Progress -activity "Remove NSX-T connection"
-            write-progress -activity "Remove NSX-T connection" -completed
             if (Test-Path variable:global:DefaultNSXTConnection) {
                 Remove-Variable -name DefaultNSXTConnection -scope global
             }
+            write-progress -activity "Remove NSX-T connection" -completed
         }
 
     }

@@ -3,8 +3,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingConvertToSecureStringWithPlainText", "")]
+Param()
 
-if ("Desktop" -eq $PSVersionTable.PsEdition) { # -BeOfType is not same on PowerShell Core and Desktop (get int with Desktop and long with Core for number)
+if ("Desktop" -eq $PSVersionTable.PsEdition) {
+    # -BeOfType is not same on PowerShell Core and Desktop (get int with Desktop and long with Core for number)
     $script:pester_longint = "int"
 }
 else {
@@ -14,6 +17,6 @@ else {
 . ../credential.ps1
 #TODO: Add check if no ipaddress/login/password info...
 
-$mysecpassword = ConvertTo-SecureString $password -AsPlainText -Force
+$script:mysecpassword = ConvertTo-SecureString $password -AsPlainText -Force
 
 Connect-NSXT -Server $ipaddress -username $login -password $mysecpassword -SkipCertificateCheck

@@ -37,7 +37,7 @@ function Invoke-NSXTRestMethod {
     Process {
 
         if ($null -eq $connection ) {
-            if ($null -eq $DefaultNSXTConnection){
+            if ($null -eq $DefaultNSXTConnection) {
                 Throw "Not Connected. Connect to the NSX-T with Connect-NSXT"
             }
             $connection = $DefaultNSXTConnection
@@ -51,7 +51,7 @@ function Invoke-NSXTRestMethod {
         $fullurl = "https://${Server}:${port}/${uri}"
 
         #Extra parameter...
-        if($fullurl -NotMatch "\?"){
+        if ($fullurl -NotMatch "\?") {
             $fullurl += "?"
         }
 
