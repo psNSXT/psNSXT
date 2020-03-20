@@ -13,6 +13,8 @@ if ("Desktop" -eq $PSVersionTable.PsEdition) {
 else {
     $script:pester_longint = "long"
 }
+$script:pester_tz = "pester_tz"
+
 
 . ../credential.ps1
 #TODO: Add check if no ipaddress/login/password info...

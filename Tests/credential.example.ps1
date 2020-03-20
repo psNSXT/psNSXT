@@ -11,3 +11,4 @@ $script:login = "admin"
 $script:password = "VMware1!VMware1!"
 
 $script:vm = "MyNSXTVM"
+$script:tz = "pester_tz"
