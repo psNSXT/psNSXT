@@ -117,20 +117,34 @@ function Get-NSXTTransportZones {
         Returns information about Transport Zones
 
         .EXAMPLE
-        Get-NSXTFabricVirtualMachines
+        Get-NSXTTransportZones
 
-        Display all Fabric Virtual Machines
+        Display all Transport Zones
 
         .EXAMPLE
-        Get-NSXTFabricVirtualMachines -zone-id myVM
+        Get-NSXTTransportZones -zone_id ede3e69a-6562-49a6-98c4-d23408bd832c
 
-        Display Virtual Machines with display_name myVM
+        Display Transport Zones with (zone) id ede3e69a-6562-49a6-98c4-d23408bd832c
 
+        .EXAMPLE
+        Get-NSXTTransportZones -display_name TZ-VLAN
+
+        Display Transport Zones with (display) name TZ-VLAN
+
+        .EXAMPLE
+        Get-NSXTTransportZones -host_switch_name NVDS-psNSXT
+
+        Display Transport Zones with host_switch_name (N-VDS) NVDS-psNSXT
     #>
 
+    [CmdletBinding(DefaultParametersetname = "Default")]
     Param(
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $false, ParameterSetName = "zone_id")]
         [string]$zone_id,
+        [Parameter(Mandatory = $false, ParameterSetName = "display_name")]
+        [string]$display_name,
+        [Parameter(Mandatory = $false, ParameterSetName = "host_switch_name")]
+        [string]$host_switch_name,
         [Parameter(Mandatory = $false)]
         [psobject]$connection = $DefaultNSXTConnection
     )
@@ -148,12 +162,22 @@ function Get-NSXTTransportZones {
 
         $response = Invoke-NSXTRestMethod -uri $uri -method 'GET' -connection $connection
 
-        #When there is a zone_id, it is directly the result...
-        if ( $PsBoundParameters.ContainsKey('zone_id') ) {
-            $response
-        }
-        else {
-            $response.results
+        switch ( $PSCmdlet.ParameterSetName ) {
+            "zone_id" {
+                #When there is a zone_id, it is directly the result...
+                $response
+            }
+            "display_name" {
+                #When there is a display_name, search on response
+                $response.results | Where-Object { $_.display_name -eq $display_name }
+            }
+            "host_switch_name" {
+                #When there is a host_switch_name, search on response
+                $response.results | Where-Object { $_.host_switch_name -eq $host_switch_name }
+            }
+            default {
+                $response.results
+            }
         }
 
     }
