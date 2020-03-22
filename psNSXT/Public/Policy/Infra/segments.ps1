@@ -4,6 +4,77 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+function Add-NSXTPolicyInfraSegments {
+
+    <#
+        .SYNOPSIS
+        Add a Segment
+
+        .DESCRIPTION
+        Add a Segment (Vlan)
+
+        .EXAMPLE
+        Get-NSXTTransportZones -display_name MyTZ-Vlan | Add-NSXTPolicyInfraSegments -segment MySegment -vlan_ids 2
+
+        Add a (vlan) Segment MySegment on MyTZ-Vlan with vlan id 2
+
+        .EXAMPLE
+        Get-NSXTTransportZones -display_name MyTZ-Vlan | Add-NSXTPolicyInfraSegments -segment MySegment -vlan_ids 2,44 -display_name MySegment2and44
+
+        Add a (vlan) Segment with (display_)name MySegment2and44 MySegment2and44 on MyTZ-Vlan with vlan id 2 and 44
+
+        .EXAMPLE
+        Get-NSXTTransportZones -display_name MyTZ-Vlan | Add-NSXTPolicyInfraSegments -segment MySegment -vlan_ids 2,44-46
+
+        Add a (vlan) Segment  on MyTZ-Vlan with vlan id 2 and 44 to 46
+
+    #>
+
+    Param(
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateScript( { Confirm-NSXTTransportZones $_ })]
+        [psobject]$tz,
+        [Parameter(Mandatory = $true)]
+        [string]$segment,
+        [Parameter(Mandatory = $false)]
+        [string]$display_name,
+        [Parameter(Mandatory = $false)]
+        [ValidateRange(0, 4096)]
+        [string]$vlan_ids,
+        [Parameter(Mandatory = $false)]
+        [psobject]$connection = $DefaultNSXTConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $uri = 'policy/api/v1/infra/segments'
+        $uri += "/" + $segment
+        $transport_zone_path = "/infra/sites/default/enforcement-points/default/transport-zones/" + $tz.id
+
+        $_sg = new-Object -TypeName PSObject
+
+        $_sg | add-member -name "type" -membertype NoteProperty -Value "DISCONNECTED"
+
+        $_sg | add-member -name "transport_zone_path" -membertype NoteProperty -Value $transport_zone_path
+
+        if ( $PsBoundParameters.ContainsKey('display_name') ) {
+            $_sg | add-member -name "display_name" -membertype NoteProperty -Value $display_name
+        }
+
+        $_tz | add-member -name "vlan_ids" -membertype NoteProperty -Value $vlans_ids
+
+        $response = Invoke-NSXTRestMethod -uri $uri -method 'PATCH' -body $_sg -connection $connection
+        $response
+
+        Get-NSXTPolicyInfraSegments -segment $segment
+    }
+
+    End {
+    }
+}
 function Get-NSXTPolicyInfraSegments {
 
     <#
