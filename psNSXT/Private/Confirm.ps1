@@ -32,6 +32,49 @@ Function Confirm-NSXTFabricVirtualMachines {
 
 }
 
+Function Confirm-NSXTSegments {
+
+    Param (
+        [Parameter (Mandatory = $true)]
+        [object]$argument
+    )
+
+    #Check if it looks like a Segment element
+
+    if ( -not ( $argument | get-member -name type -Membertype Properties)) {
+        throw "Element specified does not contain a type property."
+    }
+    if ( -not ( $argument | get-member -name vlan_ids -Membertype Properties)) {
+        throw "Element specified does not contain an vlan_ids property."
+    }
+    if ( -not ( $argument | get-member -name transport_zone_path -Membertype Properties)) {
+        throw "Element specified does not contain a transport_zone_path property."
+    }
+    if ( -not ( $argument | get-member -name resource_type -Membertype Properties)) {
+        throw "Element specified does not contain a resource_type property."
+    }
+    if ( -not ( $argument | get-member -name id -Membertype Properties)) {
+        throw "Element specified does not contain a id property."
+    }
+    if ( -not ( $argument | get-member -name display_name -Membertype Properties)) {
+        throw "Element specified does not contain a display_name property."
+    }
+    if ( -not ( $argument | get-member -name path -Membertype Properties)) {
+        throw "Element specified does not contain a path property."
+    }
+    if ( -not ( $argument | get-member -name relative_path -Membertype Properties)) {
+        throw "Element specified does not contain a relative_path property."
+    }
+    if ( -not ( $argument | get-member -name parent_path -Membertype Properties)) {
+        throw "Element specified does not contain a parent_path property."
+    }
+    if ( -not ( $argument | get-member -name marked_for_delete -Membertype Properties)) {
+        throw "Element specified does not contain a marked_for_delete property."
+    }
+    $true
+
+}
+
 Function Confirm-NSXTTransportZones {
 
     Param (
