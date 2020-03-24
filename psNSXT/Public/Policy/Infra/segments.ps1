@@ -143,3 +143,71 @@ function Get-NSXTPolicyInfraSegments {
     End {
     }
 }
+
+function Set-NSXTPolicyInfraSegments {
+
+    <#
+        .SYNOPSIS
+        Configure a Segment
+
+        .DESCRIPTION
+        Configure a Segment (Vlan)
+
+        .EXAMPLE
+        Get-NSXTPolicyInfraSegments -display_name MySegment | Set-NSXTPolicyInfraSegments -vlan_ids 23
+
+        Configure a (vlan) Segment MySegment with vlan id 23
+
+        .EXAMPLE
+        Get-NSXTPolicyInfraSegments -display_name MySegment | Set-NSXTPolicyInfraSegments -display_name MySegment2
+
+        Configure a (vlan) Segment MySegment with (display_)name MySegment2
+
+
+    #>
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
+    Param(
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateScript( { Confirm-NSXTSegments $_ })]
+        [psobject]$segment,
+        [Parameter(Mandatory = $false)]
+        [string]$display_name,
+        [Parameter(Mandatory = $false)]
+        [ValidateRange(0, 4096)]
+        [string]$vlan_ids,
+        [Parameter(Mandatory = $false)]
+        [psobject]$connection = $DefaultNSXTConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $uri = 'policy/api/v1/infra/segments'
+        $uri += "/" + $segment.id
+        $segment_name = $segment.display_name
+
+
+        if ( $PsBoundParameters.ContainsKey('display_name') ) {
+            $segment | add-member -name "display_name" -membertype NoteProperty -Value $display_name
+        }
+
+        if ( $PsBoundParameters.ContainsKey('display_name') ) {
+            $segment | add-member -name "vlan_ids" -membertype NoteProperty -Value $vlan_ids
+        }
+
+        $response = Invoke-NSXTRestMethod -uri $uri -method 'PATCH' -body $segment -connection $connection
+        $response
+
+        if ($PSCmdlet.ShouldProcess("$segment_name", 'Configure Segment')) {
+            $response = Invoke-NSXTRestMethod -uri $uri -method 'PUT' -body $tz -connection $connection
+            $response.results
+        }
+
+        Get-NSXTPolicyInfraSegments -segment $segment -connection $connection
+    }
+
+    End {
+    }
+}
