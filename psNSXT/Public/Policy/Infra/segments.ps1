@@ -69,7 +69,7 @@ function Add-NSXTPolicyInfraSegments {
         $response = Invoke-NSXTRestMethod -uri $uri -method 'PATCH' -body $_sg -connection $connection
         $response
 
-        Get-NSXTPolicyInfraSegments -segment $segment
+        Get-NSXTPolicyInfraSegments -segment $segment -connection $connection
     }
 
     End {
