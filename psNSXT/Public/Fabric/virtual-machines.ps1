@@ -178,7 +178,7 @@ function Set-NSXTFabricVirtualMachines {
         }
 
         #Display update Virtual Machine
-        Get-NSXTFabricVirtualMachines -external_id $external_id
+        Get-NSXTFabricVirtualMachines -external_id $external_id -connection $connection
     }
 
     End {
@@ -262,7 +262,7 @@ function Add-NSXTFabricVirtualMachines {
         $response.results
 
         #Display update Virtual Machine
-        Get-NSXTFabricVirtualMachines -external_id $external_id
+        Get-NSXTFabricVirtualMachines -external_id $external_id -connection $connection
     }
 
     End {
