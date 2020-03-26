@@ -263,7 +263,7 @@ function Set-NSXTTransportZones {
         }
 
         #Display update Transport Zones
-        Get-NSXTTransportZones -zone_id $zone_id
+        Get-NSXTTransportZones -zone_id $zone_id -connection $connection
     }
 
     End {
