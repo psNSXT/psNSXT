@@ -23,7 +23,7 @@ function Invoke-NSXTRestMethod {
         [Parameter(Mandatory = $true, position = 1)]
         [String]$uri,
         [Parameter(Mandatory = $false)]
-        [ValidateSet("GET", "PUT", "POST", "DELETE")]
+        [ValidateSet("GET", "PUT", "PATCH", "POST", "DELETE")]
         [String]$method = "GET",
         [Parameter(Mandatory = $false)]
         [psobject]$body,
