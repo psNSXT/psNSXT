@@ -197,15 +197,12 @@ function Set-NSXTPolicyInfraSegments {
             $segment.vlan_ids = $vlan_ids
         }
 
-        $response = Invoke-NSXTRestMethod -uri $uri -method 'PATCH' -body $segment -connection $connection
-        $response
-
         if ($PSCmdlet.ShouldProcess("$segment_name", 'Configure Segment')) {
-            $response = Invoke-NSXTRestMethod -uri $uri -method 'PUT' -body $tz -connection $connection
+            $response = Invoke-NSXTRestMethod -uri $uri -method 'PUT' -body $segment -connection $connection
             $response.results
         }
 
-        Get-NSXTPolicyInfraSegments -segment $segment -connection $connection
+        Get-NSXTPolicyInfraSegments -segment $segment.id -connection $connection
     }
 
     End {
