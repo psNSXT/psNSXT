@@ -190,11 +190,11 @@ function Set-NSXTPolicyInfraSegments {
 
 
         if ( $PsBoundParameters.ContainsKey('display_name') ) {
-            $segment | add-member -name "display_name" -membertype NoteProperty -Value $display_name
+            $segment.display_name = $display_name
         }
 
-        if ( $PsBoundParameters.ContainsKey('display_name') ) {
-            $segment | add-member -name "vlan_ids" -membertype NoteProperty -Value $vlan_ids
+        if ( $PsBoundParameters.ContainsKey('vlan_ids') ) {
+            $segment.vlan_ids = $vlan_ids
         }
 
         $response = Invoke-NSXTRestMethod -uri $uri -method 'PATCH' -body $segment -connection $connection
