@@ -308,7 +308,7 @@ function Remove-NSXTTransportZones {
 
     Process {
 
-        #get tz id from vrf tz object
+        #get tz id from tz object
         if ($tz) {
             $zone_id = $tz.id
             $name = " (" + $tz.display_name + ")"
