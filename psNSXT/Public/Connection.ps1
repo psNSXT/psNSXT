@@ -149,6 +149,9 @@ function Disconnect-NSXT {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
     Param(
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultNSXTConnection
     )
 
     Begin {
@@ -156,7 +159,7 @@ function Disconnect-NSXT {
 
     Process {
 
-        if ($PSCmdlet.ShouldProcess($DefaultNSXTConnection.server, 'Proceed with removal of NSX-T connection ?')) {
+        if ($PSCmdlet.ShouldProcess($connection.server, 'Proceed with removal of NSX-T connection ?')) {
             Write-Progress -activity "Remove NSX-T connection"
             if (Test-Path variable:global:DefaultNSXTConnection) {
                 Remove-Variable -name DefaultNSXTConnection -scope global
