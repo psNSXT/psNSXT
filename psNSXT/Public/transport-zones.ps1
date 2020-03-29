@@ -152,6 +152,8 @@ function Get-NSXTTransportZones {
         [string]$display_name,
         [Parameter(Mandatory = $false, ParameterSetName = "host_switch_name")]
         [string]$host_switch_name,
+        [Parameter(Mandatory = $false, ParameterSetName = "status")]
+        [switch]$status,
         [Parameter(Mandatory = $false)]
         [psobject]$connection = $DefaultNSXTConnection
     )
@@ -174,6 +176,10 @@ function Get-NSXTTransportZones {
             }
         }
 
+        if ( $PsBoundParameters.ContainsKey('status') ) {
+            $uri += "/status"
+        }
+
         $response = Invoke-NSXTRestMethod -uri $uri -method 'GET' -connection $connection
 
         switch ( $PSCmdlet.ParameterSetName ) {
@@ -188,6 +194,10 @@ function Get-NSXTTransportZones {
             "host_switch_name" {
                 #When there is a host_switch_name, search on response
                 $response.results | Where-Object { $_.host_switch_name -eq $host_switch_name }
+            }
+            "status" {
+                #When there is a status, it is directly the result...
+                $response
             }
             default {
                 $response.results

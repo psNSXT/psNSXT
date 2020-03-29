@@ -61,6 +61,14 @@ Describe "Get Transport Zones" {
         Confirm-NSXTTransportZones $tz | Should -Be $true
     }
 
+    It "Get Transport Zones status" {
+        $tz = Get-NSXTTransportZones -status
+        $tz.up_count | Should -Not -BeNullOrEmpty
+        $tz.degraded_count | Should -Not -BeNullOrEmpty
+        $tz.down_count | Should -Not -BeNullOrEmpty
+        $tz.unknown_count | Should -Not -BeNullOrEmpty
+    }
+
     AfterAll {
         Get-NSXTTransportZones -display_name $pester_tz | Remove-NSXTTransportZones -confirm:$false
     }
