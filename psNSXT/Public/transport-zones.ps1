@@ -201,14 +201,14 @@ function Set-NSXTTransportZones {
         Change name of Transport Zones ff8140b0-010e-4e92-aa62-a55766f17da0
 
         .EXAMPLE
-        Get-NSXTTransportZones -zone_id ff8140b0-010e-4e92-aa62-a55766f17da0 | Set-NSXTTransportZones -description "Modified by psNSXT"
+        Get-NSXTTransportZones -display_name TZ-VLAN | Set-NSXTTransportZones -description "Modified by psNSXT"
 
-        Change description of Transport Zones ff8140b0-010e-4e92-aa62-a55766f17da0
+        Change description of Transport Zones TZ-VLAN
 
         .EXAMPLE
-        Get-NSXTTransportZones -zone_id ff8140b0-010e-4e92-aa62-a55766f17da0 | Set-NSXTTransportZones -is_default
+        Get-NSXTTransportZones -display_name TZ-VLAN | Set-NSXTTransportZones -is_default
 
-        Enable default for Transport Zones ff8140b0-010e-4e92-aa62-a55766f17da0
+        Enable default for Transport Zones TZ-VLAN
 
     #>
 
