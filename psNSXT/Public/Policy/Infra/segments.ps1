@@ -38,9 +38,9 @@ function Add-NSXTPolicyInfraSegments {
         [string]$segment,
         [Parameter(Mandatory = $false)]
         [string]$display_name,
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $true)]
         [ValidateRange(0, 4096)]
-        [string]$vlan_ids,
+        [int[]]$vlan_ids,
         [Parameter(Mandatory = $false)]
         [psobject]$connection = $DefaultNSXTConnection
     )
@@ -64,7 +64,7 @@ function Add-NSXTPolicyInfraSegments {
             $_sg | add-member -name "display_name" -membertype NoteProperty -Value $display_name
         }
 
-        $_tz | add-member -name "vlan_ids" -membertype NoteProperty -Value $vlans_ids
+        $_tg | add-member -name "vlan_ids" -membertype NoteProperty -Value @($vlans_ids)
 
         $response = Invoke-NSXTRestMethod -uri $uri -method 'PATCH' -body $_sg -connection $connection
         $response
@@ -75,6 +75,7 @@ function Add-NSXTPolicyInfraSegments {
     End {
     }
 }
+
 function Get-NSXTPolicyInfraSegments {
 
     <#
