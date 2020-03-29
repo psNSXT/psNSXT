@@ -209,3 +209,59 @@ function Set-NSXTPolicyInfraSegments {
     End {
     }
 }
+
+function Remove-NSXTPolicyInfraSegments {
+
+    <#
+        .SYNOPSIS
+        Remove a Segment
+
+        .DESCRIPTION
+        Remove a Segment
+
+        .EXAMPLE
+        $sg = Get-NSXTPolicyInfraSegments -display_name MySegment
+        PS C:\>$sg | Remove-NSXTPolicyInfraSegments
+
+        Remove Segment e with ff8140b0-010e-4e92-aa62-a55766f17da0
+
+        .EXAMPLE
+        Remove-NSXTPolicyInfraSegments -segment MySegment -confirm:$false
+
+        Remove Segment MySegment with no confirmation
+    #>
+
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
+    Param(
+        [Parameter (Mandatory = $true, ParameterSetName = "segment")]
+        [string]$segment,
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "sg")]
+        [ValidateScript( { Confirm-NSXTSegments $_ })]
+        [psobject]$sg,
+        [Parameter(Mandatory = $false)]
+        [psobject]$connection = $DefaultNSXTConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        #get segment name froms segment object
+        if ($sg) {
+            $segment = $sg.id
+            $name = " (" + $sg.display_name + ")"
+        }
+
+        $uri = "policy/api/v1/infra/segments/$segment"
+
+        if ($PSCmdlet.ShouldProcess("${segment}${name}", "Remove Segment")) {
+            Write-Progress -activity "Remove Segment"
+            Invoke-NSXTRestMethod -method "DELETE" -uri $uri -connection $connection
+            Write-Progress -activity "Remove Segment" -completed
+        }
+    }
+
+    End {
+    }
+}
