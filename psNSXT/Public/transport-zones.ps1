@@ -135,12 +135,19 @@ function Get-NSXTTransportZones {
         Get-NSXTTransportZones -host_switch_name NVDS-psNSXT
 
         Display Transport Zones with host_switch_name (N-VDS) NVDS-psNSXT
+
+        .EXAMPLE
+        Get-NSXTTransportZones -zone_id ede3e69a-6562-49a6-98c4-d23408bd832c -summary
+
+        Display Transport Zones Summary (Number of Transport Nodes, Logical Switches, Logical Ports) with (zone) id ede3e69a-6562-49a6-98c4-d23408bd832c
     #>
 
     [CmdletBinding(DefaultParametersetname = "Default")]
     Param(
         [Parameter(Mandatory = $false, ParameterSetName = "zone_id")]
         [string]$zone_id,
+        [Parameter(Mandatory = $false, ParameterSetName = "zone_id")]
+        [switch]$summary,
         [Parameter(Mandatory = $false, ParameterSetName = "display_name")]
         [string]$display_name,
         [Parameter(Mandatory = $false, ParameterSetName = "host_switch_name")]
@@ -158,6 +165,13 @@ function Get-NSXTTransportZones {
 
         if ( $PsBoundParameters.ContainsKey('zone_id') ) {
             $uri += "/$zone_id"
+
+            #if summary is enable add summary on URI
+            if ( $PsBoundParameters.ContainsKey('summary') ) {
+                if ( $summary ) {
+                    $uri += "/summary"
+                }
+            }
         }
 
         $response = Invoke-NSXTRestMethod -uri $uri -method 'GET' -connection $connection

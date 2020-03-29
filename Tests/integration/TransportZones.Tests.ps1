@@ -38,6 +38,14 @@ Describe "Get Transport Zones" {
         $tz.id | Should -Be $id
     }
 
+    It "Get Transport Zones by zone_id ($id) with summary" {
+        $tz = Get-NSXTTransportZones -zone_id $id -summary
+        $tz.transport_zone_id | Should -Be $id
+        $tz.num_transport_nodes | Should -Not -BeNullOrEmpty
+        $tz.num_logical_switches | Should -Not -BeNullOrEmpty
+        $tz.num_logical_ports | Should -Not -BeNullOrEmpty
+    }
+
     It "Get Transport Zones by display_name ($display_name)" {
         $tz = Get-NSXTTransportZones -display_name $display_name
         $tz.display_name | Should -Be $display_name
