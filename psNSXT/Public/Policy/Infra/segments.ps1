@@ -64,7 +64,7 @@ function Add-NSXTPolicyInfraSegments {
             $_sg | add-member -name "display_name" -membertype NoteProperty -Value $display_name
         }
 
-        $_tg | add-member -name "vlan_ids" -membertype NoteProperty -Value @($vlan_ids)
+        $_sg | add-member -name "vlan_ids" -membertype NoteProperty -Value @($vlan_ids)
 
         $response = Invoke-NSXTRestMethod -uri $uri -method 'PATCH' -body $_sg -connection $connection
         $response
