@@ -298,12 +298,12 @@ function Remove-NSXTTransportZones {
         [string]$zone_id,
         [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "tz")]
         [ValidateScript( { Confirm-NSXTTransportZones $_ })]
-        [psobject]$tz
+        [psobject]$tz,
+        [Parameter(Mandatory = $false)]
+        [psobject]$connection = $DefaultNSXTConnection
     )
 
     Begin {
-        [Parameter(Mandatory = $false)]
-        [psobject]$connection = $DefaultNSXTConnection
     }
 
     Process {
