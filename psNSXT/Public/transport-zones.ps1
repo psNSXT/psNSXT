@@ -201,7 +201,7 @@ function Set-NSXTTransportZones {
         Change name of Transport Zones ff8140b0-010e-4e92-aa62-a55766f17da0
 
         .EXAMPLE
-        Get-NSXTTransportZones -zone_id ff8140b0-010e-4e92-aa62-a55766f17da0 | Set-NSXTTransportZones -description "My New TZ Name"
+        Get-NSXTTransportZones -zone_id ff8140b0-010e-4e92-aa62-a55766f17da0 | Set-NSXTTransportZones -description "Modified by psNSXT"
 
         Change description of Transport Zones ff8140b0-010e-4e92-aa62-a55766f17da0
 
