@@ -7,10 +7,9 @@
 
 Describe "Get Segments" {
     BeforeAll {
-        #Add (Vlan) Transport Zones for Add Segement after
+        #Add (Vlan) Transport Zones for Add Segment after
         $tz = Add-NSXTTransportZones -transport_type VLAN -host_switch_name NVDS-psNSXT -display_name $pester_tz
         $tz | Add-NSXTPolicyInfraSegments -segment $pester_sg -vlan_ids 23
-        $script:id = $mysg.id
     }
 
     It "Get Segments Does not throw an error" {
@@ -49,7 +48,7 @@ Describe "Get Segments" {
     }
 
     AfterAll {
-        Get-NSXTPolicyInfraSegments -segment $pester_tz | Remove-NSXTPolicyInfraSegments -confirm:$false
+        Get-NSXTPolicyInfraSegments -segment $pester_sg | Remove-NSXTPolicyInfraSegments -confirm:$false
         Get-NSXTTransportZones -display_name $pester_tz | Remove-NSXTTransportZones -confirm:$false
     }
 
