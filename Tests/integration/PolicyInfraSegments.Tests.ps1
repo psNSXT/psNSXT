@@ -7,9 +7,8 @@
 
 Describe "Get Segments" {
     BeforeAll {
-        #Add (Vlan) Transport Zones for Add Segment after
-        $tz = Add-NSXTTransportZones -transport_type VLAN -host_switch_name NVDS-psNSXT -display_name $pester_tz
-        $tz | Add-NSXTPolicyInfraSegments -segment $pester_sg -vlan_ids 23
+        #Use default nsx-vlan-transportzone (from NSX-T 3.0...)
+        Get-NSXTTransportZones -display_name nsx-vlan-transportzone | Add-NSXTPolicyInfraSegments -segment $pester_sg -vlan_ids 23
     }
 
     It "Get Segments Does not throw an error" {
@@ -28,12 +27,12 @@ Describe "Get Segments" {
         $sg[0].path | Should -Not -BeNullOrEmpty
         $sg[0].relative_path | Should -Not -BeNullOrEmpty
         $sg[0].parent_path | Should -Not -BeNullOrEmpty
-        $sg[0].marked_for_delete | Should -Be -BeNullOrEmpty
+        $sg[0].marked_for_delete | Should -Not -BeNullOrEmpty
     }
 
-    It "Get Segments by id ($pester_tz)" {
+    It "Get Segments by id ($pester_sg)" {
         $sg = Get-NSXTPolicyInfraSegments -segment $pester_sg
-        $sg.id | Should -Be $$pester_sg
+        $sg.id | Should -Be $pester_sg
     }
 
     It "Get Segments by display_name ($pester_sg)" {
@@ -44,12 +43,11 @@ Describe "Get Segments" {
 
     It "Get Segments and confirm (via Confirm-NSXTPolicyInfraSegments)" {
         $sg = Get-NSXTPolicyInfraSegments -segment $pester_sg
-        Confirm-NSXTPolicyInfraSegments $sg | Should -Be $true
+        Confirm-NSXTSegments $sg | Should -Be $true
     }
 
     AfterAll {
         Get-NSXTPolicyInfraSegments -segment $pester_sg | Remove-NSXTPolicyInfraSegments -confirm:$false
-        Get-NSXTTransportZones -display_name $pester_tz | Remove-NSXTTransportZones -confirm:$false
     }
 
 }
