@@ -54,68 +54,53 @@ Describe "Get Segments" {
 
 Describe "Add Segments" {
 
+    It "Add Segments type VLAN (23)" {
+        Get-NSXTTransportZones -display_name nsx-vlan-transportzone | Add-NSXTPolicyInfraSegments -segment $pester_sg -vlan_ids 23
+        $sg = Get-NSXTPolicyInfraSegments -segment $pester_sg
+        $sg.type | Should -Be "DISCONNECTED"
+        $sg.vlan_ids | Should -Be "23"
+        $sg.resource_type | Should -Be "Segment"
+        $sg.id | Should -Be $pester_sg
+        $sg.display_name | Should -Be $pester_sg
+        $sg.path | Should -Be "/infra/segments/$pester_sg"
+        $sg.relative_path | Should -Be $pester_sg
+        $sg.parent_path | Should -Be "/infra/segments/$pester_sg"
+        $sg.marked_for_delete | Should -Be $false
+    }
+
+    It "Add Segments type VLAN (23) and (display_)name" {
+        Get-NSXTTransportZones -display_name nsx-vlan-transportzone | Add-NSXTPolicyInfraSegments -segment $pester_sg -display_name "Seg by psNSXT" -vlan_ids 23
+        $sg = Get-NSXTPolicyInfraSegments -segment $pester_sg
+        $sg.type | Should -Be "DISCONNECTED"
+        $sg.vlan_ids | Should -Be "23"
+        $sg.resource_type | Should -Be "Segment"
+        $sg.id | Should -Be $pester_sg
+        $sg.display_name | Should -Be "Seg by psNSXT"
+        $sg.path | Should -Be "/infra/segments/$pester_sg"
+        $sg.relative_path | Should -Be $pester_sg
+        $sg.parent_path | Should -Be "/infra/segments/$pester_sg"
+        $sg.marked_for_delete | Should -Be $false
+    }
+
+    It "Add Segments type with multiple VLAN (23,44)" {
+        Get-NSXTTransportZones -display_name nsx-vlan-transportzone | Add-NSXTPolicyInfraSegments -segment $pester_sg -vlan_ids 23, 44
+        $sg = Get-NSXTPolicyInfraSegments -segment $pester_sg
+        $sg.type | Should -Be "DISCONNECTED"
+        $sg.vlan_ids | Should -Be @("23", "44")
+        $sg.resource_type | Should -Be "Segment"
+        $sg.id | Should -Be $pester_sg
+        $sg.display_name | Should -Be $pester_sg
+        $sg.path | Should -Be "/infra/segments/$pester_sg"
+        $sg.relative_path | Should -Be $pester_sg
+        $sg.parent_path | Should -Be "/infra/segments/$pester_sg"
+        $sg.marked_for_delete | Should -Be $false
+    }
+
     AfterEach {
-        Get-NSXTPolicyInfraSegments -segment $pester_tz | Remove-NSXTPolicyInfraSegments -confirm:$false
+        Get-NSXTPolicyInfraSegments -segment $pester_sg | Remove-NSXTPolicyInfraSegments -confirm:$false
+        #Wait 2 seconds to be sure the Segments is deleted (it can be make 5 sec for be remove !)
+        Start-Sleep 2
     }
-
-    It "Add Segments type VLAN and (display_)name" {
-        Add-NSXTPolicyInfraSegments -transport_type VLAN -host_switch_name NVDS-psNSXT -display_name $pester_tz
-        $sg = Get-NSXTPolicyInfraSegments -display_name $pester_tz
-        $sg.transport_type | Should -Be "VLAN"
-        $sg.host_switch_name | Should -Be "NVDS-psNSXT"
-        $sg.host_switch_id | Should -Not -BeNullOrEmpty
-        $sg.host_switch_mode | Should -Be "STANDARD"
-        $sg.nested_nsx | Should -Be $false
-        $sg.is_default | Should -Be $false
-        $sg.resource_type | Should -Be "TransportZone"
-        $sg.id | Should -Not -BeNullOrEmpty
-        $sg.display_name | Should -Be $pester_tz
-    }
-
-    It "Add Segments type OVERLAY and (display_)name and description" {
-        Add-NSXTPolicyInfraSegments -transport_type OVERLAY -host_switch_name NVDS-psNSXT -display_name $pester_tz -description "Add via psNSXT"
-        $sg = Get-NSXTPolicyInfraSegments -display_name $pester_tz
-        $sg.transport_type | Should -Be "OVERLAY"
-        $sg.host_switch_name | Should -Be "NVDS-psNSXT"
-        $sg.host_switch_id | Should -Not -BeNullOrEmpty
-        $sg.host_switch_mode | Should -Be "STANDARD"
-        $sg.nested_nsx | Should -Be $false
-        $sg.is_default | Should -Be $false
-        $sg.resource_type | Should -Be "TransportZone"
-        $sg.id | Should -Not -BeNullOrEmpty
-        $sg.display_name | Should -Be $pester_tz
-        $sg.description | Should -Be "Add via psNSXT"
-    }
-
-    It "Add Segments type OVERLAY (enhanced mode) and (display_)name and description" {
-        Add-NSXTPolicyInfraSegments -transport_type OVERLAY -host_switch_name NVDS-psNSXT -display_name $pester_tz -description "Add via psNSXT" -host_switch_mode ENS
-        $sg = Get-NSXTPolicyInfraSegments -display_name $pester_tz
-        $sg.transport_type | Should -Be "OVERLAY"
-        $sg.host_switch_name | Should -Be "NVDS-psNSXT"
-        $sg.host_switch_id | Should -Not -BeNullOrEmpty
-        $sg.host_switch_mode | Should -Be "ENS"
-        $sg.nested_nsx | Should -Be $false
-        $sg.is_default | Should -Be $false
-        $sg.resource_type | Should -Be "TransportZone"
-        $sg.id | Should -Not -BeNullOrEmpty
-        $sg.display_name | Should -Be $pester_tz
-        $sg.description | Should -Be "Add via psNSXT"
-    }
-
-    It "Add Segments type VLAN and (display_)name with nested and is default enable" {
-        Add-NSXTPolicyInfraSegments -transport_type VLAN -host_switch_name NVDS-psNSXT -display_name $pester_tz -nested_nsx -is_default
-        $sg = Get-NSXTPolicyInfraSegments -display_name $pester_tz
-        $sg.transport_type | Should -Be "VLAN"
-        $sg.host_switch_name | Should -Be "NVDS-psNSXT"
-        $sg.host_switch_id | Should -Not -BeNullOrEmpty
-        $sg.host_switch_mode | Should -Be "STANDARD"
-        $sg.nested_nsx | Should -Be $true
-        $sg.is_default | Should -Be $true
-        $sg.resource_type | Should -Be "TransportZone"
-        $sg.id | Should -Not -BeNullOrEmpty
-        $sg.display_name | Should -Be $pester_tz
-    }
-
 }
 
 Describe "Configure Segments" {
