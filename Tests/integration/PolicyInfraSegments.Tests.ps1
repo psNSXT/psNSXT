@@ -48,6 +48,7 @@ Describe "Get Segments" {
 
     AfterAll {
         Get-NSXTPolicyInfraSegments -segment $pester_sg | Remove-NSXTPolicyInfraSegments -confirm:$false
+        Start-Sleep 2
     }
 
 }
