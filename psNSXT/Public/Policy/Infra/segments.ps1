@@ -175,7 +175,7 @@ function Set-NSXTPolicyInfraSegments {
         [string]$display_name,
         [Parameter(Mandatory = $false)]
         [ValidateRange(0, 4096)]
-        [string]$vlan_ids,
+        [int[]]$vlan_ids,
         [Parameter(Mandatory = $false)]
         [psobject]$connection = $DefaultNSXTConnection
     )
@@ -195,7 +195,7 @@ function Set-NSXTPolicyInfraSegments {
         }
 
         if ( $PsBoundParameters.ContainsKey('vlan_ids') ) {
-            $segment.vlan_ids = $vlan_ids
+            $segment.vlan_ids = @($vlan_ids)
         }
 
         if ($PSCmdlet.ShouldProcess("$segment_name", 'Configure Segment')) {
