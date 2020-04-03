@@ -126,28 +126,28 @@ Describe "Configure Segments" {
         Get-NSXTPolicyInfraSegments -display_name pester_sg2 | Set-NSXTPolicyInfraSegments -display_name $pester_sg
     }
 
-    It "Change Segments Vlan (Change Vlan 23 -> 44)" -skip:$true {
+    It "Change Segments Vlan (Change Vlan 23 -> 44)" {
         Get-NSXTPolicyInfraSegments -segment $pester_sg | Set-NSXTPolicyInfraSegments -vlan_ids 24
         $sg = Get-NSXTPolicyInfraSegments -segment $pester_sg
         $sg.type | Should -Be "DISCONNECTED"
-        $sg.vlan_ids | Should -Be "23"
+        $sg.vlan_ids | Should -Be "24"
         $sg.resource_type | Should -Be "Segment"
         $sg.id | Should -Be $pester_sg
-        $sg.display_name | Should -Be "Seg by psNSXT"
+        $sg.display_name | Should -Be "pester_sg"
         $sg.path | Should -Be "/infra/segments/$pester_sg"
         $sg.relative_path | Should -Be $pester_sg
         $sg.parent_path | Should -Be "/infra/segments/$pester_sg"
         $sg.marked_for_delete | Should -Be $false
     }
 
-    It "Change Segments Vlan (Change Multiple: 23,45)" -skip:$true {
+    It "Change Segments Vlan (Change Multiple: 23,45)" {
         Get-NSXTPolicyInfraSegments -segment $pester_sg | Set-NSXTPolicyInfraSegments -vlan_ids 23, 45
         $sg = Get-NSXTPolicyInfraSegments -segment $pester_sg
         $sg.type | Should -Be "DISCONNECTED"
-        $sg.vlan_ids | Should -Be "23"
+        $sg.vlan_ids | Should -Be @("23", "45")
         $sg.resource_type | Should -Be "Segment"
         $sg.id | Should -Be $pester_sg
-        $sg.display_name | Should -Be "Seg by psNSXT"
+        $sg.display_name | Should -Be "pester_sg"
         $sg.path | Should -Be "/infra/segments/$pester_sg"
         $sg.relative_path | Should -Be $pester_sg
         $sg.parent_path | Should -Be "/infra/segments/$pester_sg"
