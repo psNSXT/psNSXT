@@ -11,3 +11,6 @@ $script:login = "admin"
 $script:password = "VMware1!VMware1!"
 
 $script:vm = "MyNSXTVM"
+
+#default settings use for test, can be override if needed...
+#$script:pester_tz = "pester_tz"
