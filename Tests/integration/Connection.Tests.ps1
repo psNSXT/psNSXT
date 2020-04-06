@@ -32,7 +32,37 @@ Describe  "Connect to a NSX-T (using Basic)" {
         { Invoke-NSXTRestMethod -uri "api/v1/cluster/status" } | Should throw "Unable to connect (certificate)"
         Disconnect-NSXT -confirm:$false
     }
+}
+
+Describe "Connect to a NSX-T (using multi connection)" {
+    It "Connect to a NSX-T (using HTTPS and store on NSXT variable)" {
+        $script:nsx = Connect-NSXT $ipaddress -username $login -password $mysecpassword -SkipCertificateCheck -DefaultConnection:$false
+        $DefaultNSXTConnection | Should -BeNullOrEmpty
+        $nsx.server | Should -Be $ipaddress
+        $nsx.port | Should -Be "443"
+        $nsx.headers.Authorization | should -Not -BeNullOrEmpty
+        $nsx.headers.'Content-Type' | should -Be "application/json"
+        $nsx.headers.Accept | should -Be "application/json"
+    }
+
     It "Throw when try to use Invoke-NSXTRestMethod and not connected" {
         { Invoke-NSXTRestMethod -uri "api/v1/cluster/status" } | Should throw "Not Connected. Connect to the NSX-T with Connect-NSXT"
+    }
+
+    Context "Use Multi connection for call some (Get) cmdlet (VirtualMachines, TZ, Segments...)" {
+        It "Use Multi connection for call Get (Fabric) VirtualMachine" {
+            { Get-NSXTFabricVirtualMachines -connection $nsx } | Should Not throw
+        }
+        It "Use Multi connection for call Get Transport Zones" {
+            { Get-NSXTTransportZones -connection $nsx } | Should Not throw
+        }
+        It "Use Multi connection for call Get (Policy Infra) Segments" {
+            { Get-NSXTPolicyInfraSegments -connection $nsx } | Should Not throw
+        }
+    }
+
+    It "Disconnect to a NSX-T (Multi connection)" {
+        Disconnect-NSXT -connection $nsxt -confirm:$false
+        $DefaultNSXTConnection | Should -Be $null
     }
 }
