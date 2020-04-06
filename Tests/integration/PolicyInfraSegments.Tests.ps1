@@ -141,7 +141,7 @@ Describe "Configure Segments" {
         $sg.marked_for_delete | Should -Be $false
     }
 
-    It "Change Segments Vlan (Change Multiple: 23,45)" {
+    It "Change Segments Vlan (Change Multiple Vlan 23,45)" {
         Get-NSXTPolicyInfraSegments -segment $pester_sg | Set-NSXTPolicyInfraSegments -vlan_ids 23, 45
         $sg = Get-NSXTPolicyInfraSegments -segment $pester_sg
         $sg.type | Should -Be "DISCONNECTED"
@@ -169,7 +169,7 @@ Describe "Remove Segments" {
         Get-NSXTTransportZones -display_name nsx-vlan-transportzone | Add-NSXTPolicyInfraSegments -segment $pester_sg -vlan_ids 23
     }
 
-    It "Remove Segments ($pester_sg) by id" {
+    It "Remove Segments ($pester_sg) by segment" {
         Remove-NSXTPolicyInfraSegments -segment $pester_sg -confirm:$false
         $sg = Get-NSXTPolicyInfraSegments -display_name $pester_sg
         $sg | Should -Be $NULL
