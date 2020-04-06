@@ -48,6 +48,7 @@ Describe "Get Segments" {
 
     AfterAll {
         Get-NSXTPolicyInfraSegments -segment $pester_sg | Remove-NSXTPolicyInfraSegments -confirm:$false
+        #Wait 2 seconds to be sure the Segments is deleted (it can be make 5 sec for be removed !)
         Start-Sleep 2
     }
 
@@ -99,7 +100,7 @@ Describe "Add Segments" {
 
     AfterEach {
         Get-NSXTPolicyInfraSegments -segment $pester_sg | Remove-NSXTPolicyInfraSegments -confirm:$false
-        #Wait 2 seconds to be sure the Segments is deleted (it can be make 5 sec for be remove !)
+        #Wait 2 seconds to be sure the Segments is deleted (it can be make 5 sec for be removed !)
         Start-Sleep 2
     }
 }
@@ -156,6 +157,7 @@ Describe "Configure Segments" {
 
     AfterAll {
         Get-NSXTPolicyInfraSegments -display_name $pester_sg | Remove-NSXTPolicyInfraSegments -confirm:$false
+        #Wait 2 seconds to be sure the Segments is deleted (it can be make 5 sec for be removed !)
         Start-Sleep 2
     }
 
@@ -181,7 +183,8 @@ Describe "Remove Segments" {
     }
 
     AfterEach {
-        Start-Sleep 5
+        #Wait 2 seconds to be sure the Segments is deleted (it can be make 5 sec for be removed !)
+        Start-Sleep 2
     }
 
 
