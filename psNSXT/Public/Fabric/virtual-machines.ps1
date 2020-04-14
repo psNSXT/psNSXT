@@ -124,7 +124,7 @@ function Set-NSXTFabricVirtualMachines {
         [Parameter(Mandatory = $false)]
         [string[]]$scope,
         [Parameter(Mandatory = $false)]
-        [psobject]$tags,
+        [array]$tags,
         [Parameter(Mandatory = $false)]
         [psobject]$connection = $DefaultNSXTConnection
     )
