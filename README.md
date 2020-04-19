@@ -4,7 +4,9 @@ This is a Powershell module for configure a NSX-T (Manager).
 
 With this module (version 0.1.0) you can manage:
 
-- Invoke API using Invoke-NSXTRestMethod
+There is some extra feature :
+
+- [Invoke API](#Invoke-API) using Invoke-NSXTRestMethod
 
 More functionality will be added later.
 
