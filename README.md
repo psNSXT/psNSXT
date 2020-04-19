@@ -29,15 +29,12 @@ For example, you can manage Tag on (Fabric) Virtual Machines with the following 
 # Instructions
 ### Install the module
 
+```powershell
 # Automated installation (Powershell 5 and later):
     Install-Module psNSXT
 
-```powershell
-# Copy module from Github
-   git clone https://github.com/alagoutte/psNSXT.git
-
 # Import the module
-    Import-Module ./psNSXT/psNSXT
+    Import-Module psNSXT
 
 # Get commands in the module
     Get-Command -Module psNSXT
