@@ -8,7 +8,7 @@ With this module (version 0.1.0) you can manage:
 
 More functionality will be added later.
 
-Tested with NSX-T (using 2.4.x release) on Windows/Linux/macOS
+Tested with NSX-T (using 2.4.x and 2.5.x release) on Windows/Linux/macOS
 
 # Usage
 
