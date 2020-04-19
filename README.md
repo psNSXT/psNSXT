@@ -286,6 +286,15 @@ The issue coming from use Self-Signed or Expired Certificate for management
 
 Try to connect using `Connect-NSXT -SkipCertificateCheck`
 
+# How to contribute
+
+Contribution and feature requests are more than welcome. Please use the following methods:
+
+  * For bugs and [issues](https://github.com/alagoutte/psNSXT/issues), please use the [issues](https://github.com/alagoutte/psNSXT/issues) register with details of the problem.
+  * For Feature Requests, please use the [issues](https://github.com/alagoutte/psNSXT/issues) register with details of what's required.
+  * For code contribution (bug fixes, or feature request), please request fork psNSXT, create a feature/fix branch, add tests if needed then submit a pull request.
+
+
 # List of available command
 ```powershell
 Add-NSXTFabricVirtualMachines
