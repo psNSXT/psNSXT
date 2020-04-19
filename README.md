@@ -294,6 +294,9 @@ Contribution and feature requests are more than welcome. Please use the followin
   * For Feature Requests, please use the [issues](https://github.com/alagoutte/psNSXT/issues) register with details of what's required.
   * For code contribution (bug fixes, or feature request), please request fork psNSXT, create a feature/fix branch, add tests if needed then submit a pull request.
 
+# Contact
+
+Currently, @alagoutte started this project and will keep maintaining it. Reach out to me via [Twitter](#Author), Email (see top of file) or the [issues](https://github.com/alagoutte/psNSXT/issues) Page here on GitHub. If you want to contribute, also get in touch with me.
 
 # List of available command
 ```powershell
