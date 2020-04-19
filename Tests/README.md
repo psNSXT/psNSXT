@@ -6,7 +6,7 @@ The tests don't be to be run on PRODUCTION NSX-T manager ! there is no warning a
 It need to be use only for TESTS !
 
     An NSX-T Manger with release >= 2.4.x
-    Only need an ip address with a VM attach to a N-VDS 
+    Only need an ip address with a VM attach to a N-VDS
     a user and password for admin account
 
 These are the required modules for the tests
@@ -38,7 +38,7 @@ Tests are broken up according to functional area. If you are working on Vlan fun
 Example:
 
 ```powershell
-Invoke-Pester VConnection.Tests.ps1
+Invoke-Pester Connection.Tests.ps1
 ```
 
 if you only launch a sub test (Describe on pester file), you can use for example to 'Connect to a NSX-T (using Basic)' part
