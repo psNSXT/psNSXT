@@ -2,6 +2,10 @@
 
 This is a Powershell module for configure a NSX-T (Manager).
 
+<p align="center">
+<img src="https://raw.githubusercontent.com/alagoutte/psNSXT/master/Medias/psNSXT.png" width="250" height="250" />
+</p>
+
 With this module (version 0.1.0) you can manage:
 
 - Invoke API using Invoke-NSXTRestMethod
