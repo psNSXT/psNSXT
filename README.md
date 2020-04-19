@@ -5,6 +5,7 @@ This is a Powershell module for configure a NSX-T (Manager).
 With this module (version 0.1.0) you can manage:
 
 - [Manage Tags](#manage-tags-on-fabric-virtual-machines) on (Fabric) Virtual Machines
+- [Transport Zones](#Transport-Zones)
 
 There is some extra feature :
 
@@ -273,6 +274,103 @@ tags             : {}
 _last_sync_time  : 1564995660328
 ```
 
+### Transport Zones
+
+You can Add, Set and Remove Transport Zones
+
+```powershell
+#Add Transport Zone MyTZ-Vlan (type Vlan)
+
+    Add-NSXTTransportZones -transport_type VLAN -host_switch_name NVDS-psNSXT -display_name MyTZ-Vlan
+
+    transport_type             : VLAN
+    host_switch_name           : NVDS-psNSXT
+    host_switch_id             : 87a134f7-b366-4e31-ba10-7421dfc88ccb
+    transport_zone_profile_ids : {@{resource_type=BfdHealthMonitoringProfile;
+                                profile_id=52035bb3-ab02-4a08-9884-18631312e50a}}
+    host_switch_mode           : STANDARD
+    nested_nsx                 : False
+    is_default                 : False
+    resource_type              : TransportZone
+    id                         : 94d2ee8d-9a98-4954-8993-913cf37bbff8
+    display_name               : MyTZ-Vlan
+    _create_user               : admin
+    _create_time               : 1587314452652
+    _last_modified_user        : admin
+    _last_modified_time        : 1587314452652
+    _system_owned              : False
+    _protection                : NOT_PROTECTED
+    _revision                  : 0
+    _schema                    : /v1/schema/TransportZone
+
+#Add Transport Zone MyTZ-Overlay (type Overlay)
+    Add-NSXTTransportZones -transport_type OVERLAY -host_switch_name NVDS-psNSXT -display_name MyTZ-Overlay
+
+    transport_type             : OVERLAY
+    host_switch_name           : NVDS-psNSXT
+    host_switch_id             : 87a134f7-b366-4e31-ba10-7421dfc88ccb
+    transport_zone_profile_ids : {@{resource_type=BfdHealthMonitoringProfile;
+                                profile_id=52035bb3-ab02-4a08-9884-18631312e50a}}
+    host_switch_mode           : STANDARD
+    nested_nsx                 : False
+    is_default                 : False
+    resource_type              : TransportZone
+    id                         : dcc64ab7-666d-4567-bf35-61d7521bd488
+    display_name               : MyTZ-Overlay
+    _create_user               : admin
+    _create_time               : 1587314562671
+    _last_modified_user        : admin
+    _last_modified_time        : 1587314562671
+    _system_owned              : False
+    _protection                : NOT_PROTECTED
+    _revision                  : 0
+    _schema                    : /v1/schema/TransportZone
+
+
+#Get list of all available Transport Zone
+
+    Get-NSXTTransportZones | Format-Table
+
+    transport_type host_switch_name id                                   host_switch_mode display_name
+    -------------- ---------------- --------------                       ---------------- ------------
+    OVERLAY        NVDS-psNSXT      dcc64ab7-666d-4567-bf35-61d7521bd488 STANDARD         MyTZ-Overlay
+    VLAN           NVDS-psNSXT      94d2ee8d-9a98-4954-8993-913cf37bbff8 STANDARD         MyTZ-Vlan
+
+#Get Transport Zone Vlan by display_name
+
+    Get-NSXTTransportZones -display_name MyTZ-Vlan
+
+    transport_type             : VLAN
+    host_switch_name           : NVDS-psNSXT
+    host_switch_id             : 87a134f7-b366-4e31-ba10-7421dfc88ccb
+    transport_zone_profile_ids : {@{resource_type=BfdHealthMonitoringProfile; profile_id=52035bb3-ab02-4a08-9884-18631312e50a}}
+    host_switch_mode           : STANDARD
+    nested_nsx                 : False
+    is_default                 : False
+    resource_type              : TransportZone
+    id                         : 94d2ee8d-9a98-4954-8993-913cf37bbff8
+    display_name               : MyTZ-Vlan
+    _create_user               : admin
+    _create_time               : 1587314452652
+    _last_modified_user        : admin
+    _last_modified_time        : 1587314452652
+    _system_owned              : False
+    _protection                : NOT_PROTECTED
+    _revision                  : 0
+    _schema                    : /v1/schema/TransportZone
+
+#Get Transport Zone Overlay by (zone_)id with summary
+
+    Get-NSXTTransportZones -zone_id dcc64ab7-666d-4567-bf35-61d7521bd488 -summary
+
+    transport_zone_id                    num_transport_nodes num_logical_switches num_logical_ports
+    -----------------                    ------------------- -------------------- -----------------
+    dcc64ab7-666d-4567-bf35-61d7521bd488                   0                    0                 0
+
+#Remove Transport Zone
+    Get-NSXTTransportZones -display_name MyTZ-Vlan | Remove-NSXTTransportZones
+
+```
 
 ### Disconnecting
 
