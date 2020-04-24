@@ -36,7 +36,7 @@ function Connect-NSXT {
 
       .EXAMPLE
       $mysecpassword = ConvertTo-SecureString mypassword -AsPlainText -Force
-      Connect-NSXT -Server 192.0.2.1 -Username manager -Password $mysecpassword
+      Connect-NSXT -Server 192.0.2.1 -Username admin -Password $mysecpassword
 
       Connect to a NSX-T with IP 192.0.2.1 using Username and Password
 
