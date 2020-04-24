@@ -6,6 +6,7 @@ With this module (version 0.1.0) you can manage:
 
 - [Manage Tags](#manage-tags-on-fabric-virtual-machines) on (Fabric) Virtual Machines
 - [Transport Zones](#Transport-Zones)
+- [Segments](#Segments)
 
 There is some extra feature :
 
@@ -369,6 +370,61 @@ You can Add, Set and Remove Transport Zones
 
 #Remove Transport Zone
     Get-NSXTTransportZones -display_name MyTZ-Vlan | Remove-NSXTTransportZones
+
+```
+
+### Segments
+
+You can Add, Set and Remove Segments (Type VLAN Only)
+
+```powershell
+#Add a (vlan) Segment MySegment on MyTZ-Vlan with vlan id 2
+
+    Get-NSXTTransportZones -display_name MyTZ-Vlan | Add-NSXTPolicyInfraSegments -segment MySegment -vlan_ids 2
+
+    type                : DISCONNECTED
+    vlan_ids            : {2}
+    transport_zone_path : /infra/sites/default/enforcement-points/default/transport-zones/e5bbefbc-a069-4101-a0b6-67a322e5e133
+    resource_type       : Segment
+    id                  : MySegment
+    display_name        : MySegment
+    path                : /infra/segments/MySegment
+    relative_path       : MySegment
+    parent_path         : /infra/segments/MySegment
+    marked_for_delete   : False
+    _create_user        : admin
+    _create_time        : 1587741128335
+    _last_modified_user : admin
+    _last_modified_time : 1587741128335
+    _system_owned       : False
+    _protection         : NOT_PROTECTED
+    _revision           : 0
+
+#Change Vlan id of a Segment
+
+    Get-NSXTPolicyInfraSegments -display_name MySegment | Set-NSXTPolicyInfraSegments -vlan_ids 23
+
+    type                : DISCONNECTED
+    vlan_ids            : {23}
+    transport_zone_path : /infra/sites/default/enforcement-points/default/transport-zones/e5bbefbc-a069-4101-a0b6-67a322e5e133
+    resource_type       : Segment
+    id                  : MySegment
+    display_name        : MySegment
+    path                : /infra/segments/MySegment
+    relative_path       : MySegment
+    parent_path         : /infra/segments/MySegment
+    marked_for_delete   : False
+    _create_user        : admin
+    _create_time        : 1587741369803
+    _last_modified_user : admin
+    _last_modified_time : 1587741376356
+    _system_owned       : False
+    _protection         : NOT_PROTECTED
+    _revision           : 1
+
+#Remove Segment
+
+    Get-NSXTPolicyInfraSegments -display_name MySegment | Remove-NSXTPolicyInfraSegments
 
 ```
 
