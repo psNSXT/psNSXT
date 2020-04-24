@@ -459,13 +459,23 @@ Currently, @alagoutte started this project and will keep maintaining it. Reach o
 # List of available command
 ```powershell
 Add-NSXTFabricVirtualMachines
+Add-NSXTPolicyInfraSegments
+Add-NSXTTransportZones
 Confirm-NSXTFabricVirtualMachines
+Confirm-NSXTSegments
+Confirm-NSXTTransportZones
 Connect-NSXT
 Disconnect-NSXT
 Get-NSXTFabricVirtualMachines
+Get-NSXTPolicyInfraSegments
+Get-NSXTTransportZones
 Invoke-NSXTRestMethod
+Remove-NSXTPolicyInfraSegments
+Remove-NSXTTransportZones
 Set-NSXTCipherSSL
 Set-NSXTFabricVirtualMachines
+Set-NSXTPolicyInfraSegments
+Set-NSXTTransportZones
 Set-NSXTUntrustedSSL
 Show-NSXTException
 ```
