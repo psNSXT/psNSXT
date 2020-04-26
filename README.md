@@ -11,6 +11,7 @@ With this module (version 0.1.0) you can manage:
 There is some extra feature :
 
 - [Invoke API](#Invoke-API) using Invoke-NSXTRestMethod
+- [Multi Connection](#MultiConnection)
 
 More functionality will be added later.
 
@@ -425,6 +426,43 @@ You can Add, Set and Remove Segments (Type VLAN Only)
 #Remove Segment
 
     Get-NSXTPolicyInfraSegments -display_name MySegment | Remove-NSXTPolicyInfraSegments
+
+```
+
+### MultiConnection
+
+Tt is possible to connect on same times to multi NSX-T manager
+You need to use -connection parameter to cmdlet
+
+For example to get Transport Zones of 2 NSX-T Manager
+
+```powershell
+# Connect to first NSX-T Manager
+    $nsxt1 = Connect-NSXT 192.0.2.1 -SkipCertificateCheck -DefaultConnection:$false
+
+#DefaultConnection set to false is not mandatory but only don't set the connection info on global variable
+
+# Connect to first NSX-T Manager
+    $nsxt2 = Connect-NSXT 192.0.2.2 -SkipCertificateCheck -DefaultConnection:$false
+
+# Get Transport Zones for first NSX-T Manager
+    Get-NSXTTransportZones -connection $nsxt1 | select transport_type, host_switch_name, host_switch_id, display_name
+
+    transport_type host_switch_name host_switch_id                       display_name
+    -------------- ---------------- --------------                       ------------
+    OVERLAY        NVDS-psNSXT      87a134f7-b366-4e31-ba10-7421dfc88ccb MyTZ-Overlay
+    VLAN           ALG-NVDS         ff40afe1-9bec-4c98-99f7-08f20f565c2d MyTZ-Vlan
+....
+
+# Get Transport Zones for first NSX-T Manager
+    Get-NSXTTransportZones -connection $nsxt2 | select transport_type, host_switch_name, host_switch_id, display_name
+
+    transport_type host_switch_name host_switch_id                       display_name
+    -------------- ---------------- --------------                       ------------
+    VLAN           NVDS-LAB         c1b7f689-764a-4c65-bd04-bbcdc204a855 TZ-VLAN
+...
+
+#Each cmdlet can use -connection parameter
 
 ```
 
