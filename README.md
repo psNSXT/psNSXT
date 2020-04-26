@@ -6,7 +6,7 @@ This is a Powershell module for configure a NSX-T (Manager).
 <img src="https://raw.githubusercontent.com/psNSXT/psNSXT/master/Medias/psNSXT.png" width="250" height="250" />
 </p>
 
-With this module (version 0.1.0) you can manage:
+With this module (version 0.2.0) you can manage:
 
 - [Manage Tags](#manage-tags-on-fabric-virtual-machines) on (Fabric) Virtual Machines (Get/Set)
 - [Transport Zones](#Transport-Zones) (Add/Get/Set/Remove)
