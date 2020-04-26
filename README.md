@@ -8,11 +8,18 @@ This is a Powershell module for configure a NSX-T (Manager).
 
 With this module (version 0.1.0) you can manage:
 
-- Invoke API using Invoke-NSXTRestMethod
+- [Manage Tags](#manage-tags-on-fabric-virtual-machines) on (Fabric) Virtual Machines (Get/Set)
+- [Transport Zones](#Transport-Zones) (Add/Get/Set/Remove)
+- [Segments](#Segments) (Add/Get/Set/Remove type VLAN)
+
+There is some extra feature :
+
+- [Invoke API](#Invoke-API) using Invoke-NSXTRestMethod
+- [Multi Connection](#MultiConnection)
 
 More functionality will be added later.
 
-Tested with NSX-T (using 2.4.x release) on Windows/Linux/macOS
+Tested with NSX-T (using 2.4.x and 2.5.x release) on Windows/Linux/macOS
 
 # Usage
 
@@ -33,15 +40,12 @@ For example, you can manage Tag on (Fabric) Virtual Machines with the following 
 # Instructions
 ### Install the module
 
+```powershell
 # Automated installation (Powershell 5 and later):
     Install-Module psNSXT
 
-```powershell
-# Copy module from Github
-   git clone https://github.com/alagoutte/psNSXT.git
-
 # Import the module
-    Import-Module ./psNSXT/psNSXT
+    Import-Module psNSXT
 
 # Get commands in the module
     Get-Command -Module psNSXT
@@ -276,6 +280,195 @@ tags             : {}
 _last_sync_time  : 1564995660328
 ```
 
+### Transport Zones
+
+You can Add, Set and Remove Transport Zones
+
+```powershell
+#Add Transport Zone MyTZ-Vlan (type Vlan)
+
+    Add-NSXTTransportZones -transport_type VLAN -host_switch_name NVDS-psNSXT -display_name MyTZ-Vlan
+
+    transport_type             : VLAN
+    host_switch_name           : NVDS-psNSXT
+    host_switch_id             : 87a134f7-b366-4e31-ba10-7421dfc88ccb
+    transport_zone_profile_ids : {@{resource_type=BfdHealthMonitoringProfile;
+                                profile_id=52035bb3-ab02-4a08-9884-18631312e50a}}
+    host_switch_mode           : STANDARD
+    nested_nsx                 : False
+    is_default                 : False
+    resource_type              : TransportZone
+    id                         : 94d2ee8d-9a98-4954-8993-913cf37bbff8
+    display_name               : MyTZ-Vlan
+    _create_user               : admin
+    _create_time               : 1587314452652
+    _last_modified_user        : admin
+    _last_modified_time        : 1587314452652
+    _system_owned              : False
+    _protection                : NOT_PROTECTED
+    _revision                  : 0
+    _schema                    : /v1/schema/TransportZone
+
+#Add Transport Zone MyTZ-Overlay (type Overlay)
+    Add-NSXTTransportZones -transport_type OVERLAY -host_switch_name NVDS-psNSXT -display_name MyTZ-Overlay
+
+    transport_type             : OVERLAY
+    host_switch_name           : NVDS-psNSXT
+    host_switch_id             : 87a134f7-b366-4e31-ba10-7421dfc88ccb
+    transport_zone_profile_ids : {@{resource_type=BfdHealthMonitoringProfile;
+                                profile_id=52035bb3-ab02-4a08-9884-18631312e50a}}
+    host_switch_mode           : STANDARD
+    nested_nsx                 : False
+    is_default                 : False
+    resource_type              : TransportZone
+    id                         : dcc64ab7-666d-4567-bf35-61d7521bd488
+    display_name               : MyTZ-Overlay
+    _create_user               : admin
+    _create_time               : 1587314562671
+    _last_modified_user        : admin
+    _last_modified_time        : 1587314562671
+    _system_owned              : False
+    _protection                : NOT_PROTECTED
+    _revision                  : 0
+    _schema                    : /v1/schema/TransportZone
+
+
+#Get list of all available Transport Zone
+
+    Get-NSXTTransportZones | Format-Table
+
+    transport_type host_switch_name id                                   host_switch_mode display_name
+    -------------- ---------------- --------------                       ---------------- ------------
+    OVERLAY        NVDS-psNSXT      dcc64ab7-666d-4567-bf35-61d7521bd488 STANDARD         MyTZ-Overlay
+    VLAN           NVDS-psNSXT      94d2ee8d-9a98-4954-8993-913cf37bbff8 STANDARD         MyTZ-Vlan
+
+#Get Transport Zone Vlan by display_name
+
+    Get-NSXTTransportZones -display_name MyTZ-Vlan
+
+    transport_type             : VLAN
+    host_switch_name           : NVDS-psNSXT
+    host_switch_id             : 87a134f7-b366-4e31-ba10-7421dfc88ccb
+    transport_zone_profile_ids : {@{resource_type=BfdHealthMonitoringProfile; profile_id=52035bb3-ab02-4a08-9884-18631312e50a}}
+    host_switch_mode           : STANDARD
+    nested_nsx                 : False
+    is_default                 : False
+    resource_type              : TransportZone
+    id                         : 94d2ee8d-9a98-4954-8993-913cf37bbff8
+    display_name               : MyTZ-Vlan
+    _create_user               : admin
+    _create_time               : 1587314452652
+    _last_modified_user        : admin
+    _last_modified_time        : 1587314452652
+    _system_owned              : False
+    _protection                : NOT_PROTECTED
+    _revision                  : 0
+    _schema                    : /v1/schema/TransportZone
+
+#Get Transport Zone Overlay by (zone_)id with summary
+
+    Get-NSXTTransportZones -zone_id dcc64ab7-666d-4567-bf35-61d7521bd488 -summary
+
+    transport_zone_id                    num_transport_nodes num_logical_switches num_logical_ports
+    -----------------                    ------------------- -------------------- -----------------
+    dcc64ab7-666d-4567-bf35-61d7521bd488                   0                    0                 0
+
+#Remove Transport Zone
+    Get-NSXTTransportZones -display_name MyTZ-Vlan | Remove-NSXTTransportZones
+
+```
+
+### Segments
+
+You can Add, Set and Remove Segments (Type VLAN Only)
+
+```powershell
+#Add a (vlan) Segment MySegment on MyTZ-Vlan with vlan id 2
+
+    Get-NSXTTransportZones -display_name MyTZ-Vlan | Add-NSXTPolicyInfraSegments -segment MySegment -vlan_ids 2
+
+    type                : DISCONNECTED
+    vlan_ids            : {2}
+    transport_zone_path : /infra/sites/default/enforcement-points/default/transport-zones/e5bbefbc-a069-4101-a0b6-67a322e5e133
+    resource_type       : Segment
+    id                  : MySegment
+    display_name        : MySegment
+    path                : /infra/segments/MySegment
+    relative_path       : MySegment
+    parent_path         : /infra/segments/MySegment
+    marked_for_delete   : False
+    _create_user        : admin
+    _create_time        : 1587741128335
+    _last_modified_user : admin
+    _last_modified_time : 1587741128335
+    _system_owned       : False
+    _protection         : NOT_PROTECTED
+    _revision           : 0
+
+#Change Vlan id of a Segment
+
+    Get-NSXTPolicyInfraSegments -display_name MySegment | Set-NSXTPolicyInfraSegments -vlan_ids 23
+
+    type                : DISCONNECTED
+    vlan_ids            : {23}
+    transport_zone_path : /infra/sites/default/enforcement-points/default/transport-zones/e5bbefbc-a069-4101-a0b6-67a322e5e133
+    resource_type       : Segment
+    id                  : MySegment
+    display_name        : MySegment
+    path                : /infra/segments/MySegment
+    relative_path       : MySegment
+    parent_path         : /infra/segments/MySegment
+    marked_for_delete   : False
+    _create_user        : admin
+    _create_time        : 1587741369803
+    _last_modified_user : admin
+    _last_modified_time : 1587741376356
+    _system_owned       : False
+    _protection         : NOT_PROTECTED
+    _revision           : 1
+
+#Remove Segment
+
+    Get-NSXTPolicyInfraSegments -display_name MySegment | Remove-NSXTPolicyInfraSegments
+
+```
+
+### MultiConnection
+
+Tt is possible to connect on same times to multi NSX-T manager
+You need to use -connection parameter to cmdlet
+
+For example to get Transport Zones of 2 NSX-T Manager
+
+```powershell
+# Connect to first NSX-T Manager
+    $nsxt1 = Connect-NSXT 192.0.2.1 -SkipCertificateCheck -DefaultConnection:$false
+
+#DefaultConnection set to false is not mandatory but only don't set the connection info on global variable
+
+# Connect to first NSX-T Manager
+    $nsxt2 = Connect-NSXT 192.0.2.2 -SkipCertificateCheck -DefaultConnection:$false
+
+# Get Transport Zones for first NSX-T Manager
+    Get-NSXTTransportZones -connection $nsxt1 | select transport_type, host_switch_name, host_switch_id, display_name
+
+    transport_type host_switch_name host_switch_id                       display_name
+    -------------- ---------------- --------------                       ------------
+    OVERLAY        NVDS-psNSXT      87a134f7-b366-4e31-ba10-7421dfc88ccb MyTZ-Overlay
+    VLAN           ALG-NVDS         ff40afe1-9bec-4c98-99f7-08f20f565c2d MyTZ-Vlan
+....
+
+# Get Transport Zones for first NSX-T Manager
+    Get-NSXTTransportZones -connection $nsxt2 | select transport_type, host_switch_name, host_switch_id, display_name
+
+    transport_type host_switch_name host_switch_id                       display_name
+    -------------- ---------------- --------------                       ------------
+    VLAN           NVDS-LAB         c1b7f689-764a-4c65-bd04-bbcdc204a855 TZ-VLAN
+...
+
+#Each cmdlet can use -connection parameter
+
+```
 
 ### Disconnecting
 
@@ -293,16 +486,38 @@ The issue coming from use Self-Signed or Expired Certificate for management
 
 Try to connect using `Connect-NSXT -SkipCertificateCheck`
 
+# How to contribute
+
+Contribution and feature requests are more than welcome. Please use the following methods:
+
+  * For bugs and [issues](https://github.com/alagoutte/psNSXT/issues), please use the [issues](https://github.com/alagoutte/psNSXT/issues) register with details of the problem.
+  * For Feature Requests, please use the [issues](https://github.com/alagoutte/psNSXT/issues) register with details of what's required.
+  * For code contribution (bug fixes, or feature request), please request fork psNSXT, create a feature/fix branch, add tests if needed then submit a pull request.
+
+# Contact
+
+Currently, [@alagoutte](#Author) started this project and will keep maintaining it. Reach out to me via [Twitter](#Author), Email (see top of file) or the [issues](https://github.com/alagoutte/psNSXT/issues) Page here on GitHub. If you want to contribute, also get in touch with me.
+
 # List of available command
 ```powershell
 Add-NSXTFabricVirtualMachines
+Add-NSXTPolicyInfraSegments
+Add-NSXTTransportZones
 Confirm-NSXTFabricVirtualMachines
+Confirm-NSXTSegments
+Confirm-NSXTTransportZones
 Connect-NSXT
 Disconnect-NSXT
 Get-NSXTFabricVirtualMachines
+Get-NSXTPolicyInfraSegments
+Get-NSXTTransportZones
 Invoke-NSXTRestMethod
+Remove-NSXTPolicyInfraSegments
+Remove-NSXTTransportZones
 Set-NSXTCipherSSL
 Set-NSXTFabricVirtualMachines
+Set-NSXTPolicyInfraSegments
+Set-NSXTTransportZones
 Set-NSXTUntrustedSSL
 Show-NSXTException
 ```
