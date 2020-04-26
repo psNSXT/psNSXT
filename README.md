@@ -454,7 +454,7 @@ Contribution and feature requests are more than welcome. Please use the followin
 
 # Contact
 
-Currently, @alagoutte started this project and will keep maintaining it. Reach out to me via [Twitter](#Author), Email (see top of file) or the [issues](https://github.com/alagoutte/psNSXT/issues) Page here on GitHub. If you want to contribute, also get in touch with me.
+Currently, [@alagoutte](#Author) started this project and will keep maintaining it. Reach out to me via [Twitter](#Author), Email (see top of file) or the [issues](https://github.com/alagoutte/psNSXT/issues) Page here on GitHub. If you want to contribute, also get in touch with me.
 
 # List of available command
 ```powershell
