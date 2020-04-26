@@ -23,7 +23,7 @@ Go after on integration folder and launch all tests via
 Invoke-Pester *
 ```
 
-It is possible to custom some settings when launch test (like vlan id use for vlan test or port used), you need to uncommented following line on credentials.ps1
+It is possible to custom some settings when launch test (like Transport Zones Name use for Transport Zone test or segment used), you need to uncommented following line on credentials.ps1
 
 ```powershell
 $pester_tz = My_psNSXT_tz
@@ -33,7 +33,7 @@ $pester_sg = My_psNSXT_segment
 
 ## Executing Individual Tests
 
-Tests are broken up according to functional area. If you are working on Vlan functionality for instance, its possible to just run Connection related tests.
+Tests are broken up according to functional area. If you are working on Connection functionality for instance, its possible to just run Connection related tests.
 
 Example:
 
