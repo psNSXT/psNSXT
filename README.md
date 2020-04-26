@@ -4,9 +4,9 @@ This is a Powershell module for configure a NSX-T (Manager).
 
 With this module (version 0.1.0) you can manage:
 
-- [Manage Tags](#manage-tags-on-fabric-virtual-machines) on (Fabric) Virtual Machines
-- [Transport Zones](#Transport-Zones)
-- [Segments](#Segments)
+- [Manage Tags](#manage-tags-on-fabric-virtual-machines) on (Fabric) Virtual Machines (Get/Set)
+- [Transport Zones](#Transport-Zones) (Add/Get/Set/Remove)
+- [Segments](#Segments) (Add/Get/Set/Remove type VLAN)
 
 There is some extra feature :
 
