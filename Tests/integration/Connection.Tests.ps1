@@ -62,7 +62,7 @@ Describe "Connect to a NSX-T (using multi connection)" {
     }
 
     It "Disconnect to a NSX-T (Multi connection)" {
-        Disconnect-NSXT -connection $nsxt -confirm:$false
+        Disconnect-NSXT -connection $nsx -confirm:$false
         $DefaultNSXTConnection | Should -Be $null
     }
 }

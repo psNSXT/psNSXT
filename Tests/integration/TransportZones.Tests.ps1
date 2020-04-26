@@ -69,6 +69,10 @@ Describe "Get Transport Zones" {
         $tz.unknown_count | Should -Not -BeNullOrEmpty
     }
 
+    AfterAll {
+        Get-NSXTTransportZones -display_name $pester_tz | Remove-NSXTTransportZones -confirm:$false
+    }
+
 }
 
 Describe "Add Transport Zones" {

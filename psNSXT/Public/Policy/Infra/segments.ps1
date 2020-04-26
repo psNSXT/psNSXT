@@ -21,12 +21,7 @@ function Add-NSXTPolicyInfraSegments {
         .EXAMPLE
         Get-NSXTTransportZones -display_name MyTZ-Vlan | Add-NSXTPolicyInfraSegments -segment MySegment -vlan_ids 2,44 -display_name MySegment2and44
 
-        Add a (vlan) Segment with (display_)name MySegment2and44 MySegment2and44 on MyTZ-Vlan with vlan id 2 and 44
-
-        .EXAMPLE
-        Get-NSXTTransportZones -display_name MyTZ-Vlan | Add-NSXTPolicyInfraSegments -segment MySegment -vlan_ids 2,44-46
-
-        Add a (vlan) Segment  on MyTZ-Vlan with vlan id 2 and 44 to 46
+        Add a (vlan) Segment with (display_)name MySegment2and44 on MyTZ-Vlan with vlan id 2 and 44
 
     #>
 
@@ -158,6 +153,11 @@ function Set-NSXTPolicyInfraSegments {
         Get-NSXTPolicyInfraSegments -display_name MySegment | Set-NSXTPolicyInfraSegments -vlan_ids 23
 
         Configure a (vlan) Segment MySegment with vlan id 23
+
+        .EXAMPLE
+        Get-NSXTPolicyInfraSegments -display_name MySegment | Set-NSXTPolicyInfraSegments -vlan_ids 23,44
+
+        Configure a (vlan) Segment MySegment with vlan id 23 and 44
 
         .EXAMPLE
         Get-NSXTPolicyInfraSegments -display_name MySegment | Set-NSXTPolicyInfraSegments -display_name MySegment2

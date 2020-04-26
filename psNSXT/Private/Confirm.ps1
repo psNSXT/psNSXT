@@ -25,9 +25,6 @@ Function Confirm-NSXTFabricVirtualMachines {
     if ( -not ( $argument | get-member -name display_name -Membertype Properties)) {
         throw "Element specified does not contain a display_name property."
     }
-    if ( -not ( $argument | get-member -name tags -Membertype Properties)) {
-        throw "Element specified does not contain a tags property."
-    }
     $true
 
 }

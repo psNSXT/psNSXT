@@ -36,7 +36,7 @@ function Connect-NSXT {
 
       .EXAMPLE
       $mysecpassword = ConvertTo-SecureString mypassword -AsPlainText -Force
-      Connect-NSXT -Server 192.0.2.1 -Username manager -Password $mysecpassword
+      Connect-NSXT -Server 192.0.2.1 -Username admin -Password $mysecpassword
 
       Connect to a NSX-T with IP 192.0.2.1 using Username and Password
 
@@ -100,7 +100,7 @@ function Connect-NSXT {
             $invokeParams.remove("UseBasicParsing")
         }
 
-        #for PowerShell (<=) 5 (Desktop), Enable TLS 1.1, 1.2 and Disable SSL chain trust (needed/recommanded by VMware NSX-T)
+        #for PowerShell (<=) 5 (Desktop), Enable TLS 1.1, 1.2 and Disable SSL chain trust (needed/recommended by VMware NSX-T)
         if ("Desktop" -eq $PSVersionTable.PsEdition) {
             #Enable TLS 1.1 and 1.2
             Set-NSXTCipherSSL

@@ -45,7 +45,7 @@ Describe  "Get Fabric Virtual Machines" {
 
     It "Get Fabric Virtual Machines by host_id ($host_id)" {
         $fvm = Get-NSXTFabricVirtualMachines -host_id $host_id
-        $fvm.host_id | Should -Be $host_id
+        $fvm.host_id | Should -BeIn $host_id
     }
 
     It "Get Fabric Virtual Machines and confirm (via Confirm-NSXTFabricVirtualMachines)" {

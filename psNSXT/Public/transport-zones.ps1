@@ -140,6 +140,11 @@ function Get-NSXTTransportZones {
         Get-NSXTTransportZones -zone_id ede3e69a-6562-49a6-98c4-d23408bd832c -summary
 
         Display Transport Zones Summary (Number of Transport Nodes, Logical Switches, Logical Ports) with (zone) id ede3e69a-6562-49a6-98c4-d23408bd832c
+
+        .EXAMPLE
+        Get-NSXTTransportZones -status
+
+        Display Transport Zones Status (Up, Down, degraded, Unknown)
     #>
 
     [CmdletBinding(DefaultParametersetname = "Default")]
