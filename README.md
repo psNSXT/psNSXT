@@ -3,7 +3,7 @@
 This is a Powershell module for configure a NSX-T (Manager).
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/alagoutte/psNSXT/master/Medias/psNSXT.png" width="250" height="250" />
+<img src="https://raw.githubusercontent.com/psNSXT/psNSXT/master/Medias/psNSXT.png" width="250" height="250" />
 </p>
 
 With this module (version 0.1.0) you can manage:
@@ -490,13 +490,13 @@ Try to connect using `Connect-NSXT -SkipCertificateCheck`
 
 Contribution and feature requests are more than welcome. Please use the following methods:
 
-  * For bugs and [issues](https://github.com/alagoutte/psNSXT/issues), please use the [issues](https://github.com/alagoutte/psNSXT/issues) register with details of the problem.
-  * For Feature Requests, please use the [issues](https://github.com/alagoutte/psNSXT/issues) register with details of what's required.
+  * For bugs and [issues](https://github.com/psNSXT/psNSXT/issues), please use the [issues](https://github.com/psNSXT/psNSXT/issues) register with details of the problem.
+  * For Feature Requests, please use the [issues](https://github.com/psNSXT/psNSXT/issues) register with details of what's required.
   * For code contribution (bug fixes, or feature request), please request fork psNSXT, create a feature/fix branch, add tests if needed then submit a pull request.
 
 # Contact
 
-Currently, [@alagoutte](#Author) started this project and will keep maintaining it. Reach out to me via [Twitter](#Author), Email (see top of file) or the [issues](https://github.com/alagoutte/psNSXT/issues) Page here on GitHub. If you want to contribute, also get in touch with me.
+Currently, [@alagoutte](#Author) started this project and will keep maintaining it. Reach out to me via [Twitter](#Author), Email (see top of file) or the [issues](https://github.com/psNSXT/psNSXT/issues) Page here on GitHub. If you want to contribute, also get in touch with me.
 
 # List of available command
 ```powershell

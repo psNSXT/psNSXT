@@ -98,13 +98,13 @@
             Tags       = @("VMware", "NSX", "NSXT", "NSX-T")
 
             # A URL to the license for this module.
-            LicenseUri = 'https://github.com/alagoutte/psNSXT/blob/master/LICENSE'
+            LicenseUri = 'https://github.com/psNSXT/psNSXT/blob/master/LICENSE'
 
             # A URL to the main website for this project.
-            ProjectUri = 'https://github.com/alagoutte/psNSXT'
+            ProjectUri = 'https://github.com/psNSXT/psNSXT'
 
             # A URL to an icon representing this module.
-            IconUri    = 'https://raw.githubusercontent.com/alagoutte/psNSXT/master/Medias/psNSXT.png'
+            IconUri    = 'https://raw.githubusercontent.com/psNSXT/psNSXT/master/Medias/psNSXT.png'
 
             # ReleaseNotes of this module
             # ReleaseNotes = ''
