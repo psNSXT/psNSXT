@@ -101,7 +101,7 @@
             LicenseUri = 'https://github.com/psNSXT/psNSXT/blob/master/LICENSE'
 
             # A URL to the main website for this project.
-            ProjectUri = 'https://github.com/psNSXT/psNSXT'
+            ProjectUri = 'https://psNSXT.github.io/psNSXT/'
 
             # A URL to an icon representing this module.
             IconUri    = 'https://raw.githubusercontent.com/psNSXT/psNSXT/master/Medias/psNSXT.png'
