@@ -14,4 +14,4 @@ jobs:
     - name: Publish
       run: |
         pwsh -Command "import-module ./psNSXT -Force"
-        pwsh -Command "Publish-Module name psNSXT -NuGetApiKey ${{ secrets.PSGALLERY_API_KEY }}"
+        pwsh -Command "Publish-Module -name psNSXT -NuGetApiKey ${{ secrets.PSGALLERY_API_KEY }}"
