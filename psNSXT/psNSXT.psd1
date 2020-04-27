@@ -9,7 +9,7 @@
 @{
 
     # Script module or binary module file associated with this manifest.
-    RootModule        = 'PsNSXT.psm1'
+    RootModule        = 'psNSXT.psm1'
 
     # Version number of this module.
     ModuleVersion     = '0.2.1'
