@@ -86,7 +86,15 @@ function Connect-NSXT {
 
         $cred = $Credential.username + ":" + $Credential.GetNetworkCredential().Password
         $base64 = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($cred))
-        $headers = @{ Authorization = "Basic " + $base64; Accept = "application/json"; "Content-type" = "application/json" }
+        #if username is admin, it is Basic
+        if ($Credential.username -eq "admin") {
+            $auth = "Basic "
+        }
+        # else (vIDM or LDAP), it is Remote...
+        else {
+            $auth = "Remote "
+        }
+        $headers = @{ Authorization = $auth + $base64; Accept = "application/json"; "Content-type" = "application/json" }
         $invokeParams = @{DisableKeepAlive = $false; UseBasicParsing = $true; SkipCertificateCheck = $SkipCertificateCheck }
 
 
