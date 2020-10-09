@@ -187,7 +187,6 @@ Describe "Remove Segments" {
         Start-Sleep 2
     }
 
-
 }
 
 Disconnect-NSXT -confirm:$false
