@@ -66,7 +66,7 @@ Describe "Add Segments" {
         $sg.display_name | Should -Be $pester_sg
         $sg.path | Should -Be "/infra/segments/$pester_sg"
         $sg.relative_path | Should -Be $pester_sg
-        $sg.parent_path | Should -Be "/infra/segments/$pester_sg"
+        $sg.parent_path | Should -BeLike "/infra"
         $sg.marked_for_delete | Should -Be $false
     }
 
@@ -80,7 +80,7 @@ Describe "Add Segments" {
         $sg.display_name | Should -Be "Seg by psNSXT"
         $sg.path | Should -Be "/infra/segments/$pester_sg"
         $sg.relative_path | Should -Be $pester_sg
-        $sg.parent_path | Should -Be "/infra/segments/$pester_sg"
+        $sg.parent_path | Should -BeLike "/infra"
         $sg.marked_for_delete | Should -Be $false
     }
 
@@ -94,7 +94,7 @@ Describe "Add Segments" {
         $sg.display_name | Should -Be $pester_sg
         $sg.path | Should -Be "/infra/segments/$pester_sg"
         $sg.relative_path | Should -Be $pester_sg
-        $sg.parent_path | Should -Be "/infra/segments/$pester_sg"
+        $sg.parent_path | Should -BeLike "/infra"
         $sg.marked_for_delete | Should -Be $false
     }
 
@@ -121,7 +121,7 @@ Describe "Configure Segments" {
         $sg.display_name | Should -Be "pester_sg2"
         $sg.path | Should -Be "/infra/segments/$pester_sg"
         $sg.relative_path | Should -Be $pester_sg
-        $sg.parent_path | Should -Be "/infra/segments/$pester_sg"
+        $sg.parent_path | Should -BeLike "/infra"
         $sg.marked_for_delete | Should -Be $false
         #Restore name...
         Get-NSXTPolicyInfraSegments -display_name pester_sg2 | Set-NSXTPolicyInfraSegments -display_name $pester_sg
@@ -137,7 +137,7 @@ Describe "Configure Segments" {
         $sg.display_name | Should -Be "pester_sg"
         $sg.path | Should -Be "/infra/segments/$pester_sg"
         $sg.relative_path | Should -Be $pester_sg
-        $sg.parent_path | Should -Be "/infra/segments/$pester_sg"
+        $sg.parent_path | Should -BeLike "/infra"
         $sg.marked_for_delete | Should -Be $false
     }
 
@@ -151,7 +151,7 @@ Describe "Configure Segments" {
         $sg.display_name | Should -Be "pester_sg"
         $sg.path | Should -Be "/infra/segments/$pester_sg"
         $sg.relative_path | Should -Be $pester_sg
-        $sg.parent_path | Should -Be "/infra/segments/$pester_sg"
+        $sg.parent_path | Should -BeLike "/infra"
         $sg.marked_for_delete | Should -Be $false
     }
 
@@ -186,7 +186,6 @@ Describe "Remove Segments" {
         #Wait 2 seconds to be sure the Segments is deleted (it can be make 5 sec for be removed !)
         Start-Sleep 2
     }
-
 
 }
 
