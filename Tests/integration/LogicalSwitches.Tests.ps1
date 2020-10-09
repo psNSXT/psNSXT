@@ -8,7 +8,8 @@
 Describe "Get Logical Switches" {
     BeforeAll {
         #Use default nsx-vlan-transportzone (from NSX-T 3.0...)
-        Get-NSXTTransportZones -display_name nsx-vlan-transportzone | Add-NSXTPolicyInfraSegments -segment $pester_sg -vlan_ids 23
+        $script:segment = Get-NSXTTransportZones -display_name nsx-vlan-transportzone | Add-NSXTPolicyInfraSegments -segment $pester_sg -vlan_ids 23
+        $script:sid = $segment.unique_id
     }
 
     It "Get Logical Switches Does not throw an error" {
@@ -29,10 +30,10 @@ Describe "Get Logical Switches" {
         $sg[0].tags | Should -Not -BeNullOrEmpty
     }
 
-    #It "Get Logical Switches by id ($pester_sg)" {
-    #    $sg = Get-NSXTLogicalSwitches -id $pester_sg
-    #    $sg.id | Should -Be $pester_sg
-    #}
+    It "Get Logical Switches by id ($sid)" {
+        $sg = Get-NSXTLogicalSwitches -id $sid
+        $sg.id | Should -Be $sid
+    }
 
     It "Get Logical Switches by display_name ($pester_sg)" {
         $sg = Get-NSXTLogicalSwitches -display_name $pester_sg

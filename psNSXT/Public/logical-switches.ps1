@@ -42,6 +42,8 @@ function Get-NSXTLogicalSwitches {
 
     [CmdletBinding(DefaultParametersetname = "Default")]
     Param(
+        [Parameter(Mandatory = $false, ParameterSetName = "id")]
+        [string]$id,
         [Parameter(Mandatory = $false, ParameterSetName = "Default")]
         [string]$switching_profile_id,
         [Parameter(Mandatory = $false, ParameterSetName = "display_name")]
@@ -76,6 +78,10 @@ function Get-NSXTLogicalSwitches {
         $response = Invoke-NSXTRestMethod -uri $uri -method 'GET' -connection $connection
 
         switch ( $PSCmdlet.ParameterSetName ) {
+            "id" {
+                #When there is a id, search on response
+                $response.results | Where-Object { $_.id -eq $id }
+            }
             "display_name" {
                 #When there is a display_name, search on response
                 $response.results | Where-Object { $_.display_name -eq $display_name }
