@@ -86,8 +86,8 @@ function Connect-NSXT {
 
         $cred = $Credential.username + ":" + $Credential.GetNetworkCredential().Password
         $base64 = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($cred))
-        #if username is admin, it is Basic
-        if ($Credential.username -eq "admin") {
+        #if username is admin or audit, it is Basic
+        if ($Credential.username -eq "admin" -or $Credential.username -eq "audit" ) {
             $auth = "Basic "
         }
         # else (vIDM or LDAP), it is Remote...
