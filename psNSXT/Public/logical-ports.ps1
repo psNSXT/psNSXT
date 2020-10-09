@@ -4,6 +4,89 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+function Add-NSXTLogicalPorts {
+
+    <#
+        .SYNOPSIS
+        Add a Logical Ports
+
+        .DESCRIPTION
+        Add a Logical Ports
+
+        .EXAMPLE
+        Get-NSXTLogicalSwitches -display_name MyLogicalSwitch | Add-NSXTLogicalPorts -display_name MyLogicalPort -admin_state UP -attachement_id 0d6560fc-8b51-40fb-b6b1-588a0cea8f22
+
+        Add a LogicalPorts type MyLogicalPort with admin state UP on MyLogicalSwitch with attachement id 0d6560fc-8b51-40fb-b6b1-588a0cea8f22
+
+        .EXAMPLE
+        Get-NSXTLogicalSwitches -display_name MyLogicalSwitch | Add-NSXTLogicalPorts -display_name MyLogicalPort -admin_state UP -attachement_id 0d6560fc-8b51-40fb-b6b1-588a0cea8f22 -description "Add by psNSXT"
+
+        Add a LogicalPorts type MyLogicalPort with admin state UP on MyLogicalSwitch with attachement id 0d6560fc-8b51-40fb-b6b1-588a0cea8f22 with a description
+
+        .EXAMPLE
+        Get-NSXTLogicalSwitches -display_name MyLogicalSwitch | Add-NSXTLogicalPorts -display_name MyLogicalPort -admin_state UP -attachement_id 0d6560fc-8b51-40fb-b6b1-588a0cea8f22 -init_state UNBLOCKED_VLAN
+
+        Add a LogicalPorts type MyLogicalPort with admin state UP on MyLogicalSwitch with attachement id 0d6560fc-8b51-40fb-b6b1-588a0cea8f22 and init state set to Unblocked vlan
+    #>
+
+    Param(
+        [Parameter(Mandatory = $true)]
+        [ValidateSet("UP", "DOWN", IgnoreCase = $false)]
+        [string]$admin_state,
+        [Parameter(Mandatory = $true)]
+        [guid]$attachement_id,
+        [Parameter(Mandatory = $true)]
+        [string]$display_name,
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateScript( { Confirm-NSXTLogicalPorts $_ })]
+        [psobject]$logical_switch_id,
+        [Parameter(Mandatory = $false)]
+        [ValidateSet("UNBLOCKED_VLAN", IgnoreCase = $false)]
+        [string]$init_state,
+        [Parameter(Mandatory = $true)]
+        [string]$description,
+        [Parameter(Mandatory = $false)]
+        [psobject]$connection = $DefaultNSXTConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $uri = 'api/v1/logical-ports'
+
+        $_lg = new-Object -TypeName PSObject
+
+        $_lg | add-member -name "admin_state" -membertype NoteProperty -Value $admin_state
+
+        $_lg | add-member -name "display_name" -membertype NoteProperty -Value $display_name
+
+        $attachment = new-Object -TypeName PSObject
+        $attachment | Add-member -name "attachment_type" -membertype NoteProperty -Value "VIF"
+        $attachment | Add-member -name "id" -membertype NoteProperty -Value $attachement_id
+
+        $_lg | add-member -name "attachment" -membertype NoteProperty -Value $attachment
+
+        $_lg | add-member -name "logical_switch_id" -membertype NoteProperty -Value $logical_switch_id.id
+
+        if ( $PsBoundParameters.ContainsKey('init_state') ) {
+            $_lg | add-member -name "init_state" -membertype NoteProperty -Value $init_state
+        }
+
+        if ( $PsBoundParameters.ContainsKey('description') ) {
+            $_lg | add-member -name "description" -membertype NoteProperty -Value $description
+        }
+
+        $response = Invoke-NSXTRestMethod -uri $uri -method 'POST' -body $_lg -connection $connection
+        $response
+
+    }
+
+    End {
+    }
+}
+
 function Get-NSXTLogicalPorts {
 
     <#
