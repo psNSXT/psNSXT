@@ -19,7 +19,7 @@ function Get-NSXTLogicalSwitches {
         Display all Logical Switches
 
         .EXAMPLE
-        Get-NSXTTransportZones -switching_profile_id ede3e69a-6562-49a6-98c4-d23408bd832c
+        Get-NSXTLogicalSwitches -switching_profile_id ede3e69a-6562-49a6-98c4-d23408bd832c
 
         Display Logical Switches with switching_profile_id ede3e69a-6562-49a6-98c4-d23408bd832c
 
