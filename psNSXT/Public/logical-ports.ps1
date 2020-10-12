@@ -38,7 +38,7 @@ function Add-NSXTLogicalPorts {
         [Parameter(Mandatory = $true)]
         [string]$display_name,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [ValidateScript( { Confirm-NSXTLogicalPorts $_ })]
+        [ValidateScript( { Confirm-NSXTLogicalSwitches $_ })]
         [psobject]$logical_switch_id,
         [Parameter(Mandatory = $false)]
         [ValidateSet("UNBLOCKED_VLAN", IgnoreCase = $false)]
