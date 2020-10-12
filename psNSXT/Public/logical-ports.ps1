@@ -30,10 +30,10 @@ function Add-NSXTLogicalPorts {
     #>
 
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $false)]
         [ValidateSet("UP", "DOWN", IgnoreCase = $false)]
-        [string]$admin_state,
-        [Parameter(Mandatory = $true)]
+        [string]$admin_state = "UP",
+        [Parameter(Mandatory = $false)]
         [guid]$attachement_id,
         [Parameter(Mandatory = $true)]
         [string]$display_name,
@@ -43,7 +43,7 @@ function Add-NSXTLogicalPorts {
         [Parameter(Mandatory = $false)]
         [ValidateSet("UNBLOCKED_VLAN", IgnoreCase = $false)]
         [string]$init_state,
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $false)]
         [string]$description,
         [Parameter(Mandatory = $false)]
         [psobject]$connection = $DefaultNSXTConnection
@@ -64,6 +64,9 @@ function Add-NSXTLogicalPorts {
 
         $attachment = new-Object -TypeName PSObject
         $attachment | Add-member -name "attachment_type" -membertype NoteProperty -Value "VIF"
+        if ( -not $PsBoundParameters.ContainsKey('attachement_id') ) {
+            $attachement_id = (New-Guid).guid
+        }
         $attachment | Add-member -name "id" -membertype NoteProperty -Value $attachement_id
 
         $_lg | add-member -name "attachment" -membertype NoteProperty -Value $attachment
