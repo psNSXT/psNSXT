@@ -29,14 +29,14 @@ Function Confirm-NSXTFabricVirtualMachines {
 
 }
 
-Function Confirm-NSXTLogicalPorts {
+Function Confirm-NSXTLogicalSwitches {
 
     Param (
         [Parameter (Mandatory = $true)]
         [object]$argument
     )
 
-    #Check if it looks like an Logical Ports element
+    #Check if it looks like an Logical Switches element
 
     if ( -not ( $argument | get-member -name switch_type -Membertype Properties)) {
         throw "Element specified does not contain a switch_type property."
