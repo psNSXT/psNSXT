@@ -8,25 +8,35 @@ function Add-NSXTLogicalPorts {
 
     <#
         .SYNOPSIS
-        Add a Logical Ports
+        Add a Logical Port
 
         .DESCRIPTION
-        Add a Logical Ports
+        Add a Logical Port
+
+        .EXAMPLE
+        Get-NSXTLogicalSwitches -display_name MyLogicalSwitch | Add-NSXTLogicalPorts -display_name MyLogicalPort
+
+        Add a Logical Port type MyLogicalPort with admin state UP (default) on MyLogicalSwitch with generate attachement id
+
+        .EXAMPLE
+        Get-NSXTLogicalSwitches -display_name MyLogicalSwitch | Add-NSXTLogicalPorts -display_name MyLogicalPort -admin_state DOWN
+
+        Add a LogicalPorts type MyLogicalPort with admin state DOWN on MyLogicalSwitch with generate attachement id
 
         .EXAMPLE
         Get-NSXTLogicalSwitches -display_name MyLogicalSwitch | Add-NSXTLogicalPorts -display_name MyLogicalPort -admin_state UP -attachement_id 0d6560fc-8b51-40fb-b6b1-588a0cea8f22
 
-        Add a LogicalPorts type MyLogicalPort with admin state UP on MyLogicalSwitch with attachement id 0d6560fc-8b51-40fb-b6b1-588a0cea8f22
+        Add a Logical Port type MyLogicalPort with admin state UP on MyLogicalSwitch with attachement id 0d6560fc-8b51-40fb-b6b1-588a0cea8f22
 
         .EXAMPLE
         Get-NSXTLogicalSwitches -display_name MyLogicalSwitch | Add-NSXTLogicalPorts -display_name MyLogicalPort -admin_state UP -attachement_id 0d6560fc-8b51-40fb-b6b1-588a0cea8f22 -description "Add by psNSXT"
 
-        Add a LogicalPorts type MyLogicalPort with admin state UP on MyLogicalSwitch with attachement id 0d6560fc-8b51-40fb-b6b1-588a0cea8f22 with a description
+        Add a Logical Port type MyLogicalPort with admin state UP on MyLogicalSwitch with attachement id 0d6560fc-8b51-40fb-b6b1-588a0cea8f22 with a description
 
         .EXAMPLE
         Get-NSXTLogicalSwitches -display_name MyLogicalSwitch | Add-NSXTLogicalPorts -display_name MyLogicalPort -admin_state UP -attachement_id 0d6560fc-8b51-40fb-b6b1-588a0cea8f22 -init_state UNBLOCKED_VLAN
 
-        Add a LogicalPorts type MyLogicalPort with admin state UP on MyLogicalSwitch with attachement id 0d6560fc-8b51-40fb-b6b1-588a0cea8f22 and init state set to Unblocked vlan
+        Add a Logical Port type MyLogicalPort with admin state UP on MyLogicalSwitch with attachement id 0d6560fc-8b51-40fb-b6b1-588a0cea8f22 and init state set to Unblocked vlan
     #>
 
     Param(
