@@ -218,8 +218,8 @@ function Remove-NSXTLogicalPorts {
         Remove a Logical Port
 
         .EXAMPLE
-        $tz = Get-NSXTLogicalPorts -id ff8140b0-010e-4e92-aa62-a55766f17da0
-        PS C:\>$tz | Remove-NSXTLogicalPorts
+        $lp = Get-NSXTLogicalPorts -id ff8140b0-010e-4e92-aa62-a55766f17da0
+        PS C:\>$lp | Remove-NSXTLogicalPorts
 
         Remove Logical Port with id ff8140b0-010e-4e92-aa62-a55766f17da0
 
