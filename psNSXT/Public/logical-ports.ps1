@@ -227,6 +227,12 @@ function Remove-NSXTLogicalPorts {
         Remove-NSXTLogicalPorts -id ff8140b0-010e-4e92-aa62-a55766f17da0 -confirm:$false
 
         Remove Logical Port with id ff8140b0-010e-4e92-aa62-a55766f17da0 with no confirmation
+
+        .EXAMPLE
+        $lp = Get-NSXTLogicalPorts -id ff8140b0-010e-4e92-aa62-a55766f17da0
+        PS C:\>$lp | Remove-NSXTLogicalPorts -force
+
+        Force remove Logical Port with id ff8140b0-010e-4e92-aa62-a55766f17da0
     #>
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
@@ -236,6 +242,8 @@ function Remove-NSXTLogicalPorts {
         [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "lp")]
         [ValidateScript( { Confirm-NSXTLogicalPorts $_ })]
         [psobject]$lp,
+        [Parameter (Mandatory = $false)]
+        [switch]$force,
         [Parameter(Mandatory = $false)]
         [psobject]$connection = $DefaultNSXTConnection
     )
@@ -251,7 +259,11 @@ function Remove-NSXTLogicalPorts {
             $name = "(" + $lp.display_name + ")"
         }
 
-        $uri = "api/v1/logical-ports/$id"
+        $uri = "api/v1/logical-ports/" + $id + "?"
+
+        if ( $PsBoundParameters.ContainsKey('force') ) {
+            $uri += "&detach=true"
+        }
 
         if ($PSCmdlet.ShouldProcess("LP", "Remove Logical Port ${id} ${name}")) {
             Invoke-NSXTRestMethod -method "DELETE" -uri $uri -connection $connection
