@@ -70,4 +70,103 @@ Describe "Get Logical Ports" {
 
 }
 
+
+Describe "Add Logical Port" {
+    BeforeAll {
+        #Use default nsx-vlan-transportzone (from NSX-T 3.0...)
+        Get-NSXTTransportZones -display_name nsx-vlan-transportzone | Add-NSXTPolicyInfraSegments -segment $pester_sg -vlan_ids 23
+        Start-Sleep 1
+    }
+
+    It "Add Logical Port" {
+        Get-NSXTLogicalSwitches -display_name $pester_sg | Add-NSXTLogicalPorts -display_name $pester_lp
+        $lp = Get-NSXTLogicalPorts -display_name $pester_lp
+        $lp.logical_switch_id | Should -Not -BeNullOrEmpty
+        $lp.attachment | Should -Not -BeNullOrEmpty
+        $lp.attachment.attachment_type | Should -Be "VIF"
+        $lp.attachment.id | Should -Not -BeNullOrEmpty
+        $lp.admin_state | Should -Be "UP"
+        $lp.description | Should -BeNullOrEmpty
+        $lp.init_state | Should -BeNullOrEmpty
+        $lp.resource_type | Should -Be "LogicalPort"
+        $lp.id | Should -Not -BeNullOrEmpty
+        $lp.switching_profile_ids | Should -Not -BeNullOrEmpty
+        $lp.display_name | Should -Be $pester_lp
+    }
+
+    It "Add Logical Port with admin_state down" {
+        Get-NSXTLogicalSwitches -display_name $pester_sg | Add-NSXTLogicalPorts -display_name $pester_lp -admin_state "DOWN"
+        $lp = Get-NSXTLogicalPorts -display_name $pester_lp
+        $lp.logical_switch_id | Should -Not -BeNullOrEmpty
+        $lp.attachment | Should -Not -BeNullOrEmpty
+        $lp.attachment.attachment_type | Should -Be "VIF"
+        $lp.attachment.id | Should -Not -BeNullOrEmpty
+        $lp.admin_state | Should -Be "DOWN"
+        $lp.description | Should -BeNullOrEmpty
+        $lp.init_state | Should  -BeNullOrEmpty
+        $lp.resource_type | Should -Be "LogicalPort"
+        $lp.id | Should -Not -BeNullOrEmpty
+        $lp.switching_profile_ids | Should -Not -BeNullOrEmpty
+        $lp.display_name | Should -Be $pester_lp
+    }
+
+    It "Add Logical Port with specific attachement id" {
+        Get-NSXTLogicalSwitches -display_name $pester_sg | Add-NSXTLogicalPorts -display_name $pester_lp -attachement_id 0d6560fc-8b51-40fb-b6b1-588a0cea8f22
+        $lp = Get-NSXTLogicalPorts -display_name $pester_lp
+        $lp.logical_switch_id | Should -Not -BeNullOrEmpty
+        $lp.attachment | Should -Not -BeNullOrEmpty
+        $lp.attachment.attachment_type | Should -Be "VIF"
+        $lp.attachment.id | Should -Be "0d6560fc-8b51-40fb-b6b1-588a0cea8f22"
+        $lp.admin_state | Should -Be "UP"
+        $lp.description | Should -BeNullOrEmpty
+        $lp.init_state | Should -BeNullOrEmpty
+        $lp.resource_type | Should -Be "LogicalPort"
+        $lp.id | Should -Not -BeNullOrEmpty
+        $lp.switching_profile_ids | Should -Not -BeNullOrEmpty
+        $lp.display_name | Should -Be $pester_lp
+    }
+
+    It "Add Logical Port with a description" {
+        Get-NSXTLogicalSwitches -display_name $pester_sg | Add-NSXTLogicalPorts -display_name $pester_lp -description "Add via psNSXT"
+        $lp = Get-NSXTLogicalPorts -display_name $pester_lp
+        $lp.logical_switch_id | Should -Not -BeNullOrEmpty
+        $lp.attachment | Should -Not -BeNullOrEmpty
+        $lp.attachment.attachment_type | Should -Be "VIF"
+        $lp.attachment.id | Should -Not -BeNullOrEmpty
+        $lp.admin_state | Should -Be "UP"
+        $lp.description | Should -Be "Add via psNSXT"
+        $lp.init_state | Should -BeNullOrEmpty
+        $lp.resource_type | Should -Be "LogicalPort"
+        $lp.id | Should -Not -BeNullOrEmpty
+        $lp.switching_profile_ids | Should -Not -BeNullOrEmpty
+        $lp.display_name | Should -Be $pester_lp
+    }
+
+    It "Add Logical Port with a init_state" {
+        Get-NSXTLogicalSwitches -display_name $pester_sg | Add-NSXTLogicalPorts -display_name $pester_lp -init_state UNBLOCKED_VLAN
+        $lp = Get-NSXTLogicalPorts -display_name $pester_lp
+        $lp.logical_switch_id | Should -Not -BeNullOrEmpty
+        $lp.attachment | Should -Not -BeNullOrEmpty
+        $lp.attachment.attachment_type | Should -Be "VIF"
+        $lp.attachment.id | Should -Not -BeNullOrEmpty
+        $lp.admin_state | Should -Be "UP"
+        $lp.description | Should -BeNullOrEmpty
+        $lp.init_state | Should -Be "UNBLOCKED_VLAN"
+        $lp.resource_type | Should -Be "LogicalPort"
+        $lp.id | Should -Not -BeNullOrEmpty
+        $lp.switching_profile_ids | Should -Not -BeNullOrEmpty
+        $lp.display_name | Should -Be $pester_lp
+    }
+
+    AfterEach {
+        Get-NSXTLogicalPorts -display_name $pester_lp | Remove-NSXTLogicalPorts -confirm:$false -force
+    }
+
+    AfterAll {
+        Get-NSXTPolicyInfraSegments -segment $pester_sg | Remove-NSXTPolicyInfraSegments -confirm:$false
+        #Wait 2 seconds to be sure the Segments is deleted (it can be make 5 sec for be removed !)
+        Start-Sleep 2
+    }
+}
+
 Disconnect-NSXT -confirm:$false
