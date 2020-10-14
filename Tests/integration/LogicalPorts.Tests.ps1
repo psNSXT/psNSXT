@@ -169,4 +169,36 @@ Describe "Add Logical Port" {
     }
 }
 
+
+Describe "Remove Logical Port" {
+
+    BeforeAll {
+        Get-NSXTTransportZones -display_name nsx-vlan-transportzone | Add-NSXTPolicyInfraSegments -segment $pester_sg -vlan_ids 23
+    }
+    BeforeEach {
+        $lp = Get-NSXTLogicalSwitches -display_name $pester_sg | Add-NSXTLogicalPorts -display_name $pester_lp
+        $script:lpid = $lp.id
+    }
+
+    It "Remove Logical Ports by id" {
+        Remove-NSXTLogicalPorts -id $lpid -confirm:$false -force
+        $lp = Get-NSXTLogicalPorts -display_name $pester_lp
+        $lp | Should -Be $NULL
+    }
+
+    It "Remove Logical Ports ($pester_lp) by pipeline" {
+        $lp = Get-NSXTLogicalPorts -display_name $pester_lp
+        $lp | Remove-NSXTLogicalPorts -confirm:$false -force
+        $lp = Get-NSXTLogicalPorts -display_name $pester_lp
+        $lp | Should -Be $NULL
+    }
+
+    AfterAll {
+        Get-NSXTPolicyInfraSegments -segment $pester_sg | Remove-NSXTPolicyInfraSegments -confirm:$false
+        #Wait 2 seconds to be sure the Segments is deleted (it can be make 5 sec for be removed !)
+        Start-Sleep 2
+    }
+
+}
+
 Disconnect-NSXT -confirm:$false
