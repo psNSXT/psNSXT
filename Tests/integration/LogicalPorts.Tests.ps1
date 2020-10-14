@@ -23,14 +23,14 @@ Describe "Get Logical Ports" {
     }
 
     It "Get Logical Ports" {
-        $sg = Get-NSXTLogicalPorts
-        $sg[0].logical_switch_id | Should -Not -BeNullOrEmpty
-        $sg[0].attachment | Should -Not -BeNullOrEmpty
-        $sg[0].admin_state | Should -Not -BeNullOrEmpty
-        $sg[0].resource_type | Should -Be "LogicalPort"
-        $sg[0].id | Should -Not -BeNullOrEmpty
-        $sg[0].switching_profile_ids | Should -Not -BeNullOrEmpty
-        $sg[0].display_name | Should -Not -BeNullOrEmpty
+        $lp = Get-NSXTLogicalPorts
+        $lp[0].logical_switch_id | Should -Not -BeNullOrEmpty
+        $lp[0].attachment | Should -Not -BeNullOrEmpty
+        $lp[0].admin_state | Should -Not -BeNullOrEmpty
+        $lp[0].resource_type | Should -Be "LogicalPort"
+        $lp[0].id | Should -Not -BeNullOrEmpty
+        $lp[0].switching_profile_ids | Should -Not -BeNullOrEmpty
+        $lp[0].display_name | Should -Not -BeNullOrEmpty
     }
 
     It "Get Logical Ports by id ($sid)" {
@@ -49,9 +49,9 @@ Describe "Get Logical Ports" {
         $lp.id | Should -Not -BeNullOrEmpty
     }
 
-    #It "Get Logical Ports by switching_profile_id ($pester_sg)" {
-    #    $sg = Get-NSXTLogicalPorts -switching_profile_id $pester_sg
-    #    $sg.id | Should -Be $pester_sg
+    #It "Get Logical Ports by switching_profile_id ($spid)" {
+    #    $lp = Get-NSXTLogicalPorts -switching_profile_id $spid
+    #    $lp.id | Should -Be $pester_sg
     #}
 
     It "Get Logical Ports by attachment(_id) ($aid)" {
