@@ -13,6 +13,7 @@ if ("Desktop" -eq $PSVersionTable.PsEdition) {
 else {
     $script:pester_longint = "long"
 }
+$script:pester_lp = "pester_lp"
 $script:pester_tz = "pester_tz"
 $script:pester_sg = "pester_sg"
 

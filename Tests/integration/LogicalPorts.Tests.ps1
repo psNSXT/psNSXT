@@ -7,7 +7,13 @@
 
 Describe "Get Logical Ports" {
     BeforeAll {
-        #Need to create a default value...
+        #Use default nsx-vlan-transportzone (from NSX-T 3.0...)
+        Get-NSXTTransportZones -display_name nsx-vlan-transportzone | Add-NSXTPolicyInfraSegments -segment $pester_sg -vlan_ids 23
+
+        $lp = Get-NSXTLogicalSwitches -display_name $pester_sg | Add-NSXTLogicalPorts -display_name $pester_lp
+        $script:sid = $lp.id
+        $script:tid = (Get-NSXTTransportZones -display_name nsx-vlan-transportzone).id
+        $script:aid = $lp.attachment.id
     }
 
     It "Get Logical Ports Does not throw an error" {
@@ -27,29 +33,39 @@ Describe "Get Logical Ports" {
         $sg[0].display_name | Should -Not -BeNullOrEmpty
     }
 
-    #It "Get Logical Ports by id ($sid)" {
-    #    $sg = Get-NSXTLogicalPorts -id $sid
-    #    $sg.id | Should -Be $sid
-    #}
+    It "Get Logical Ports by id ($sid)" {
+        $lp = Get-NSXTLogicalPorts -id $sid
+        $lp.id | Should -Be $sid
+    }
 
-    #It "Get Logical Ports by display_name ($pester_sg)" {
-    #    $sg = Get-NSXTLogicalPorts -display_name $pester_sg
-    #    $sg.id | Should -Not -BeNullOrEmpty
-    #    $sg.display_name | Should -Be $pester_sg
-    #}
+    It "Get Logical Ports by display_name ($pester_lp)" {
+        $lp = Get-NSXTLogicalPorts -display_name $pester_lp
+        $lp.id | Should -Not -BeNullOrEmpty
+        $lp.display_name | Should -Be $pester_lp
+    }
 
-    #It "Get Logical Ports by transport_zone(_id) ($tid)" {
-    #    $sg = Get-NSXTLogicalPorts -transport_zone_id $tid
-    #    $sg.transport_zone_id | Should -Be $tid
-    #}
+    It "Get Logical Ports by transport_zone(_id) ($tid)" {
+        $lp = Get-NSXTLogicalPorts -transport_zone_id $tid
+        $lp.id | Should -Not -BeNullOrEmpty
+    }
 
     #It "Get Logical Ports by switching_profile_id ($pester_sg)" {
     #    $sg = Get-NSXTLogicalPorts -switching_profile_id $pester_sg
     #    $sg.id | Should -Be $pester_sg
     #}
 
+    It "Get Logical Ports by attachment(_id) ($aid)" {
+        $lp = Get-NSXTLogicalPorts -attachment_id $aid
+        $lp.id | Should -Not -BeNullOrEmpty
+        $lp.attachment.id | Should -Be $aid
+    }
+
     AfterAll {
-        #Remove create Logical Ports...
+        Get-NSXTLogicalPorts -display_name $pester_lp | Remove-NSXTLogicalPorts -confirm:$false -force
+
+        Get-NSXTPolicyInfraSegments -segment $pester_sg | Remove-NSXTPolicyInfraSegments -confirm:$false
+        #Wait 2 seconds to be sure the Segments is deleted (it can be make 5 sec for be removed !)
+        Start-Sleep 2
     }
 
 }
