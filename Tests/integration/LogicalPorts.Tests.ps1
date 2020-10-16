@@ -71,6 +71,58 @@ Describe "Get Logical Ports" {
 }
 
 
+Describe "Set Logical Port" {
+    BeforeAll {
+        #Use default nsx-vlan-transportzone (from NSX-T 3.0...)
+        Get-NSXTTransportZones -display_name nsx-vlan-transportzone | Add-NSXTPolicyInfraSegments -segment $pester_sg -vlan_ids 23
+    }
+
+    BeforeEach {
+        Get-NSXTLogicalSwitches -display_name $pester_sg | Add-NSXTLogicalPorts -display_name $pester_lp
+    }
+
+    It "Set Logical Port description" {
+        Get-NSXTLogicalPorts -display_name $pester_lp | Set-NSXTLogicalPorts -description "Modified by psNSXT"
+        $lp = Get-NSXTLogicalPorts -display_name $pester_lp
+        $lp.logical_switch_id | Should -Not -BeNullOrEmpty
+        $lp.attachment | Should -Not -BeNullOrEmpty
+        $lp.attachment.attachment_type | Should -Be "VIF"
+        $lp.attachment.id | Should -Not -BeNullOrEmpty
+        $lp.admin_state | Should -Be "UP"
+        $lp.description | Should -Be "Modified by psNSXT"
+        $lp.init_state | Should -BeNullOrEmpty
+        $lp.resource_type | Should -Be "LogicalPort"
+        $lp.id | Should -Not -BeNullOrEmpty
+        $lp.switching_profile_ids | Should -Not -BeNullOrEmpty
+        $lp.display_name | Should -Be $pester_lp
+    }
+
+    It "Set Logical Port with admin_state down" {
+        Get-NSXTLogicalPorts -display_name $pester_lp | Set-NSXTLogicalPorts -admin_state "DOWN"
+        $lp = Get-NSXTLogicalPorts -display_name $pester_lp
+        $lp.attachment | Should -Not -BeNullOrEmpty
+        $lp.attachment.attachment_type | Should -Be "VIF"
+        $lp.attachment.id | Should -Not -BeNullOrEmpty
+        $lp.admin_state | Should -Be "DOWN"
+        $lp.description | Should -BeNullOrEmpty
+        $lp.init_state | Should  -BeNullOrEmpty
+        $lp.resource_type | Should -Be "LogicalPort"
+        $lp.id | Should -Not -BeNullOrEmpty
+        $lp.switching_profile_ids | Should -Not -BeNullOrEmpty
+        $lp.display_name | Should -Be $pester_lp
+    }
+
+    AfterEach {
+        Get-NSXTLogicalPorts -display_name $pester_lp | Remove-NSXTLogicalPorts -confirm:$false -force
+    }
+
+    AfterAll {
+        Get-NSXTPolicyInfraSegments -segment $pester_sg | Remove-NSXTPolicyInfraSegments -confirm:$false
+        #Wait 2 seconds to be sure the Segments is deleted (it can be make 5 sec for be removed !)
+        Start-Sleep 2
+    }
+}
+
 Describe "Add Logical Port" {
     BeforeAll {
         #Use default nsx-vlan-transportzone (from NSX-T 3.0...)
@@ -168,7 +220,6 @@ Describe "Add Logical Port" {
         Start-Sleep 2
     }
 }
-
 
 Describe "Remove Logical Port" {
 

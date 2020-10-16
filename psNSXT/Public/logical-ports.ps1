@@ -208,6 +208,74 @@ function Get-NSXTLogicalPorts {
     }
 }
 
+function Set-NSXTLogicalPorts {
+
+    <#
+        .SYNOPSIS
+        Change settings of a Logical Ports
+
+        .DESCRIPTION
+        Change settings (description, admin sate) of a Logical Ports
+
+        .EXAMPLE
+        Get-NSXTLogicalPorts -id ff8140b0-010e-4e92-aa62-a55766f17da0 | Set-NSXTLogicalPorts -description "Modified by psNSXT"
+
+        Change description of Logical Ports ff8140b0-010e-4e92-aa62-a55766f17da0
+
+        .EXAMPLE
+        Get-NSXTLogicalPorts -display_name MyLogicalPort | Set-NSXTLogicalPorts -admin_state "Down"
+
+        Change admin state to Down of Logical Ports MyLogicalPort
+
+    #>
+
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
+    Param(
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateScript( { Confirm-NSXTLogicalPorts $_ })]
+        [psobject]$lp,
+        [Parameter(Mandatory = $false)]
+        [string]$description,
+        [Parameter(Mandatory = $false)]
+        [ValidateSet("UP", "DOWN", IgnoreCase = $false)]
+        [string]$admin_state,
+        [Parameter(Mandatory = $false)]
+        [psobject]$connection = $DefaultNSXTConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $lp_id = $lp.id
+        $lp_name = "(" + $lp.display_name + ")"
+
+        $uri = "api/v1/logical-ports/$lp_id"
+
+        if ( $PsBoundParameters.ContainsKey('admin_state') ) {
+            $lp.admin_state = $admin_state
+        }
+
+        if ( $PsBoundParameters.ContainsKey('description') ) {
+            if ($null -eq $lp.description) {
+                $lp | Add-member -name "description" -membertype NoteProperty -Value ""
+            }
+            $lp.description = $description
+        }
+
+        if ($PSCmdlet.ShouldProcess("$lp_id $lp_name", 'Configure Logical Ports')) {
+            $response = Invoke-NSXTRestMethod -uri $uri -method 'PUT' -body $lp -connection $connection
+            $response.results
+        }
+
+        #Display update Logical Ports
+        Get-NSXTLogicalPorts -id $lp_id -connection $connection
+    }
+
+    End {
+    }
+}
 function Remove-NSXTLogicalPorts {
 
     <#
