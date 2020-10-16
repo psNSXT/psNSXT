@@ -106,20 +106,19 @@ function Move-NSXTTransportNodes {
 
     <#
         .SYNOPSIS
-        Change settings of a Logical Ports
+        Move a VM to a new Logical Port
 
         .DESCRIPTION
-        Change settings (description, admin state) of a Logical Ports
+        Move a VM....
 
         .EXAMPLE
-        Get-NSXTLogicalPorts -id ff8140b0-010e-4e92-aa62-a55766f17da0 | Set-NSXTLogicalPorts -description "Modified by psNSXT"
+        $lp = Get-NSXTLogicalSwitches -display_name MyLogicalSwitch | Add-NSXTLogicalPorts -display_name MyLogicalPort -init_state UNBLOCKED_VLAN
 
-        Change description of Logical Ports ff8140b0-010e-4e92-aa62-a55766f17da0
+        PS >$vm = Get-NSXTFabricVirtualMachines -display_name myVM
 
-        .EXAMPLE
-        Get-NSXTLogicalPorts -display_name MyLogicalPort | Set-NSXTLogicalPorts -admin_state "Down"
+        PS >Get-NSXTTransportNodes -node_id $vm.host_id | Move-NSXTTransportNodes -vm $vm -lp $lp
 
-        Change admin state to Down of Logical Ports MyLogicalPort
+        Move myVM to new Logical Port MyLogicalPort
 
     #>
 
