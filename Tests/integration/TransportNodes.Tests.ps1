@@ -54,6 +54,11 @@ Describe "Get Transport Nodes" {
     #    $tn.transport_zone_id | Should -Be $tid
     #}
 
+    It "Get Transport Nodes and confirm (via Confirm-NSXTTransportNodes)" {
+        $tn = Get-NSXTTransportNodes -display_name $tnname
+        Confirm-NSXTTransportNodes $tn | Should -Be $true
+    }
+
 }
 
 Disconnect-NSXT -confirm:$false
