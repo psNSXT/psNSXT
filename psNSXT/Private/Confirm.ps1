@@ -159,9 +159,6 @@ Function Confirm-NSXTTransportNodes {
     if ( -not ( $argument | get-member -name is_overridden -Membertype Properties)) {
         throw "Element specified does not contain an is_overridden property."
     }
-    if ( -not ( $argument | get-member -name description -Membertype Properties)) {
-        throw "Element specified does not contain a description property."
-    }
     if ( -not ( $argument | get-member -name resource_type -Membertype Properties)) {
         throw "Element specified does not contain a resource_type property."
     }
