@@ -101,3 +101,68 @@ function Get-NSXTTransportNodes {
     End {
     }
 }
+
+function Move-NSXTTransportNodes {
+
+    <#
+        .SYNOPSIS
+        Change settings of a Logical Ports
+
+        .DESCRIPTION
+        Change settings (description, admin state) of a Logical Ports
+
+        .EXAMPLE
+        Get-NSXTLogicalPorts -id ff8140b0-010e-4e92-aa62-a55766f17da0 | Set-NSXTLogicalPorts -description "Modified by psNSXT"
+
+        Change description of Logical Ports ff8140b0-010e-4e92-aa62-a55766f17da0
+
+        .EXAMPLE
+        Get-NSXTLogicalPorts -display_name MyLogicalPort | Set-NSXTLogicalPorts -admin_state "Down"
+
+        Change admin state to Down of Logical Ports MyLogicalPort
+
+    #>
+
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
+    Param(
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateScript( { Confirm-NSXTTransportNodes $_ })]
+        [psobject]$tn,
+        [Parameter(Mandatory = $true)]
+        [ValidateScript( { Confirm-NSXTFabricVirtualMachines $_ })]
+        [psobject]$vm,
+        [Parameter(Mandatory = $true)]
+        [ValidateScript( { Confirm-NSXTLogicalPorts $_ })]
+        [psobject]$lp,
+        [Parameter(Mandatory = $false)]
+        [int]$vnic_number = '0',
+        [Parameter(Mandatory = $false)]
+        [psobject]$connection = $DefaultNSXTConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $tn_id = $tn.id
+        $tn_name = "(" + $tn.display_name + ")"
+
+        $uri = "api/v1/transport-nodes/" + $tn_id + "?"
+        $vnic = $vm.external_id + ":400" + $vnic_number
+
+        $uri += "&vnic=" + $vnic
+
+        $vnic_migration_dest = $lp.attachment.id
+        $uri += "&vnic_migration_dest=" + $vnic_migration_dest
+
+        if ($PSCmdlet.ShouldProcess("$tn_id $tn_name", 'Move VM')) {
+            $response = Invoke-NSXTRestMethod -uri $uri -method 'PUT' -body $tn -connection $connection
+            $response.results
+        }
+
+    }
+
+    End {
+    }
+}
