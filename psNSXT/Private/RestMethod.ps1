@@ -58,7 +58,7 @@ function Invoke-NSXTRestMethod {
         try {
             if ($body) {
 
-                Write-Verbose ($body | ConvertTo-Json)
+                Write-Verbose ($body | ConvertTo-Json -Depth 10)
 
                 $response = Invoke-RestMethod $fullurl -Method $method -body ($body | ConvertTo-Json -Depth 10) -Headers $headers @invokeParams
             }
