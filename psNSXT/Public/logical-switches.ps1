@@ -19,6 +19,11 @@ function Get-NSXTLogicalSwitches {
         Display all Logical Switches
 
         .EXAMPLE
+        Get-NSXTLogicalSwitches -id 1ff59e9b-8e82-41ae-95bf-28fd737d6023
+
+        Display Logical Switches with id 1ff59e9b-8e82-41ae-95bf-28fd737d6023
+
+        .EXAMPLE
         Get-NSXTLogicalSwitches -switching_profile_id ede3e69a-6562-49a6-98c4-d23408bd832c
 
         Display Logical Switches with switching_profile_id ede3e69a-6562-49a6-98c4-d23408bd832c
