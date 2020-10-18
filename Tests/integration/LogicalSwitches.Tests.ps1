@@ -20,43 +20,43 @@ Describe "Get Logical Switches" {
     }
 
     It "Get Logical Switches" {
-        $sg = Get-NSXTLogicalSwitches
-        $sg[0].switch_type | Should -Not -BeNullOrEmpty
-        $sg[0].transport_zone_id | Should -Not -BeNullOrEmpty
-        $sg[0].admin_state | Should -Not -BeNullOrEmpty
-        $sg[0].resource_type | Should -Be "LogicalSwitch"
-        $sg[0].id | Should -Not -BeNullOrEmpty
-        $sg[0].switching_profile_ids | Should -Not -BeNullOrEmpty
-        $sg[0].display_name | Should -Not -BeNullOrEmpty
-        $sg[0].tags | Should -Not -BeNullOrEmpty
+        $ls = Get-NSXTLogicalSwitches
+        $ls[0].switch_type | Should -Not -BeNullOrEmpty
+        $ls[0].transport_zone_id | Should -Not -BeNullOrEmpty
+        $ls[0].admin_state | Should -Not -BeNullOrEmpty
+        $ls[0].resource_type | Should -Be "LogicalSwitch"
+        $ls[0].id | Should -Not -BeNullOrEmpty
+        $ls[0].switching_profile_ids | Should -Not -BeNullOrEmpty
+        $ls[0].display_name | Should -Not -BeNullOrEmpty
+        $ls[0].tags | Should -Not -BeNullOrEmpty
     }
 
     It "Get Logical Switches by id ($sid)" {
-        $sg = Get-NSXTLogicalSwitches -id $sid
-        $sg.id | Should -Be $sid
+        $ls = Get-NSXTLogicalSwitches -id $sid
+        $ls.id | Should -Be $sid
     }
 
     It "Get Logical Switches by display_name ($pester_sg)" {
-        $sg = Get-NSXTLogicalSwitches -display_name $pester_sg
-        $sg.id | Should -Not -BeNullOrEmpty
-        $sg.display_name | Should -Be $pester_sg
+        $ls = Get-NSXTLogicalSwitches -display_name $pester_sg
+        $ls.id | Should -Not -BeNullOrEmpty
+        $ls.display_name | Should -Be $pester_sg
     }
 
     It "Get Logical Switches by vlan_id (23)" {
-        $sg = Get-NSXTLogicalSwitches -vlan 23
-        $sg.id | Should -Not -BeNullOrEmpty
-        $sg.vlan | Should -Be "23"
-        $sg.display_name | Should -Be $pester_sg
+        $ls = Get-NSXTLogicalSwitches -vlan 23
+        $ls.id | Should -Not -BeNullOrEmpty
+        $ls.vlan | Should -Be "23"
+        $ls.display_name | Should -Be $pester_sg
     }
 
     It "Get Logical Switches by transport_zone(_id) ($tid)" {
-        $sg = Get-NSXTLogicalSwitches -transport_zone_id $tid
-        $sg.transport_zone_id | Should -Be $tid
+        $ls = Get-NSXTLogicalSwitches -transport_zone_id $tid
+        $ls.transport_zone_id | Should -Be $tid
     }
 
     #It "Get Logical Switches by switching_profile_id ($pester_sg)" {
-    #    $sg = Get-NSXTLogicalSwitches -switching_profile_id $pester_sg
-    #    $sg.id | Should -Be $pester_sg
+    #    $ls = Get-NSXTLogicalSwitches -switching_profile_id $pester_sg
+    #    $ls.id | Should -Be $pester_sg
     #}
 
     AfterAll {
