@@ -59,6 +59,11 @@ Describe "Get Logical Switches" {
     #    $ls.id | Should -Be $pester_sg
     #}
 
+    It "Get Logical Switches and confirm (via Confirm-NSXTLogicalSwitches)" {
+        $ls = Get-NSXTLogicalSwitches -display_name $pester_sg
+        Confirm-NSXTLogicalSwitches $ls | Should -Be $true
+    }
+
     AfterAll {
         Get-NSXTPolicyInfraSegments -segment $pester_sg | Remove-NSXTPolicyInfraSegments -confirm:$false
         #Wait 2 seconds to be sure the Segments is deleted (it can be make 5 sec for be removed !)
