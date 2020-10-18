@@ -42,7 +42,7 @@ function Get-NSXTLogicalSwitches {
 
     [CmdletBinding(DefaultParametersetname = "Default")]
     Param(
-        [Parameter(Mandatory = $false, ParameterSetName = "id")]
+        [Parameter(Mandatory = $false, ParameterSetName = "id", position = 1)]
         [string]$id,
         [Parameter(Mandatory = $false, ParameterSetName = "Default")]
         [string]$switching_profile_id,
