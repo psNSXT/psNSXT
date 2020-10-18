@@ -48,6 +48,10 @@ Describe "Get Vifs" {
         $vif.lport_attachment_id | Should -Be $slpid
     }
 
+    It "Get Vifs and confirm (via Confirm-NSXTFabricVifs)" {
+        $vif = Get-NSXTFabricVifs -owner_vm_id $fvmid
+        Confirm-NSXTFabricVifs $vif | Should -Be $true
+    }
 }
 
 Disconnect-NSXT -confirm:$false

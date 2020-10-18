@@ -4,6 +4,49 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+Function Confirm-NSXTFabricVifs {
+
+    Param (
+        [Parameter (Mandatory = $true)]
+        [object]$argument
+    )
+
+    #Check if it looks like an Fabric Vifs (Virtual Interface) element
+
+    if ( -not ( $argument | get-member -name host_id -Membertype Properties)) {
+        throw "Element specified does not contain a host_id property."
+    }
+    if ( -not ( $argument | get-member -name external_id -Membertype Properties)) {
+        throw "Element specified does not contain an external_id property."
+    }
+    if ( -not ( $argument | get-member -name resource_type -Membertype Properties)) {
+        throw "Element specified does not contain a resource_type property."
+    }
+    if ( -not ( $argument | get-member -name display_name -Membertype Properties)) {
+        throw "Element specified does not contain a display_name property."
+    }
+    if ( -not ( $argument | get-member -name owner_vm_id -Membertype Properties)) {
+        throw "Element specified does not contain an owner_vm_id property."
+    }
+    if ( -not ( $argument | get-member -name owner_vm_type -Membertype Properties)) {
+        throw "Element specified does not contain an owner_vm_type property."
+    }
+    if ( -not ( $argument | get-member -name vm_local_id_on_host -Membertype Properties)) {
+        throw "Element specified does not contain a vm_local_id_on_host property."
+    }
+    if ( -not ( $argument | get-member -name device_key -Membertype Properties)) {
+        throw "Element specified does not contain a device_key property."
+    }
+    if ( -not ( $argument | get-member -name device_name -Membertype Properties)) {
+        throw "Element specified does not contain a device_name property."
+    }
+    if ( -not ( $argument | get-member -name mac_address -Membertype Properties)) {
+        throw "Element specified does not contain a mac_address property."
+    }
+    $true
+
+}
+
 Function Confirm-NSXTFabricVirtualMachines {
 
     Param (
