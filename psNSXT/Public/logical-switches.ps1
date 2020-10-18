@@ -61,8 +61,13 @@ function Get-NSXTLogicalSwitches {
 
     Process {
 
-        $uri = 'api/v1/logical-switches?'
+        $uri = 'api/v1/logical-switches'
 
+        if ( $PsBoundParameters.ContainsKey('id') ) {
+            $uri += "/$id"
+        }
+
+        $uri += "?"
         if ( $PsBoundParameters.ContainsKey('switching_profile_id') ) {
             $uri += "&switching_profile_id=$switching_profile_id"
         }
@@ -79,8 +84,8 @@ function Get-NSXTLogicalSwitches {
 
         switch ( $PSCmdlet.ParameterSetName ) {
             "id" {
-                #When there is a id, search on response
-                $response.results | Where-Object { $_.id -eq $id }
+                #When there is a id, it is directly the result...
+                $response
             }
             "display_name" {
                 #When there is a display_name, search on response
