@@ -29,9 +29,9 @@ function Get-NSXTLogicalSwitches {
         Display Logical Switches with switching_profile_id ede3e69a-6562-49a6-98c4-d23408bd832c
 
         .EXAMPLE
-        Get-NSXTLogicalSwitches -display_name TZ-VLAN
+        Get-NSXTLogicalSwitches -display_name MyLogicalSwitch
 
-        Display Logical Switches with (display) name TZ-VLAN
+        Display Logical Switches with (display) name MyLogicalSwitch
 
         .EXAMPLE
         Get-NSXTLogicalSwitches -transport_zone_id ede3e69a-6562-49a6-98c4-d23408bd832c
