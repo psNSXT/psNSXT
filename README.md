@@ -19,7 +19,7 @@ There is some extra feature :
 
 More functionality will be added later.
 
-Tested with NSX-T (using 2.4.x and 2.5.x release) on Windows/Linux/macOS
+Tested with NSX-T (using 2.4.x, 2.5.x  and 3.0.x release) on Windows/Linux/macOS
 
 # Usage
 
