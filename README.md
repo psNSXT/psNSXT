@@ -9,13 +9,13 @@ This is a Powershell module for configure a NSX-T (Manager).
 With this module (version 0.2.0) you can manage:
 
 - [Manage Tags](#manage-tags-on-fabric-virtual-machines) on (Fabric) Virtual Machines (Get/Set)
-- [Transport Zones](#Transport-Zones) (Add/Get/Set/Remove)
-- [Segments](#Segments) (Add/Get/Set/Remove type VLAN)
+- [Transport Zones](#transport-zones) (Add/Get/Set/Remove)
+- [Segments](#segments) (Add/Get/Set/Remove type VLAN)
 
 There is some extra feature :
 
-- [Invoke API](#Invoke-API) using Invoke-NSXTRestMethod
-- [Multi Connection](#MultiConnection)
+- [Invoke API](#invoke-API) using Invoke-NSXTRestMethod
+- [Multi Connection](#multiConnection)
 
 More functionality will be added later.
 
@@ -200,7 +200,7 @@ severity                 : INFO
 [...]
 ```
 
-if you get a warning about `Unable to connect` Look [Issue](#Issue)
+if you get a warning about `Unable to connect` Look [Issue](#issue)
 
 to get API uri, go to NSXT Swagger (https://NSXT-IP/policy/api.html)
 
@@ -496,7 +496,7 @@ Contribution and feature requests are more than welcome. Please use the followin
 
 # Contact
 
-Currently, [@alagoutte](#Author) started this project and will keep maintaining it. Reach out to me via [Twitter](#Author), Email (see top of file) or the [issues](https://github.com/psNSXT/psNSXT/issues) Page here on GitHub. If you want to contribute, also get in touch with me.
+Currently, [@alagoutte](#author) started this project and will keep maintaining it. Reach out to me via [Twitter](#author), Email (see top of file) or the [issues](https://github.com/psNSXT/psNSXT/issues) Page here on GitHub. If you want to contribute, also get in touch with me.
 
 # List of available command
 ```powershell
