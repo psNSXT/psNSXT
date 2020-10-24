@@ -29,6 +29,36 @@ Function Confirm-NSXTFabricVirtualMachines {
 
 }
 
+Function Confirm-NSXTLogicalSwitches {
+
+    Param (
+        [Parameter (Mandatory = $true)]
+        [object]$argument
+    )
+
+    #Check if it looks like an Logical Switches element
+
+    if ( -not ( $argument | get-member -name switch_type -Membertype Properties)) {
+        throw "Element specified does not contain a switch_type property."
+    }
+    if ( -not ( $argument | get-member -name transport_zone_id -Membertype Properties)) {
+        throw "Element specified does not contain a transport_zone_id property."
+    }
+    if ( -not ( $argument | get-member -name switching_profile_ids -Membertype Properties)) {
+        throw "Element specified does not contain a switching_profile_ids property."
+    }
+    if ( -not ( $argument | get-member -name resource_type -Membertype Properties)) {
+        throw "Element specified does not contain a resource_type property."
+    }
+    if ( -not ( $argument | get-member -name id -Membertype Properties)) {
+        throw "Element specified does not contain a id property."
+    }
+    if ( -not ( $argument | get-member -name display_name -Membertype Properties)) {
+        throw "Element specified does not contain a display_name property."
+    }
+    $true
+
+}
 Function Confirm-NSXTSegments {
 
     Param (

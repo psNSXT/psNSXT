@@ -59,6 +59,9 @@ Describe "Connect to a NSX-T (using multi connection)" {
         It "Use Multi connection for call Get (Policy Infra) Segments" {
             { Get-NSXTPolicyInfraSegments -connection $nsx } | Should Not throw
         }
+        It "Use Multi connection for call Get Logical Switches" {
+            { Get-NSXTLogicalSwitches -connection $nsx } | Should Not throw
+        }
     }
 
     It "Disconnect to a NSX-T (Multi connection)" {
