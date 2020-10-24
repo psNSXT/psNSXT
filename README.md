@@ -28,9 +28,6 @@ For example, you can manage Tag on (Fabric) Virtual Machines with the following 
 - `Get-NSXTFabricVirtualMachines`
 - `Add-NSXTFabricVirtualMachines`
 - `Set-NSXTFabricVirtualMachines`
-<!--
-- `Remove-NSXTVlans`
--->
 
 # Requirements
 
