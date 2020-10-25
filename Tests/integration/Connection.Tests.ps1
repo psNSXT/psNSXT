@@ -29,7 +29,7 @@ Describe  "Connect to a NSX-T (using Basic)" {
     #This test will be fail, if there is valid certificate...
     It "Throw when try to use Invoke-NSXTRestMethod with don't use -SkipCertifiateCheck" -Skip:("Desktop" -eq $PSEdition) {
         Connect-NSXT $ipaddress -username $login -password $mysecpassword
-        { Invoke-NSXTRestMethod -uri "api/v1/cluster/status" } | Should throw "Unable to connect (certificate)"
+        { Invoke-NSXTRestMethod -uri "api/v1/cluster/status" } | Should -Throw "Unable to connect (certificate)"
         Disconnect-NSXT -confirm:$false
     }
 }
@@ -46,21 +46,21 @@ Describe "Connect to a NSX-T (using multi connection)" {
     }
 
     It "Throw when try to use Invoke-NSXTRestMethod and not connected" {
-        { Invoke-NSXTRestMethod -uri "api/v1/cluster/status" } | Should hrow "Not Connected. Connect to the NSX-T with Connect-NSXT"
+        { Invoke-NSXTRestMethod -uri "api/v1/cluster/status" } | Should -Throw "Not Connected. Connect to the NSX-T with Connect-NSXT"
     }
 
     Context "Use Multi connection for call some (Get) cmdlet (VirtualMachines, TZ, Segments...)" {
         It "Use Multi connection for call Get (Fabric) VirtualMachine" {
-            { Get-NSXTFabricVirtualMachines -connection $nsx } | Should Not throw
+            { Get-NSXTFabricVirtualMachines -connection $nsx } | Should -Not -Throw
         }
         It "Use Multi connection for call Get Transport Zones" {
-            { Get-NSXTTransportZones -connection $nsx } | Should Not throw
+            { Get-NSXTTransportZones -connection $nsx } | Should -Not -Throw
         }
         It "Use Multi connection for call Get (Policy Infra) Segments" {
-            { Get-NSXTPolicyInfraSegments -connection $nsx } | Should Not throw
+            { Get-NSXTPolicyInfraSegments -connection $nsx } | Should -Not -Throw
         }
         It "Use Multi connection for call Get Logical Switches" {
-            { Get-NSXTLogicalSwitches -connection $nsx } | Should Not throw
+            { Get-NSXTLogicalSwitches -connection $nsx } | Should -Not -Throw
         }
         It "Use Multi connection for call Get Logical Ports" {
             { Get-NSXTLogicalPorts -connection $nsx } | Should -Not -Throw
