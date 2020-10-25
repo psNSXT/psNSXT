@@ -21,5 +21,9 @@ $script:pester_sg = "pester_sg"
 #TODO: Add check if no ipaddress/login/password info...
 
 $script:mysecpassword = ConvertTo-SecureString $password -AsPlainText -Force
+if ($null -eq $port){
+    $port = 443
+}
 
-Connect-NSXT -Server $ipaddress -username $login -password $mysecpassword -SkipCertificateCheck
+
+Connect-NSXT -Server $ipaddress -username $login -password $mysecpassword -port 443 -SkipCertificateCheck

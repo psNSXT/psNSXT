@@ -13,6 +13,7 @@ $script:password = "VMware1!VMware1!"
 $script:vm = "MyNSXTVM"
 
 #default settings use for test, can be override if needed...
+#$script:port = "4443"
 #$script:pester_lp = "pester_lp"
 #$script:pester_tz = "pester_tz"
 #$script:pester_sg = "pester_sg"

@@ -46,7 +46,7 @@ Describe "Connect to a NSX-T (using multi connection)" {
     }
 
     It "Throw when try to use Invoke-NSXTRestMethod and not connected" {
-        { Invoke-NSXTRestMethod -uri "api/v1/cluster/status" } | Should throw "Not Connected. Connect to the NSX-T with Connect-NSXT"
+        { Invoke-NSXTRestMethod -uri "api/v1/cluster/status" } | Should hrow "Not Connected. Connect to the NSX-T with Connect-NSXT"
     }
 
     Context "Use Multi connection for call some (Get) cmdlet (VirtualMachines, TZ, Segments...)" {
