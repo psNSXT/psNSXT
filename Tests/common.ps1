@@ -25,5 +25,10 @@ if ($null -eq $port){
     $port = 443
 }
 
-
-Connect-NSXT -Server $ipaddress -username $login -password $mysecpassword -port 443 -SkipCertificateCheck
+$script:invokeParams = @{
+    Server = $ipaddress;
+    username = $login;
+    password = $mysecpassword;
+    port = $port;
+    SkipCertificateCheck = $true;
+}
