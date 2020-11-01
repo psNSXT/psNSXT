@@ -16,7 +16,7 @@ Describe  "Get Fabric Virtual Machines" {
     It "Get Fabric Virtual Machines Does not throw an error" {
         {
             Get-NSXTFabricVirtualMachines
-        } | Should Not Throw
+        } | Should -Not -Throw
     }
 
     It "Get Fabric Virtual Machines" {

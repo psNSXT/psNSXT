@@ -16,7 +16,7 @@ Describe "Get Transport Zones" {
     It "Get Transport Zones Does not throw an error" {
         {
             Get-NSXTTransportZones
-        } | Should Not Throw
+        } | Should -Not -Throw
     }
 
     It "Get Transport Zones" {

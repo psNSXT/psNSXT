@@ -14,7 +14,7 @@ Describe "Get Segments" {
     It "Get Segments Does not throw an error" {
         {
             Get-NSXTPolicyInfraSegments
-        } | Should Not Throw
+        } | Should -Not -Throw
     }
 
     It "Get Segments" {
