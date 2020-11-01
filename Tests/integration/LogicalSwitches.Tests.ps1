@@ -20,7 +20,7 @@ Describe "Get Logical Switches" {
     It "Get Logical Switches Does not throw an error" {
         {
             Get-NSXTLogicalSwitches
-        } | Should Not Throw
+        } | Should -Not -Throw
     }
 
     It "Get Logical Switches" {
