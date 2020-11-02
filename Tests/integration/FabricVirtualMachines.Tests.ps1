@@ -5,6 +5,10 @@
 #
 . ../common.ps1
 
+BeforeAll {
+    Connect-NSXT @invokeParams
+}
+
 Describe  "Get Fabric Virtual Machines" {
     BeforeAll {
         $fvm = Get-NSXTFabricVirtualMachines -display_name $vm
@@ -324,5 +328,8 @@ Describe  "Add Fabric Virtual Machines Tag (via Add-NSXTFabricVirtualMachines)" 
         Get-NSXTFabricVirtualMachines -display_name $display_name | Set-NSXTFabricVirtualMachines -tags @()
     }
 
+}
 
+AfterAll {
+    Disconnect-NSXT -confirm:$false
 }
