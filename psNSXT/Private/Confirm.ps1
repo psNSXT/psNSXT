@@ -142,7 +142,7 @@ Function Confirm-NSXTTransportNodes {
         [object]$argument
     )
 
-    #Check if it looks like an Transport Zones element
+    #Check if it looks like a Transport Nodes element
 
     if ( -not ( $argument | get-member -name node_id -Membertype Properties)) {
         throw "Element specified does not contain a node_id property."
