@@ -221,7 +221,7 @@ function Set-NSXTLogicalPorts {
         Change settings of a Logical Ports
 
         .DESCRIPTION
-        Change settings (description, admin sate) of a Logical Ports
+        Change settings (description, admin state) of a Logical Ports
 
         .EXAMPLE
         Get-NSXTLogicalPorts -id ff8140b0-010e-4e92-aa62-a55766f17da0 | Set-NSXTLogicalPorts -description "Modified by psNSXT"
