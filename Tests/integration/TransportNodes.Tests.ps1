@@ -42,7 +42,6 @@ Describe "Get Transport Nodes" {
         $tn.node_deployment_info.ip_addresses | Should -Be $tnip
     }
 
-
     It "Get Transport Nodes by display_name ($tnname)" {
         $tn = Get-NSXTTransportNodes -display_name $tnname
         $tn.id | Should -Not -BeNullOrEmpty
