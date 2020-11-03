@@ -105,7 +105,7 @@ Describe "Set Logical Port" {
         $lp.attachment.id | Should -Not -BeNullOrEmpty
         $lp.admin_state | Should -Be "DOWN"
         $lp.description | Should -BeNullOrEmpty
-        $lp.init_state | Should  -BeNullOrEmpty
+        $lp.init_state | Should -BeNullOrEmpty
         $lp.resource_type | Should -Be "LogicalPort"
         $lp.id | Should -Not -BeNullOrEmpty
         $lp.switching_profile_ids | Should -Not -BeNullOrEmpty
@@ -155,7 +155,7 @@ Describe "Add Logical Port" {
         $lp.attachment.id | Should -Not -BeNullOrEmpty
         $lp.admin_state | Should -Be "DOWN"
         $lp.description | Should -BeNullOrEmpty
-        $lp.init_state | Should  -BeNullOrEmpty
+        $lp.init_state | Should -BeNullOrEmpty
         $lp.resource_type | Should -Be "LogicalPort"
         $lp.id | Should -Not -BeNullOrEmpty
         $lp.switching_profile_ids | Should -Not -BeNullOrEmpty
