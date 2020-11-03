@@ -36,7 +36,7 @@ Function Confirm-NSXTLogicalPorts {
         [object]$argument
     )
 
-    #Check if it looks like an Logical Ports element
+    #Check if it looks like a Logical Ports element
 
     if ( -not ( $argument | get-member -name logical_switch_id -Membertype Properties)) {
         throw "Element specified does not contain a logical_switch_id property."
@@ -51,7 +51,7 @@ Function Confirm-NSXTLogicalPorts {
         throw "Element specified does not contain an admin_state property."
     }
     if ( -not ( $argument | get-member -name id -Membertype Properties)) {
-        throw "Element specified does not contain a id property."
+        throw "Element specified does not contain an id property."
     }
     if ( -not ( $argument | get-member -name display_name -Membertype Properties)) {
         throw "Element specified does not contain a display_name property."
