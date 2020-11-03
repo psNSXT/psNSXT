@@ -63,7 +63,7 @@ Describe "Connect to a NSX-T (using multi connection)" {
             { Get-NSXTLogicalSwitches -connection $nsx } | Should Not throw
         }
         It "Use Multi connection for call Get Logical Ports" {
-            { Get-NSXTLogicalPorts -connection $nsx } | Should Not throw
+            { Get-NSXTLogicalPorts -connection $nsx } | Should -Not -Throw
         }
     }
 
