@@ -17,7 +17,7 @@ Describe "Get Transport Nodes" {
     It "Get Transport Nodes Does not throw an error" {
         {
             Get-NSXTTransportNodes
-        } | Should Not Throw
+        } | Should -Not -Throw
     }
 
     It "Get Transport Nodes" {
