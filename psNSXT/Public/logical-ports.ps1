@@ -282,6 +282,7 @@ function Set-NSXTLogicalPorts {
     End {
     }
 }
+
 function Remove-NSXTLogicalPorts {
 
     <#
