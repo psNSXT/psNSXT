@@ -19,7 +19,7 @@ Describe "Get Logical Ports" {
     It "Get Logical Ports Does not throw an error" {
         {
             Get-NSXTLogicalPorts
-        } | Should Not Throw
+        } | Should -Not -Throw
     }
 
     It "Get Logical Ports" {
