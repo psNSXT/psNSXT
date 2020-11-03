@@ -75,7 +75,6 @@ Describe "Get Logical Ports" {
 
 }
 
-
 Describe "Set Logical Port" {
     BeforeAll {
         #Use default nsx-vlan-transportzone (from NSX-T 3.0...)
@@ -227,7 +226,6 @@ Describe "Add Logical Port" {
 }
 
 Describe "Remove Logical Port" {
-
     BeforeAll {
         Get-NSXTTransportZones -display_name nsx-vlan-transportzone | Add-NSXTPolicyInfraSegments -segment $pester_sg -vlan_ids 23
     }
