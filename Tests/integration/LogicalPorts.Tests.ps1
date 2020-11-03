@@ -60,6 +60,11 @@ Describe "Get Logical Ports" {
         $lp.attachment.id | Should -Be $aid
     }
 
+    It "Get Logical Ports and confirm (via Confirm-NSXTLogicalPorts)" {
+        $ls = Get-NSXTLogicalPorts -display_name $pester_lp
+        Confirm-NSXTLogicalPorts $ls | Should -Be $true
+    }
+
     AfterAll {
         Get-NSXTLogicalPorts -display_name $pester_lp | Remove-NSXTLogicalPorts -confirm:$false -force
 
