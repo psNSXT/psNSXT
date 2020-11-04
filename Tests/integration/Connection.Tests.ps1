@@ -68,6 +68,9 @@ Describe "Connect to a NSX-T (using multi connection)" {
         It "Use Multi connection for call Get Transport Nodes" {
             { Get-NSXTTransportNodes -connection $nsx } | Should -Not -Throw
         }
+        It "Use Multi connection for call Get (Fabric) Vifs (Virtual Interfaces)" {
+            { Get-NSXTFabricVifs -connection $nsx } | Should -Not -Throw
+        }
     }
 
     It "Disconnect to a NSX-T (Multi connection)" {
