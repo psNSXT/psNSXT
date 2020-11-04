@@ -16,7 +16,7 @@ Describe "Get Vifs" {
     It "Get Vifs Does not throw an error" {
         {
             Get-NSXTFabricVifs
-        } | Should Not Throw
+        } | Should -Not -Throw
     }
 
     It "Get Vifs" {
