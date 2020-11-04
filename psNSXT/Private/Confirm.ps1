@@ -135,6 +135,45 @@ Function Confirm-NSXTSegments {
 
 }
 
+Function Confirm-NSXTTransportNodes {
+
+    Param (
+        [Parameter (Mandatory = $true)]
+        [object]$argument
+    )
+
+    #Check if it looks like a Transport Nodes element
+
+    if ( -not ( $argument | get-member -name node_id -Membertype Properties)) {
+        throw "Element specified does not contain a node_id property."
+    }
+    if ( -not ( $argument | get-member -name host_switch_spec -Membertype Properties)) {
+        throw "Element specified does not contain a host_switch_spec property."
+    }
+    if ( -not ( $argument | get-member -name transport_zone_endpoints -Membertype Properties)) {
+        throw "Element specified does not contain a transport_zone_endpoints property."
+    }
+    if ( -not ( $argument | get-member -name node_deployment_info -Membertype Properties)) {
+        throw "Element specified does not contain a node_deployment_info property."
+    }
+    if ( -not ( $argument | get-member -name is_overridden -Membertype Properties)) {
+        throw "Element specified does not contain an is_overridden property."
+    }
+    if ( -not ( $argument | get-member -name description -Membertype Properties)) {
+        throw "Element specified does not contain a description property."
+    }
+    if ( -not ( $argument | get-member -name resource_type -Membertype Properties)) {
+        throw "Element specified does not contain a resource_type property."
+    }
+    if ( -not ( $argument | get-member -name id -Membertype Properties)) {
+        throw "Element specified does not contain an id property."
+    }
+    if ( -not ( $argument | get-member -name display_name -Membertype Properties)) {
+        throw "Element specified does not contain a display_name property."
+    }
+    $true
+
+}
 Function Confirm-NSXTTransportZones {
 
     Param (
