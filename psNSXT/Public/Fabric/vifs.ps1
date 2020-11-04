@@ -33,10 +33,6 @@ function Get-NSXTFabricVifs {
 
         Display Vifs (Virtual Interfaces) with owner_vm_id ede3e69a-6562-49a6-98c4-d23408bd832c
 
-        .EXAMPLE
-        Get-NSXTFabricVifs -owner_vm_id ede3e69a-6562-49a6-98c4-d23408bd832c
-
-        Display Vifs (Virtual Interfaces) with owner_vm_id ede3e69a-6562-49a6-98c4-d23408bd832c
     #>
 
     [CmdletBinding(DefaultParametersetname = "Default")]
