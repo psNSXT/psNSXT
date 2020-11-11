@@ -101,3 +101,69 @@ function Get-NSXTTransportNodes {
     End {
     }
 }
+
+function Move-NSXTTransportNodes {
+
+    <#
+        .SYNOPSIS
+        Move a VM to a new Logical Port
+
+        .DESCRIPTION
+        Move a VM to a new Logical Port
+        You need to known the host where it is the VM
+        it can use for set init_state to UNBLOCKED_VLAN for VM when use fully Collapsed vSphere Cluster NSX-T (See https://kb.vmware.com/s/article/77284)
+
+        .EXAMPLE
+        $lp = Get-NSXTLogicalSwitches -display_name MyLogicalSwitch | Add-NSXTLogicalPorts -display_name MyLogicalPort -init_state UNBLOCKED_VLAN
+
+        PS >$vm = Get-NSXTFabricVirtualMachines -display_name myVM
+
+        PS >Get-NSXTTransportNodes -node_id $vm.host_id | Move-NSXTTransportNodes -vm $vm -lp $lp
+
+        Move myVM to new Logical Port MyLogicalPort (with init_state to unblocked vlan)
+
+    #>
+
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
+    Param(
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateScript( { Confirm-NSXTTransportNodes $_ })]
+        [psobject]$tn,
+        [Parameter(Mandatory = $true)]
+        [ValidateScript( { Confirm-NSXTFabricVirtualMachines $_ })]
+        [psobject]$vm,
+        [Parameter(Mandatory = $true)]
+        [ValidateScript( { Confirm-NSXTLogicalPorts $_ })]
+        [psobject]$lp,
+        [Parameter(Mandatory = $false)]
+        [int]$vnic_number = '0',
+        [Parameter(Mandatory = $false)]
+        [psobject]$connection = $DefaultNSXTConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $tn_id = $tn.id
+        $target = "Logical Port " + $lp.display_name + " (host " + $tn.display_name + ")"
+
+        $uri = "api/v1/transport-nodes/" + $tn_id + "?"
+        $vnic = $vm.external_id + ":400" + $vnic_number
+
+        $uri += "&vnic=" + $vnic
+
+        $vnic_migration_dest = $lp.attachment.id
+        $uri += "&vnic_migration_dest=" + $vnic_migration_dest
+
+        if ($PSCmdlet.ShouldProcess($target, 'Move VM ' + $vm.display_name)) {
+            $response = Invoke-NSXTRestMethod -uri $uri -method 'PUT' -body $tn -connection $connection
+            $response.results
+        }
+
+    }
+
+    End {
+    }
+}
