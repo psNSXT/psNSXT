@@ -6,7 +6,7 @@ The tests don't be to be run on PRODUCTION NSX-T manager ! there is no warning a
 It need to be use only for TESTS !
 
     An NSX-T Manger with release >= 2.4.x
-    Only need an ip address with a VM attach to a N-VDS
+    Only need an ip address with a VM attach to a VDS 7.0 (on NSX PortGroup / Segments)
     a user and password for admin account
 
 These are the required modules for the tests
