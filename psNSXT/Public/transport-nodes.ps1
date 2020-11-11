@@ -109,7 +109,9 @@ function Move-NSXTTransportNodes {
         Move a VM to a new Logical Port
 
         .DESCRIPTION
-        Move a VM....
+        Move a VM to a new Logical Port
+        You need to known the host where it is the VM
+        it can use for set init_state to UNBLOCKED_VLAN for VM when use fully Collapsed vSphere Cluster NSX-T (See https://kb.vmware.com/s/article/77284)
 
         .EXAMPLE
         $lp = Get-NSXTLogicalSwitches -display_name MyLogicalSwitch | Add-NSXTLogicalPorts -display_name MyLogicalPort -init_state UNBLOCKED_VLAN
@@ -118,7 +120,7 @@ function Move-NSXTTransportNodes {
 
         PS >Get-NSXTTransportNodes -node_id $vm.host_id | Move-NSXTTransportNodes -vm $vm -lp $lp
 
-        Move myVM to new Logical Port MyLogicalPort
+        Move myVM to new Logical Port MyLogicalPort (with init_state to unblocked vlan)
 
     #>
 
