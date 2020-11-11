@@ -147,7 +147,7 @@ function Move-NSXTTransportNodes {
     Process {
 
         $tn_id = $tn.id
-        $tn_name = "(" + $tn.display_name + ")"
+        $target = "Logical Port " + $lp.display_name + " (host " + $tn.display_name + ")"
 
         $uri = "api/v1/transport-nodes/" + $tn_id + "?"
         $vnic = $vm.external_id + ":400" + $vnic_number
@@ -157,7 +157,7 @@ function Move-NSXTTransportNodes {
         $vnic_migration_dest = $lp.attachment.id
         $uri += "&vnic_migration_dest=" + $vnic_migration_dest
 
-        if ($PSCmdlet.ShouldProcess("$tn_id $tn_name", 'Move VM')) {
+        if ($PSCmdlet.ShouldProcess($target, 'Move VM ' + $vm.display_name)) {
             $response = Invoke-NSXTRestMethod -uri $uri -method 'PUT' -body $tn -connection $connection
             $response.results
         }
