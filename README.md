@@ -9,6 +9,7 @@ This is a Powershell module for configure a NSX-T (Manager).
 With this module (version 0.2.0) you can manage:
 
 - [VIFS](#vifs) (Get)
+- [Logical Ports](#logical-ports) (Add/Get/Set/Remove)
 - [Logical Switches](#logical-switches) (Get)
 - [Manage Tags](#manage-tags-on-fabric-virtual-machines) on (Fabric) Virtual Machines (Get/Set)
 - [Transport Nodes](#transport-nodes) (Get)
@@ -564,6 +565,107 @@ You can the the list of Transport Nodes
 ```
 
 You can filter by display_name, transport_zone_id, node_id, node_ip or in_maintenance_mode
+
+### Logical Ports
+
+You can Add, Get, Set and Remove Logical Ports
+
+```powershell
+#Add Logical PortsMyLogicalPort on Logical Switches MyLogicalSwitch
+
+    Get-NSXTLogicalSwitches -display_name MyLogicalSwitch | Add-NSXTLogicalPorts -display_name MyLogicalPort
+
+    logical_switch_id       : bc279814-7ae7-4bb3-8dea-4808a11ee8d6
+    attachment              : @{attachment_type=VIF; id=bd637944-1075-4fda-b85b-ea277c9dacd5}
+    admin_state             : UP
+    address_bindings        : {}
+    switching_profile_ids   : {@{key=SwitchSecuritySwitchingProfile; value=fbc4fb17-83d9-4b53-a286-ccdf04301888},
+                            @{key=SpoofGuardSwitchingProfile; value=fad98876-d7ff-11e4-b9d6-1681e6b88ec1},
+                            @{key=IpDiscoverySwitchingProfile; value=0c403bc9-7773-4680-a5cc-847ed0f9f52e},
+                            @{key=MacManagementSwitchingProfile; value=1e7101c8-cfef-415a-9c8c-ce3d8dd078fb}…}
+    ignore_address_bindings : {}
+    internal_id             : d6e0be4a-3bb0-4eb2-8b60-98bf9ced0a1a
+    resource_type           : LogicalPort
+    id                      : d6e0be4a-3bb0-4eb2-8b60-98bf9ced0a1a
+    display_name            : MyLogicalPort
+    _create_user            : admin
+    _create_time            : 1605365173474
+    _last_modified_user     : admin
+    _last_modified_time     : 1605365173474
+    _system_owned           : False
+    _protection             : NOT_PROTECTED
+    _revision               : 0
+
+    #When you add Logical Ports, you can configure also the admin_state, description, attachement_id and init_state
+
+#Get list of all available Logical Ports
+
+    Get-NSXTLogicalPorts -display_name MyLogicalPort | Select display_name, logical_switch_id, admin_state | Format-Table
+
+    display_name   logical_switch_id                    admin_state
+    ------------   -----------------                    -----------
+    MyLogicalPort  bc279814-7ae7-4bb3-8dea-4808a11ee8d6 UP
+    MyLogicalPort2 bc279814-7ae7-4bb3-8dea-4808a11ee8d6 UP
+    ...
+
+#Get Logical Ports by display_name
+
+    Get-NSXTLogicalPorts -display_name MyLogicalPort
+
+    logical_switch_id       : bc279814-7ae7-4bb3-8dea-4808a11ee8d6
+    attachment              : @{attachment_type=VIF; id=bd637944-1075-4fda-b85b-ea277c9dacd5}
+    admin_state             : UP
+    address_bindings        : {}
+    switching_profile_ids   : {@{key=SwitchSecuritySwitchingProfile; value=fbc4fb17-83d9-4b53-a286-ccdf04301888},
+                            @{key=SpoofGuardSwitchingProfile; value=fad98876-d7ff-11e4-b9d6-1681e6b88ec1}, @{key=IpDiscoverySwitchingProfile;
+                            value=0c403bc9-7773-4680-a5cc-847ed0f9f52e}, @{key=MacManagementSwitchingProfile;
+                            value=1e7101c8-cfef-415a-9c8c-ce3d8dd078fb}…}
+    ignore_address_bindings : {}
+    internal_id             : d6e0be4a-3bb0-4eb2-8b60-98bf9ced0a1a
+    resource_type           : LogicalPort
+    id                      : d6e0be4a-3bb0-4eb2-8b60-98bf9ced0a1a
+    display_name            : MyLogicalPort
+    _create_user            : admin
+    _create_time            : 1605365173474
+    _last_modified_user     : admin
+    _last_modified_time     : 1605365173474
+    _system_owned           : False
+    _protection             : NOT_PROTECTED
+    _revision               : 0
+
+#It is also possible to filter by transport_zone_id, attachement_type, attachement_id or switching_profile_id
+
+#Configure Logical Ports (set admin_state to DOWN and change description)
+
+    Get-NSXTLogicalPorts -display_name MyLogicalPort | Set-NSXTLogicalPorts -admin_state DOWN -description "Modified by psNSXT"
+
+    logical_switch_id       : bc279814-7ae7-4bb3-8dea-4808a11ee8d6
+    attachment              : @{attachment_type=VIF; id=bd637944-1075-4fda-b85b-ea277c9dacd5}
+    admin_state             : DOWN
+    address_bindings        : {}
+    switching_profile_ids   : {@{key=SwitchSecuritySwitchingProfile; value=fbc4fb17-83d9-4b53-a286-ccdf04301888},
+                            @{key=SpoofGuardSwitchingProfile; value=fad98876-d7ff-11e4-b9d6-1681e6b88ec1}, @{key=IpDiscoverySwitchingProfile;
+                            value=0c403bc9-7773-4680-a5cc-847ed0f9f52e}, @{key=MacManagementSwitchingProfile;
+                            value=1e7101c8-cfef-415a-9c8c-ce3d8dd078fb}…}
+    ignore_address_bindings : {}
+    internal_id             : d6e0be4a-3bb0-4eb2-8b60-98bf9ced0a1a
+    resource_type           : LogicalPort
+    id                      : d6e0be4a-3bb0-4eb2-8b60-98bf9ced0a1a
+    display_name            : MyLogicalPort
+    description             : Modified by psNSXT
+    _create_user            : admin
+    _create_time            : 1605365173474
+    _last_modified_user     : admin
+    _last_modified_time     : 1605366529585
+    _system_owned           : False
+    _protection             : NOT_PROTECTED
+    _revision               : 1
+
+
+#Remove Logical Ports MyLogicalPort
+    Get-NSXTLogicalPorts -display_name MyLogicalPort | Remove-NSXTLogicalPorts
+
+```
 
 ### MultiConnection
 
