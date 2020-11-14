@@ -8,13 +8,13 @@ This is a Powershell module for configure a NSX-T (Manager).
 
 With this module (version 0.2.0) you can manage:
 
-- [VIFS](#vifs) (Get)
 - [Logical Ports](#logical-ports) (Add/Get/Set/Remove)
 - [Logical Switches](#logical-switches) (Get)
 - [Manage Tags](#manage-tags-on-fabric-virtual-machines) on (Fabric) Virtual Machines (Get/Set)
 - [Transport Nodes](#transport-nodes) (Get)
 - [Transport Zones](#transport-zones) (Add/Get/Set/Remove)
 - [Segments](#segments) (Add/Get/Set/Remove type VLAN)
+- (Fabric) [VIFS](#vifs) (Get)
 
 There is some extra feature :
 
