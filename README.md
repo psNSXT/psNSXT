@@ -6,20 +6,24 @@ This is a Powershell module for configure a NSX-T (Manager).
 <img src="https://raw.githubusercontent.com/psNSXT/psNSXT/master/Medias/psNSXT.png" width="250" height="250" />
 </p>
 
-With this module (version 0.2.0) you can manage:
+With this module (version 0.3.0) you can manage:
 
+- [Logical Ports](#logical-ports) (Add/Get/Set/Remove)
+- [Logical Switches](#logical-switches) (Get)
 - [Manage Tags](#manage-tags-on-fabric-virtual-machines) on (Fabric) Virtual Machines (Get/Set)
-- [Transport Zones](#Transport-Zones) (Add/Get/Set/Remove)
-- [Segments](#Segments) (Add/Get/Set/Remove type VLAN)
+- [Transport Nodes](#transport-nodes) (Get)
+- [Transport Zones](#transport-zones) (Add/Get/Set/Remove)
+- [Segments](#segments) (Add/Get/Set/Remove type VLAN)
+- (Fabric) [VIFS](#vifs) (Get)
 
 There is some extra feature :
 
-- [Invoke API](#Invoke-API) using Invoke-NSXTRestMethod
-- [Multi Connection](#MultiConnection)
+- [Invoke API](#invoke-API) using Invoke-NSXTRestMethod
+- [Multi Connection](#multiConnection)
 
 More functionality will be added later.
 
-Tested with NSX-T (using 2.4.x and 2.5.x release) on Windows/Linux/macOS
+Tested with NSX-T (using 2.4.x, 2.5.x  and 3.0.x release) on Windows/Linux/macOS
 
 # Usage
 
@@ -28,9 +32,6 @@ For example, you can manage Tag on (Fabric) Virtual Machines with the following 
 - `Get-NSXTFabricVirtualMachines`
 - `Add-NSXTFabricVirtualMachines`
 - `Set-NSXTFabricVirtualMachines`
-<!--
-- `Remove-NSXTVlans`
--->
 
 # Requirements
 
@@ -200,7 +201,7 @@ severity                 : INFO
 [...]
 ```
 
-if you get a warning about `Unable to connect` Look [Issue](#Issue)
+if you get a warning about `Unable to connect` Look [Issue](#issue)
 
 to get API uri, go to NSXT Swagger (https://NSXT-IP/policy/api.html)
 
@@ -433,6 +434,239 @@ You can Add, Set and Remove Segments (Type VLAN Only)
 
 ```
 
+### VIFS
+
+You can the the list of VIFS (Virtual InterFaceS)
+
+```powershell
+    Get-NSXTFabricVifs
+
+    external_id         : 50100001-c249-c3bd-b338-95ffde75dcbf-4000
+    owner_vm_id         : 50100001-c249-c3bd-b338-95ffde75dcbf
+    owner_vm_type       : REGULAR
+    host_id             : 3e36c43d-37a7-464f-83d8-9ecd6c62ac8d
+    vm_local_id_on_host : 21
+    device_key          : 4000
+    device_name         : Network adapter 1
+    mac_address         : 00:50:56:90:20:91
+    ip_address_info     : {@{source=VM_TOOLS; ip_addresses=System.Object[]}}
+    resource_type       : VirtualNetworkInterface
+    display_name        : Network adapter 1
+    _last_sync_time     : 1601838667905
+
+    external_id         : 502ef9e8-7e39-0b61-965b-d7c4dbff0540-4000
+    owner_vm_id         : 502ef9e8-7e39-0b61-965b-d7c4dbff0540
+    owner_vm_type       : REGULAR
+    host_id             : 3e36c43d-37a7-464f-83d8-9ecd6c62ac8d
+    vm_local_id_on_host : 8
+    device_key          : 4000
+    device_name         : Network adapter 1
+    mac_address         : 00:50:56:ae:68:16
+    ip_address_info     : {@{source=VM_TOOLS; ip_addresses=System.Object[]}}
+    resource_type       : VirtualNetworkInterface
+    display_name        : Network adapter 1
+    _last_sync_time     : 1600084236078
+...
+```
+
+You can filter by host_id, lport_attachment_id or owner_vm_id
+
+### Logical Switches
+
+You can the the list of Logical Switches
+
+```powershell
+    Get-NSXTLogicalSwitches
+
+    switch_type           : DEFAULT
+    transport_zone_id     : af9bed19-6b4a-4790-8a93-c7a20d88ce3c
+    vlan                  : 2011
+    admin_state           : UP
+    address_bindings      : {}
+    switching_profile_ids : {@{key=SwitchSecuritySwitchingProfile; value=fbc4fb17-83d9-4b53-a286-ccdf04301888},
+                            @{key=SpoofGuardSwitchingProfile; value=fad98876-d7ff-11e4-b9d6-1681e6b88ec1},
+                            @{key=IpDiscoverySwitchingProfile; value=0c403bc9-7773-4680-a5cc-847ed0f9f52e},
+                            @{key=MacManagementSwitchingProfile; value=1e7101c8-cfef-415a-9c8c-ce3d8dd078fb}…}
+    hybrid                : False
+    span                  : {}
+    resource_type         : LogicalSwitch
+    id                    : fa6c37d8-b13a-48e8-8325-093ec86233e2
+    display_name          : NSXT-VLAN-2011
+    tags                  : {@{scope=policyPath; tag=/infra/segments/NSXT-VLAN-2011}}
+    _create_user          : nsx_policy
+    _create_time          : 1600108586879
+    _last_modified_user   : nsx_policy
+    _last_modified_time   : 1600108586879
+    _system_owned         : False
+    _protection           : REQUIRE_OVERRIDE
+    _revision             : 0
+    _schema               : /v1/schema/LogicalSwitch
+...
+```
+
+You can filter by display_name, transport_zone_id, vlan or switching_profile_id
+
+### Transport Nodes
+
+You can the the list of Transport Nodes
+
+```powershell
+ Get-NSXTTransportNodes
+
+    node_id                  : 059eec67-514f-49ff-902f-3e6e48087f06
+    host_switch_spec         : @{host_switches=System.Object[]; resource_type=StandardHostSwitchSpec}
+    transport_zone_endpoints : {}
+    maintenance_mode         : DISABLED
+    node_deployment_info     : @{deployment_type=VIRTUAL_MACHINE; deployment_config=; node_settings=;
+                            resource_type=EdgeNode; id=059eec67-514f-49ff-902f-3e6e48087f06;
+                            display_name=NSXT-EDGE1; external_id=059eec67-514f-49ff-902f-3e6e48087f06;
+                            ip_addresses=System.Object[]; _create_user=admin; _create_time=1600109960772;
+                            _last_modified_user=admin; _last_modified_time=1600110236974; _system_owned=False;
+                            _protection=NOT_PROTECTED; _revision=2}
+    is_overridden            : False
+    failure_domain_id        : 4fc1e3b0-1cd4-4339-86c8-f76baddbaafb
+    resource_type            : TransportNode
+    id                       : 059eec67-514f-49ff-902f-3e6e48087f06
+    display_name             : NSXT-EDGE1
+    description              :
+    tags                     : {}
+    _create_user             : admin
+    _create_time             : 1600109961176
+    _last_modified_user      : admin
+    _last_modified_time      : 1600110237148
+    _system_owned            : False
+    _protection              : NOT_PROTECTED
+    _revision                : 1
+
+    node_id                  : 408e7237-995f-4f66-b1b6-4c5649f152eb
+    host_switch_spec         : @{host_switches=System.Object[]; resource_type=StandardHostSwitchSpec}
+    transport_zone_endpoints : {}
+    maintenance_mode         : DISABLED
+    node_deployment_info     : @{os_type=ESXI; os_version=7.0.0; managed_by_server=;
+                            discovered_node_id=9812dfdb-82b4-450c-93fa-236210348a78:host-12; resource_type=HostNode;
+                            id=408e7237-995f-4f66-b1b6-4c5649f152eb; display_name=VSAN01.psNSXT;
+                            description=; tags=System.Object[]; external_id=408e7237-995f-4f66-b1b6-4c5649f152eb;
+                            fqdn=VSAN01.psNSXT.intra; ip_addresses=System.Object[];
+                            discovered_ip_addresses=System.Object[]; _create_user=admin; _create_time=1600084021602;
+                            _last_modified_user=admin; _last_modified_time=1600108187045; _protection=NOT_PROTECTED;
+                            _revision=1}
+    is_overridden            : False
+    resource_type            : TransportNode
+    id                       : 408e7237-995f-4f66-b1b6-4c5649f152eb
+    display_name             : VSAN01.psNSXT
+    _create_user             : admin
+    _create_time             : 1600101500538
+    _last_modified_user      : admin
+    _last_modified_time      : 1600196769240
+    _system_owned            : False
+    _protection              : NOT_PROTECTED
+    _revision                : 4
+...
+```
+
+You can filter by display_name, transport_zone_id, node_id, node_ip or in_maintenance_mode
+
+### Logical Ports
+
+You can Add, Get, Set and Remove Logical Ports
+
+```powershell
+#Add Logical PortsMyLogicalPort on Logical Switches MyLogicalSwitch
+
+    Get-NSXTLogicalSwitches -display_name MyLogicalSwitch | Add-NSXTLogicalPorts -display_name MyLogicalPort
+
+    logical_switch_id       : bc279814-7ae7-4bb3-8dea-4808a11ee8d6
+    attachment              : @{attachment_type=VIF; id=bd637944-1075-4fda-b85b-ea277c9dacd5}
+    admin_state             : UP
+    address_bindings        : {}
+    switching_profile_ids   : {@{key=SwitchSecuritySwitchingProfile; value=fbc4fb17-83d9-4b53-a286-ccdf04301888},
+                            @{key=SpoofGuardSwitchingProfile; value=fad98876-d7ff-11e4-b9d6-1681e6b88ec1},
+                            @{key=IpDiscoverySwitchingProfile; value=0c403bc9-7773-4680-a5cc-847ed0f9f52e},
+                            @{key=MacManagementSwitchingProfile; value=1e7101c8-cfef-415a-9c8c-ce3d8dd078fb}…}
+    ignore_address_bindings : {}
+    internal_id             : d6e0be4a-3bb0-4eb2-8b60-98bf9ced0a1a
+    resource_type           : LogicalPort
+    id                      : d6e0be4a-3bb0-4eb2-8b60-98bf9ced0a1a
+    display_name            : MyLogicalPort
+    _create_user            : admin
+    _create_time            : 1605365173474
+    _last_modified_user     : admin
+    _last_modified_time     : 1605365173474
+    _system_owned           : False
+    _protection             : NOT_PROTECTED
+    _revision               : 0
+
+    #When you add Logical Ports, you can configure also the admin_state, description, attachement_id and init_state
+
+#Get list of all available Logical Ports
+
+    Get-NSXTLogicalPorts -display_name MyLogicalPort | Select display_name, logical_switch_id, admin_state | Format-Table
+
+    display_name   logical_switch_id                    admin_state
+    ------------   -----------------                    -----------
+    MyLogicalPort  bc279814-7ae7-4bb3-8dea-4808a11ee8d6 UP
+    MyLogicalPort2 bc279814-7ae7-4bb3-8dea-4808a11ee8d6 UP
+    ...
+
+#Get Logical Ports by display_name
+
+    Get-NSXTLogicalPorts -display_name MyLogicalPort
+
+    logical_switch_id       : bc279814-7ae7-4bb3-8dea-4808a11ee8d6
+    attachment              : @{attachment_type=VIF; id=bd637944-1075-4fda-b85b-ea277c9dacd5}
+    admin_state             : UP
+    address_bindings        : {}
+    switching_profile_ids   : {@{key=SwitchSecuritySwitchingProfile; value=fbc4fb17-83d9-4b53-a286-ccdf04301888},
+                            @{key=SpoofGuardSwitchingProfile; value=fad98876-d7ff-11e4-b9d6-1681e6b88ec1}, @{key=IpDiscoverySwitchingProfile;
+                            value=0c403bc9-7773-4680-a5cc-847ed0f9f52e}, @{key=MacManagementSwitchingProfile;
+                            value=1e7101c8-cfef-415a-9c8c-ce3d8dd078fb}…}
+    ignore_address_bindings : {}
+    internal_id             : d6e0be4a-3bb0-4eb2-8b60-98bf9ced0a1a
+    resource_type           : LogicalPort
+    id                      : d6e0be4a-3bb0-4eb2-8b60-98bf9ced0a1a
+    display_name            : MyLogicalPort
+    _create_user            : admin
+    _create_time            : 1605365173474
+    _last_modified_user     : admin
+    _last_modified_time     : 1605365173474
+    _system_owned           : False
+    _protection             : NOT_PROTECTED
+    _revision               : 0
+
+#It is also possible to filter by transport_zone_id, attachement_type, attachement_id or switching_profile_id
+
+#Configure Logical Ports (set admin_state to DOWN and change description)
+
+    Get-NSXTLogicalPorts -display_name MyLogicalPort | Set-NSXTLogicalPorts -admin_state DOWN -description "Modified by psNSXT"
+
+    logical_switch_id       : bc279814-7ae7-4bb3-8dea-4808a11ee8d6
+    attachment              : @{attachment_type=VIF; id=bd637944-1075-4fda-b85b-ea277c9dacd5}
+    admin_state             : DOWN
+    address_bindings        : {}
+    switching_profile_ids   : {@{key=SwitchSecuritySwitchingProfile; value=fbc4fb17-83d9-4b53-a286-ccdf04301888},
+                            @{key=SpoofGuardSwitchingProfile; value=fad98876-d7ff-11e4-b9d6-1681e6b88ec1}, @{key=IpDiscoverySwitchingProfile;
+                            value=0c403bc9-7773-4680-a5cc-847ed0f9f52e}, @{key=MacManagementSwitchingProfile;
+                            value=1e7101c8-cfef-415a-9c8c-ce3d8dd078fb}…}
+    ignore_address_bindings : {}
+    internal_id             : d6e0be4a-3bb0-4eb2-8b60-98bf9ced0a1a
+    resource_type           : LogicalPort
+    id                      : d6e0be4a-3bb0-4eb2-8b60-98bf9ced0a1a
+    display_name            : MyLogicalPort
+    description             : Modified by psNSXT
+    _create_user            : admin
+    _create_time            : 1605365173474
+    _last_modified_user     : admin
+    _last_modified_time     : 1605366529585
+    _system_owned           : False
+    _protection             : NOT_PROTECTED
+    _revision               : 1
+
+
+#Remove Logical Ports MyLogicalPort
+    Get-NSXTLogicalPorts -display_name MyLogicalPort | Remove-NSXTLogicalPorts
+
+```
+
 ### MultiConnection
 
 Tt is possible to connect on same times to multi NSX-T manager
@@ -496,26 +730,38 @@ Contribution and feature requests are more than welcome. Please use the followin
 
 # Contact
 
-Currently, [@alagoutte](#Author) started this project and will keep maintaining it. Reach out to me via [Twitter](#Author), Email (see top of file) or the [issues](https://github.com/psNSXT/psNSXT/issues) Page here on GitHub. If you want to contribute, also get in touch with me.
+Currently, [@alagoutte](#author) started this project and will keep maintaining it. Reach out to me via [Twitter](#author), Email (see top of file) or the [issues](https://github.com/psNSXT/psNSXT/issues) Page here on GitHub. If you want to contribute, also get in touch with me.
 
 # List of available command
 ```powershell
 Add-NSXTFabricVirtualMachines
+Add-NSXTLogicalPorts
 Add-NSXTPolicyInfraSegments
 Add-NSXTTransportZones
+Confirm-NSXTFabricVifs
 Confirm-NSXTFabricVirtualMachines
+Confirm-NSXTLogicalPorts
+Confirm-NSXTLogicalSwitches
 Confirm-NSXTSegments
+Confirm-NSXTTransportNodes
 Confirm-NSXTTransportZones
 Connect-NSXT
 Disconnect-NSXT
+Get-NSXTFabricVifs
 Get-NSXTFabricVirtualMachines
+Get-NSXTLogicalPorts
+Get-NSXTLogicalSwitches
 Get-NSXTPolicyInfraSegments
+Get-NSXTTransportNodes
 Get-NSXTTransportZones
 Invoke-NSXTRestMethod
+Move-NSXTTransportNodes
+Remove-NSXTLogicalPorts
 Remove-NSXTPolicyInfraSegments
 Remove-NSXTTransportZones
 Set-NSXTCipherSSL
 Set-NSXTFabricVirtualMachines
+Set-NSXTLogicalPorts
 Set-NSXTPolicyInfraSegments
 Set-NSXTTransportZones
 Set-NSXTUntrustedSSL
