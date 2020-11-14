@@ -8,6 +8,7 @@ This is a Powershell module for configure a NSX-T (Manager).
 
 With this module (version 0.2.0) you can manage:
 
+- [VIFS](#vifs) (Get)
 - [Manage Tags](#manage-tags-on-fabric-virtual-machines) on (Fabric) Virtual Machines (Get/Set)
 - [Transport Zones](#transport-zones) (Add/Get/Set/Remove)
 - [Segments](#segments) (Add/Get/Set/Remove type VLAN)
@@ -429,6 +430,43 @@ You can Add, Set and Remove Segments (Type VLAN Only)
     Get-NSXTPolicyInfraSegments -display_name MySegment | Remove-NSXTPolicyInfraSegments
 
 ```
+
+### VIFS
+
+You can the the list of VIFS (Virtual InterFaceS)
+
+```powershell
+    Get-NSXTFabricVifs
+
+    external_id         : 50100001-c249-c3bd-b338-95ffde75dcbf-4000
+    owner_vm_id         : 50100001-c249-c3bd-b338-95ffde75dcbf
+    owner_vm_type       : REGULAR
+    host_id             : 3e36c43d-37a7-464f-83d8-9ecd6c62ac8d
+    vm_local_id_on_host : 21
+    device_key          : 4000
+    device_name         : Network adapter 1
+    mac_address         : 00:50:56:90:20:91
+    ip_address_info     : {@{source=VM_TOOLS; ip_addresses=System.Object[]}}
+    resource_type       : VirtualNetworkInterface
+    display_name        : Network adapter 1
+    _last_sync_time     : 1601838667905
+
+    external_id         : 502ef9e8-7e39-0b61-965b-d7c4dbff0540-4000
+    owner_vm_id         : 502ef9e8-7e39-0b61-965b-d7c4dbff0540
+    owner_vm_type       : REGULAR
+    host_id             : 3e36c43d-37a7-464f-83d8-9ecd6c62ac8d
+    vm_local_id_on_host : 8
+    device_key          : 4000
+    device_name         : Network adapter 1
+    mac_address         : 00:50:56:ae:68:16
+    ip_address_info     : {@{source=VM_TOOLS; ip_addresses=System.Object[]}}
+    resource_type       : VirtualNetworkInterface
+    display_name        : Network adapter 1
+    _last_sync_time     : 1600084236078
+...
+```
+
+You can filter by host_id, lport_attachment_id or owner_vm_id
 
 ### MultiConnection
 
