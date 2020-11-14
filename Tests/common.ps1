@@ -3,6 +3,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
+#Requires -Modules @{ ModuleName="Pester"; ModuleVersion="5.1.0" }
+
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingConvertToSecureStringWithPlainText", "")]
 Param()
 
@@ -21,5 +23,14 @@ $script:pester_sg = "pester_sg"
 #TODO: Add check if no ipaddress/login/password info...
 
 $script:mysecpassword = ConvertTo-SecureString $password -AsPlainText -Force
+if ($null -eq $port){
+    $port = 443
+}
 
-Connect-NSXT -Server $ipaddress -username $login -password $mysecpassword -SkipCertificateCheck
+$script:invokeParams = @{
+    Server = $ipaddress;
+    username = $login;
+    password = $mysecpassword;
+    port = $port;
+    SkipCertificateCheck = $true;
+}

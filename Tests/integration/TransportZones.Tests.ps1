@@ -5,6 +5,10 @@
 #
 . ../common.ps1
 
+BeforeAll {
+    Connect-NSXT @invokeParams
+}
+
 Describe "Get Transport Zones" {
     BeforeAll {
         $mytz = Add-NSXTTransportZones -transport_type VLAN -host_switch_name NVDS-psNSXT -display_name $pester_tz
@@ -16,7 +20,7 @@ Describe "Get Transport Zones" {
     It "Get Transport Zones Does not throw an error" {
         {
             Get-NSXTTransportZones
-        } | Should Not Throw
+        } | Should -Not -Throw
     }
 
     It "Get Transport Zones" {
@@ -239,4 +243,6 @@ Describe "Remove Transport Zones" {
 
 }
 
-Disconnect-NSXT -confirm:$false
+AfterAll {
+    Disconnect-NSXT -confirm:$false
+}

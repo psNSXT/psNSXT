@@ -5,6 +5,10 @@
 #
 . ../common.ps1
 
+BeforeAll {
+    Connect-NSXT @invokeParams
+}
+
 Describe "Get Transport Nodes" {
     BeforeAll {
         #Get the first TransportNodes...
@@ -60,4 +64,6 @@ Describe "Get Transport Nodes" {
 
 }
 
-Disconnect-NSXT -confirm:$false
+AfterAll {
+    Disconnect-NSXT -confirm:$false
+}

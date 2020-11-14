@@ -5,6 +5,10 @@
 #
 . ../common.ps1
 
+BeforeAll {
+    Connect-NSXT @invokeParams
+}
+
 Describe  "Get Fabric Virtual Machines" {
     BeforeAll {
         $fvm = Get-NSXTFabricVirtualMachines -display_name $vm
@@ -16,7 +20,7 @@ Describe  "Get Fabric Virtual Machines" {
     It "Get Fabric Virtual Machines Does not throw an error" {
         {
             Get-NSXTFabricVirtualMachines
-        } | Should Not Throw
+        } | Should -Not -Throw
     }
 
     It "Get Fabric Virtual Machines" {
@@ -132,7 +136,7 @@ Describe  "Configure Fabric Virtual Machines Tag (via Set-NSXTFabricVirtualMachi
     It "Throw when use tag and -tags on same time" {
         {
             Get-NSXTFabricVirtualMachines -display_name $display_name | Set-NSXTFabricVirtualMachines -tag tag1 -tags @()
-        } | Should Throw "Can use on the same time tag and tags parameter"
+        } | Should -Throw "Can use on the same time tag and tags parameter"
     }
 
     It "Set a tag to VM (using -tags)" {
@@ -324,5 +328,8 @@ Describe  "Add Fabric Virtual Machines Tag (via Add-NSXTFabricVirtualMachines)" 
         Get-NSXTFabricVirtualMachines -display_name $display_name | Set-NSXTFabricVirtualMachines -tags @()
     }
 
+}
 
+AfterAll {
+    Disconnect-NSXT -confirm:$false
 }

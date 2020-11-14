@@ -5,6 +5,10 @@
 #
 . ../common.ps1
 
+BeforeAll {
+    Connect-NSXT @invokeParams
+}
+
 Describe "Get Segments" {
     BeforeAll {
         #Use default nsx-vlan-transportzone (from NSX-T 3.0...)
@@ -14,7 +18,7 @@ Describe "Get Segments" {
     It "Get Segments Does not throw an error" {
         {
             Get-NSXTPolicyInfraSegments
-        } | Should Not Throw
+        } | Should -Not -Throw
     }
 
     It "Get Segments" {
@@ -189,4 +193,6 @@ Describe "Remove Segments" {
 
 }
 
-Disconnect-NSXT -confirm:$false
+AfterAll {
+    Disconnect-NSXT -confirm:$false
+}

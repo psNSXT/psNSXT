@@ -5,6 +5,10 @@
 #
 . ../common.ps1
 
+BeforeAll {
+    Connect-NSXT @invokeParams
+}
+
 Describe "Get Logical Switches" {
     BeforeAll {
         #Use default nsx-vlan-transportzone (from NSX-T 3.0...)
@@ -16,7 +20,7 @@ Describe "Get Logical Switches" {
     It "Get Logical Switches Does not throw an error" {
         {
             Get-NSXTLogicalSwitches
-        } | Should Not Throw
+        } | Should -Not -Throw
     }
 
     It "Get Logical Switches" {
@@ -72,4 +76,6 @@ Describe "Get Logical Switches" {
 
 }
 
-Disconnect-NSXT -confirm:$false
+AfterAll {
+    Disconnect-NSXT -confirm:$false
+}

@@ -5,6 +5,9 @@
 #
 . ../common.ps1
 
+BeforeAll {
+    Connect-NSXT @invokeParams
+}
 Describe "Get Vifs" {
     BeforeAll {
         $fvm = Get-NSXTFabricVirtualMachines -display_name $vm
@@ -54,4 +57,6 @@ Describe "Get Vifs" {
     }
 }
 
-Disconnect-NSXT -confirm:$false
+AfterAll {
+    Disconnect-NSXT -confirm:$false
+}
