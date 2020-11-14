@@ -9,6 +9,7 @@ This is a Powershell module for configure a NSX-T (Manager).
 With this module (version 0.2.0) you can manage:
 
 - [VIFS](#vifs) (Get)
+- [Logical Switches](#logical-switches) (Get)
 - [Manage Tags](#manage-tags-on-fabric-virtual-machines) on (Fabric) Virtual Machines (Get/Set)
 - [Transport Zones](#transport-zones) (Add/Get/Set/Remove)
 - [Segments](#segments) (Add/Get/Set/Remove type VLAN)
@@ -467,6 +468,41 @@ You can the the list of VIFS (Virtual InterFaceS)
 ```
 
 You can filter by host_id, lport_attachment_id or owner_vm_id
+
+### Logical Switches
+
+You can the the list of Logical Switches
+
+```powershell
+    Get-NSXTLogicalSwitches
+
+    switch_type           : DEFAULT
+    transport_zone_id     : af9bed19-6b4a-4790-8a93-c7a20d88ce3c
+    vlan                  : 2011
+    admin_state           : UP
+    address_bindings      : {}
+    switching_profile_ids : {@{key=SwitchSecuritySwitchingProfile; value=fbc4fb17-83d9-4b53-a286-ccdf04301888},
+                            @{key=SpoofGuardSwitchingProfile; value=fad98876-d7ff-11e4-b9d6-1681e6b88ec1},
+                            @{key=IpDiscoverySwitchingProfile; value=0c403bc9-7773-4680-a5cc-847ed0f9f52e},
+                            @{key=MacManagementSwitchingProfile; value=1e7101c8-cfef-415a-9c8c-ce3d8dd078fb}…}
+    hybrid                : False
+    span                  : {}
+    resource_type         : LogicalSwitch
+    id                    : fa6c37d8-b13a-48e8-8325-093ec86233e2
+    display_name          : NSXT-VLAN-2011
+    tags                  : {@{scope=policyPath; tag=/infra/segments/NSXT-VLAN-2011}}
+    _create_user          : nsx_policy
+    _create_time          : 1600108586879
+    _last_modified_user   : nsx_policy
+    _last_modified_time   : 1600108586879
+    _system_owned         : False
+    _protection           : REQUIRE_OVERRIDE
+    _revision             : 0
+    _schema               : /v1/schema/LogicalSwitch
+...
+```
+
+You can filter by display_name, transport_zone_id, vlan or switching_profile_id
 
 ### MultiConnection
 
