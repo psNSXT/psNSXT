@@ -11,6 +11,7 @@ With this module (version 0.2.0) you can manage:
 - [VIFS](#vifs) (Get)
 - [Logical Switches](#logical-switches) (Get)
 - [Manage Tags](#manage-tags-on-fabric-virtual-machines) on (Fabric) Virtual Machines (Get/Set)
+- [Transport Nodes](#transport-nodes) (Get)
 - [Transport Zones](#transport-zones) (Add/Get/Set/Remove)
 - [Segments](#segments) (Add/Get/Set/Remove type VLAN)
 
@@ -503,6 +504,66 @@ You can the the list of Logical Switches
 ```
 
 You can filter by display_name, transport_zone_id, vlan or switching_profile_id
+
+### Transport Nodes
+
+You can the the list of Transport Nodes
+
+```powershell
+ Get-NSXTTransportNodes
+
+    node_id                  : 059eec67-514f-49ff-902f-3e6e48087f06
+    host_switch_spec         : @{host_switches=System.Object[]; resource_type=StandardHostSwitchSpec}
+    transport_zone_endpoints : {}
+    maintenance_mode         : DISABLED
+    node_deployment_info     : @{deployment_type=VIRTUAL_MACHINE; deployment_config=; node_settings=;
+                            resource_type=EdgeNode; id=059eec67-514f-49ff-902f-3e6e48087f06;
+                            display_name=NSXT-EDGE1; external_id=059eec67-514f-49ff-902f-3e6e48087f06;
+                            ip_addresses=System.Object[]; _create_user=admin; _create_time=1600109960772;
+                            _last_modified_user=admin; _last_modified_time=1600110236974; _system_owned=False;
+                            _protection=NOT_PROTECTED; _revision=2}
+    is_overridden            : False
+    failure_domain_id        : 4fc1e3b0-1cd4-4339-86c8-f76baddbaafb
+    resource_type            : TransportNode
+    id                       : 059eec67-514f-49ff-902f-3e6e48087f06
+    display_name             : NSXT-EDGE1
+    description              :
+    tags                     : {}
+    _create_user             : admin
+    _create_time             : 1600109961176
+    _last_modified_user      : admin
+    _last_modified_time      : 1600110237148
+    _system_owned            : False
+    _protection              : NOT_PROTECTED
+    _revision                : 1
+
+    node_id                  : 408e7237-995f-4f66-b1b6-4c5649f152eb
+    host_switch_spec         : @{host_switches=System.Object[]; resource_type=StandardHostSwitchSpec}
+    transport_zone_endpoints : {}
+    maintenance_mode         : DISABLED
+    node_deployment_info     : @{os_type=ESXI; os_version=7.0.0; managed_by_server=;
+                            discovered_node_id=9812dfdb-82b4-450c-93fa-236210348a78:host-12; resource_type=HostNode;
+                            id=408e7237-995f-4f66-b1b6-4c5649f152eb; display_name=VSAN01.psNSXT;
+                            description=; tags=System.Object[]; external_id=408e7237-995f-4f66-b1b6-4c5649f152eb;
+                            fqdn=VSAN01.psNSXT.intra; ip_addresses=System.Object[];
+                            discovered_ip_addresses=System.Object[]; _create_user=admin; _create_time=1600084021602;
+                            _last_modified_user=admin; _last_modified_time=1600108187045; _protection=NOT_PROTECTED;
+                            _revision=1}
+    is_overridden            : False
+    resource_type            : TransportNode
+    id                       : 408e7237-995f-4f66-b1b6-4c5649f152eb
+    display_name             : VSAN01.psNSXT
+    _create_user             : admin
+    _create_time             : 1600101500538
+    _last_modified_user      : admin
+    _last_modified_time      : 1600196769240
+    _system_owned            : False
+    _protection              : NOT_PROTECTED
+    _revision                : 4
+...
+```
+
+You can filter by display_name, transport_zone_id, node_id, node_ip or in_maintenance_mode
 
 ### MultiConnection
 
