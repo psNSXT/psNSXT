@@ -6,7 +6,7 @@ This is a Powershell module for configure a NSX-T (Manager).
 <img src="https://raw.githubusercontent.com/psNSXT/psNSXT/master/Medias/psNSXT.png" width="250" height="250" />
 </p>
 
-With this module (version 0.3.0) you can manage:
+With this module (version 0.3.1) you can manage:
 
 - [Logical Ports](#logical-ports) (Add/Get/Set/Remove)
 - [Logical Switches](#logical-switches) (Get)
