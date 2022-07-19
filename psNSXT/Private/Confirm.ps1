@@ -147,9 +147,9 @@ Function Confirm-NSXTSegments {
     if ( -not ( $argument | get-member -name type -Membertype Properties)) {
         throw "Element specified does not contain a type property."
     }
-    if ( -not ( $argument | get-member -name vlan_ids -Membertype Properties)) {
-        throw "Element specified does not contain an vlan_ids property."
-    }
+    #if ( -not ( $argument | get-member -name vlan_ids -Membertype Properties)) {
+    #    throw "Element specified does not contain an vlan_ids property."
+    #}
     if ( -not ( $argument | get-member -name transport_zone_path -Membertype Properties)) {
         throw "Element specified does not contain a transport_zone_path property."
     }
