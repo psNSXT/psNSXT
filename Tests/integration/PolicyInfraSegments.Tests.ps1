@@ -58,7 +58,7 @@ Describe "Get Segments" {
 
 }
 
-Describe "Add Segments" {
+Describe "Add Segments (vlan)" {
 
     It "Add Segments type VLAN (23)" {
         Get-NSXTTransportZones -display_name nsx-vlan-transportzone | Add-NSXTPolicyInfraSegments -segment $pester_sg -vlan_ids 23
@@ -109,7 +109,7 @@ Describe "Add Segments" {
     }
 }
 
-Describe "Configure Segments" {
+Describe "Configure Segments (vlan)" {
 
     BeforeAll {
         Get-NSXTTransportZones -display_name nsx-vlan-transportzone | Add-NSXTPolicyInfraSegments -segment $pester_sg -vlan_ids 23
@@ -167,7 +167,7 @@ Describe "Configure Segments" {
 
 }
 
-Describe "Remove Segments" {
+Describe "Remove Segments (vlan)" {
 
     BeforeEach {
         Get-NSXTTransportZones -display_name nsx-vlan-transportzone | Add-NSXTPolicyInfraSegments -segment $pester_sg -vlan_ids 23
