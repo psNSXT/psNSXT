@@ -109,6 +109,73 @@ Describe "Add Segments (vlan)" {
     }
 }
 
+
+Describe "Add Segments (Overlay)" {
+
+    It "Add Segments type Overlay" {
+        Get-NSXTTransportZones -display_name $tz_overlay | Add-NSXTPolicyInfraSegmentsOverlay -segment $pester_sg -gateway_address 192.0.2.254/24 -tier1 $tier1
+        $sg = Get-NSXTPolicyInfraSegments -segment $pester_sg
+        $sg.type | Should -Be "ROUTED"
+        $sg.resource_type | Should -Be "Segment"
+        $sg.id | Should -Be $pester_sg
+        $sg.display_name | Should -Be $pester_sg
+        $sg.path | Should -Be "/infra/segments/$pester_sg"
+        $sg.connectivity_path  | Should -Be "/infra/tier-1s/$tier1"
+        $sg.subnets.gateway_address | Should -Be "192.0.2.254/24"
+        $sg.subnets.network | Should -Be "192.0.2.0/24"
+        $sg.relative_path | Should -Be $pester_sg
+        $sg.parent_path | Should -BeLike "/infra"
+        $sg.marked_for_delete | Should -Be $false
+    }
+
+    It "Add Segments type Overlay with DHCP" {
+        Get-NSXTTransportZones -display_name $tz_overlay | Add-NSXTPolicyInfraSegmentsOverlay -segment $pester_sg -gateway_address 192.0.2.254/24 -tier1 $tier1 -dhcp_config $dhcp_config -dhcp_ranges 192.0.2.1-192.0.2.100 -dhcp_server 192.0.2.253/24
+        $sg = Get-NSXTPolicyInfraSegments -segment $pester_sg
+        $sg.type | Should -Be "ROUTED"
+        $sg.resource_type | Should -Be "Segment"
+        $sg.id | Should -Be $pester_sg
+        $sg.display_name | Should -Be $pester_sg
+        $sg.path | Should -Be "/infra/segments/$pester_sg"
+        $sg.connectivity_path  | Should -Be "/infra/tier-1s/$tier1"
+        $sg.subnets.gateway_address | Should -Be "192.0.2.254/24"
+        $sg.subnets.network | Should -Be "192.0.2.0/24"
+        $sg.subnets.dhcp_ranges | Should -Be "192.0.2.1-192.0.2.100"
+        $sg.subnets.dhcp_config.resource_type | Should -Be "SegmentDhcpV4Config"
+        $sg.subnets.dhcp_config.server_address | Should -Be "192.0.2.253/24"
+        $sg.subnets.dhcp_config.lease_time | Should -Be "86400"
+        $sg.relative_path | Should -Be $pester_sg
+        $sg.parent_path | Should -BeLike "/infra"
+        $sg.marked_for_delete | Should -Be $false
+    }
+
+    It "Add Segments type Overlay with DHCP with 2 ranges" {
+        Get-NSXTTransportZones -display_name $tz_overlay | Add-NSXTPolicyInfraSegmentsOverlay -segment $pester_sg -gateway_address 192.0.2.254/24 -tier1 $tier1 -dhcp_config $dhcp_config -dhcp_ranges 192.0.2.1-192.0.2.100, 192.0.2.150-192.0.2.200 -dhcp_server 192.0.2.253/24
+        $sg = Get-NSXTPolicyInfraSegments -segment $pester_sg
+        $sg.type | Should -Be "ROUTED"
+        $sg.resource_type | Should -Be "Segment"
+        $sg.id | Should -Be $pester_sg
+        $sg.display_name | Should -Be $pester_sg
+        $sg.path | Should -Be "/infra/segments/$pester_sg"
+        $sg.connectivity_path  | Should -Be "/infra/tier-1s/$tier1"
+        $sg.subnets.gateway_address | Should -Be "192.0.2.254/24"
+        $sg.subnets.network | Should -Be "192.0.2.0/24"
+        $sg.subnets.dhcp_ranges[0] | Should -Be "192.0.2.1-192.0.2.100"
+        $sg.subnets.dhcp_ranges[1] | Should -Be "192.0.2.150-192.0.2.200"
+        $sg.subnets.dhcp_config.resource_type | Should -Be "SegmentDhcpV4Config"
+        $sg.subnets.dhcp_config.server_address | Should -Be "192.0.2.253/24"
+        $sg.subnets.dhcp_config.lease_time | Should -Be "86400"
+        $sg.relative_path | Should -Be $pester_sg
+        $sg.parent_path | Should -BeLike "/infra"
+        $sg.marked_for_delete | Should -Be $false
+    }
+
+    AfterEach {
+        Get-NSXTPolicyInfraSegments -segment $pester_sg | Remove-NSXTPolicyInfraSegments -confirm:$false
+        #Wait 2 seconds to be sure the Segments is deleted (it can be make 5 sec for be removed !)
+        Start-Sleep 2
+    }
+}
+
 Describe "Configure Segments (vlan)" {
 
     BeforeAll {
