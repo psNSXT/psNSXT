@@ -96,6 +96,7 @@ function Add-NSXTPolicyInfraSegmentsOverlay {
         Add a (Overlay) Segment MySegment with DHCP Leases : 3600 (seconds) and DHCP DNS Server 192.51.100.1, 192.51.100.2 and DHCP NTP (Option 42) Server 203.0.113.1, 203.0.113.2
     #>
 
+    [CmdletBinding(DefaultParametersetname = "Default")]
     Param(
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [ValidateScript( { Confirm-NSXTTransportZones $_ })]
