@@ -13,7 +13,7 @@ With this module (version 0.3.1) you can manage:
 - [Manage Tags](#manage-tags-on-fabric-virtual-machines) on (Fabric) Virtual Machines (Get/Set)
 - [Transport Nodes](#transport-nodes) (Get)
 - [Transport Zones](#transport-zones) (Add/Get/Set/Remove)
-- [Segments](#segments) (Add/Get/Set/Remove type VLAN)
+- [Segments](#segments) (Add/Get/Set/Remove type VLAN and Overlay)
 - (Fabric) [VIFS](#vifs) (Get)
 
 There is some extra feature :
@@ -381,7 +381,7 @@ You can Add, Set and Remove Transport Zones
 
 ### Segments
 
-You can Add, Set and Remove Segments (Type VLAN Only)
+You can Add, Set and Remove Segments (Type VLAN and Overlay)
 
 ```powershell
 #Add a (vlan) Segment MySegment on MyTZ-Vlan with vlan id 2
@@ -402,6 +402,33 @@ You can Add, Set and Remove Segments (Type VLAN Only)
     _create_time        : 1587741128335
     _last_modified_user : admin
     _last_modified_time : 1587741128335
+    _system_owned       : False
+    _protection         : NOT_PROTECTED
+    _revision           : 0
+
+Add a (Overlay) Segment MySegment on MyTZ-Overlay with Gateway 192.0.2.254 on Tier MyT1
+
+    Get-NSXTTransportZones -display_name MyTZ-Overlay | Add-NSXTPolicyInfraSegmentsOverlay -segment MyOverlaySegment -gateway_address 192.0.2.254/24 -tier1 MyT1
+
+    type                : ROUTED
+    subnets             : {@{gateway_address=192.0.2.254/24; network=192.0.2.0/24}}
+    connectivity_path   : /infra/tier-1s/MyT1
+    transport_zone_path : /infra/sites/default/enforcement-points/default/transport-zones/0ee7c2e7-8e25-4c25-81c3-f5316600d7b0
+    admin_state         : UP
+    replication_mode    : MTEP
+    resource_type       : Segment
+    id                  : MyOverlaySegment
+    display_name        : MyOverlaySegment
+    path                : /infra/segments/MyOverlaySegment
+    relative_path       : MyOverlaySegment
+    parent_path         : /infra
+    unique_id           : 8210807c-efc1-49dd-9e47-a7fb8e78a2a0
+    marked_for_delete   : False
+    overridden          : False
+    _create_user        : admin
+    _create_time        : 1658433917321
+    _last_modified_user : admin
+    _last_modified_time : 1658433917332
     _system_owned       : False
     _protection         : NOT_PROTECTED
     _revision           : 0
@@ -737,6 +764,7 @@ Currently, [@alagoutte](#author) started this project and will keep maintaining 
 Add-NSXTFabricVirtualMachines
 Add-NSXTLogicalPorts
 Add-NSXTPolicyInfraSegments
+Add-NSXTPolicyInfraSegmentsOverlay
 Add-NSXTTransportZones
 Confirm-NSXTFabricVifs
 Confirm-NSXTFabricVirtualMachines
