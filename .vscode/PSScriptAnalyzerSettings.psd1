@@ -1,5 +1,6 @@
 @{
     ExcludeRules = @(
-        'PSUseToExportFieldsInManifest'
+        'PSUseToExportFieldsInManifest',
+        'PSUseSingularNouns'
     )
 }
