@@ -71,6 +71,138 @@ function Add-NSXTPolicyInfraSegments {
     }
 }
 
+function Add-NSXTPolicyInfraSegmentsOverlay {
+
+    <#
+        .SYNOPSIS
+        Add a Segment
+
+        .DESCRIPTION
+        Add a Segment (Overlay)
+
+        .EXAMPLE
+        Get-NSXTTransportZones -display_name MyTZ-Overlay | Add-NSXTPolicyInfraSegmentsOverlay -segment MySegment -gateway_address 192.0.2.254/24 -tier1 MyT1
+
+        Add a (Overlay) Segment MySegment on MyTZ-Overlay with Gateway 192.0.2.254 on Tier MyT1
+
+        .EXAMPLE
+        Get-NSXTTransportZones -display_name TZ-OVERLAY | Add-NSXTPolicyInfraSegmentsOverlay -segment MySegment -gateway_address 192.0.2.254/24 -tier1 MyT1 -dhcp_config MyDHCPConfig -dhcp_ranges 192.0.2.1-192.0.2.100 -dhcp_server 192.0.2.253/24
+
+        Add a (Overlay) Segment MySegment with DHCP Config MyDHCPConfig and DHCP Range 192.0.2.1-192.0.2.100 and DHCP Server 192.0.2.250
+
+        .EXAMPLE
+        Get-NSXTTransportZones -display_name TZ-OVERLAY | Add-NSXTPolicyInfraSegmentsOverlay -segment MySegment -gateway_address 192.0.2.254/24 -tier1 MyT1 -dhcp_config MyDHCPConfig -dhcp_ranges 192.0.2.1-192.0.2.100 -dhcp_server 192.0.2.253/24 -dhcp_leases 3600 -dhcp_dns 192.51.100.1, 192.51.100.2 -dhcp_ntp 203.0.113.1, 203.0.113.2
+
+        Add a (Overlay) Segment MySegment with DHCP Leases : 3600 (seconds) and DHCP DNS Server 192.51.100.1, 192.51.100.2 and DHCP NTP (Option 42) Server 203.0.113.1, 203.0.113.2
+    #>
+
+    [CmdletBinding(DefaultParametersetname = "Default")]
+    Param(
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateScript( { Confirm-NSXTTransportZones $_ })]
+        [psobject]$tz,
+        [Parameter(Mandatory = $true)]
+        [string]$segment,
+        [Parameter(Mandatory = $true)]
+        [string]$tier1,
+        [Parameter(Mandatory = $false)]
+        [string]$display_name,
+        [Parameter(Mandatory = $true)]
+        [string]$gateway_address,
+        [Parameter(Mandatory = $true, ParameterSetName = "dhcp")]
+        [string]$dhcp_config,
+        [Parameter(Mandatory = $true, ParameterSetName = "dhcp")]
+        [string[]]$dhcp_ranges,
+        [Parameter(Mandatory = $true, ParameterSetName = "dhcp")]
+        [string]$dhcp_server,
+        [Parameter(Mandatory = $false, ParameterSetName = "dhcp")]
+        [int]$dhcp_leases,
+        [Parameter(Mandatory = $false, ParameterSetName = "dhcp")]
+        [string[]]$dhcp_dns,
+        [Parameter(Mandatory = $false, ParameterSetName = "dhcp")]
+        [string[]]$dhcp_ntp,
+        [Parameter(Mandatory = $false)]
+        [psobject]$connection = $DefaultNSXTConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $uri = 'policy/api/v1/infra/segments'
+        $uri += "/" + $segment
+        $transport_zone_path = "/infra/sites/default/enforcement-points/default/transport-zones/" + $tz.id
+        $connectivity_path = "/infra/tier-1s/" + $tier1
+
+        $_sg = new-Object -TypeName PSObject
+
+        $_sg | add-member -name "type" -membertype NoteProperty -Value "ROUTED"
+
+        $_sg | add-member -name "transport_zone_path" -membertype NoteProperty -Value $transport_zone_path
+
+        $_sg | add-member -name "connectivity_path" -membertype NoteProperty -Value $connectivity_path
+
+        if ( $PsBoundParameters.ContainsKey('display_name') ) {
+            $_sg | add-member -name "display_name" -membertype NoteProperty -Value $display_name
+        }
+
+        $_subnets = new-Object -TypeName PSObject
+        $_subnets | add-member -name "gateway_address" -membertype NoteProperty -Value $gateway_address
+
+        if ( $PSCmdlet.ParameterSetName -eq "dhcp" ) {
+            $dhcp_config_path = "/infra/dhcp-server-configs/" + $dhcp_config
+
+            $_sg | add-member -name "dhcp_config_path" -membertype NoteProperty -Value $dhcp_config_path
+
+            $_subnets | add-member -name "dhcp_ranges" -membertype NoteProperty -Value @($dhcp_ranges)
+
+            $_dhcp_config = new-Object -TypeName PSObject
+
+            $_dhcp_config | add-member -name "resource_type" -membertype NoteProperty -Value "SegmentDhcpV4Config"
+
+            $_dhcp_config | add-member -name "server_address" -membertype NoteProperty -Value $dhcp_server
+
+            if ( $PsBoundParameters.ContainsKey('dhcp_leases') ) {
+                $_dhcp_config | add-member -name "lease_time" -membertype NoteProperty -Value $dhcp_leases
+            }
+
+            if ( $PsBoundParameters.ContainsKey('dhcp_dns') ) {
+                $_dhcp_config | add-member -name "dns_servers" -membertype NoteProperty -Value @($dhcp_dns)
+            }
+
+            #Options..
+
+            if ( $PsBoundParameters.ContainsKey('dhcp_ntp') ) {
+
+                $_dhcp_options = new-Object -TypeName PSObject
+
+                $_dhcp_others = new-Object -TypeName PSObject
+
+                #Only Support NTP...
+                $_dhcp_others | add-member -name "code" -membertype NoteProperty -Value "42"
+
+                $_dhcp_others | add-member -name "values" -membertype NoteProperty -Value @($dhcp_ntp)
+
+                $_dhcp_options | add-member -name "others" -membertype NoteProperty -Value @($_dhcp_others)
+
+                $_dhcp_config | add-member -name "options" -membertype NoteProperty -Value $_dhcp_options
+            }
+
+            $_subnets | add-member -name "dhcp_config" -membertype NoteProperty -Value $_dhcp_config
+
+        }
+        $_sg | add-member -name "subnets" -membertype NoteProperty -Value @($_subnets)
+
+        $response = Invoke-NSXTRestMethod -uri $uri -method 'PATCH' -body $_sg -connection $connection
+        $response
+
+        Get-NSXTPolicyInfraSegments -segment $segment -connection $connection
+    }
+
+    End {
+    }
+}
 function Get-NSXTPolicyInfraSegments {
 
     <#

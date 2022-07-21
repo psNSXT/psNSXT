@@ -12,6 +12,10 @@ $script:password = "VMware1!VMware1!"
 
 $script:vm = "MyNSXTVM"
 
+$script:tier1 = "myT1"
+$script:dhcp_config = "MyDHCPConfig"
+$script:tz_overlay = "MyTZOverlay"
+
 #default settings use for test, can be override if needed...
 #$script:port = "4443"
 #$script:pester_lp = "pester_lp"
