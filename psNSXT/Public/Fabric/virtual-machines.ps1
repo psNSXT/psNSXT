@@ -108,7 +108,7 @@ function Set-NSXTFabricVirtualMachines {
         PS > $tags += @{ tag = "MyTag2" }
         PS > Get-NSXTFabricVirtualMachines -display_name myVM | Set-NSXTFabricVirtualMachines -tags $tags
 
-        Configure $tags (a array of tags) to Virtual Machine myVM
+        Configure $tags (an array of tags) to Virtual Machine myVM
     #>
 
     #[CmdLetBinding(DefaultParameterSetName = "Default")]
