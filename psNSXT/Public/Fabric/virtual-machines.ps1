@@ -106,7 +106,7 @@ function Set-NSXTFabricVirtualMachines {
         $tags = @()
         PS > $tags += @{ tag = "MyTag1"; scope = "myScope1" }
         PS > $tags += @{ tag = "MyTag2" }
-        PS > Get-NSXTFabricVirtualMachines -display_name myVM | Set-NSXTFabricVirtualMachines -tag $tags
+        PS > Get-NSXTFabricVirtualMachines -display_name myVM | Set-NSXTFabricVirtualMachines -tags $tags
 
         Configure $tags (a array of tags) to Virtual Machine myVM
     #>
