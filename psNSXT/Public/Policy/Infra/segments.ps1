@@ -83,7 +83,7 @@ function Get-NSXTPolicyInfraSegments {
         .EXAMPLE
         Get-NSXTPolicyInfraSegments
 
-        Display all Transport Zones
+        Display all Segments
 
         .EXAMPLE
         Get-NSXTPolicyInfraSegments -segment mySegment
