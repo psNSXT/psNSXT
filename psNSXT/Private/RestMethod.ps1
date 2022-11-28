@@ -55,6 +55,9 @@ function Invoke-NSXTRestMethod {
             $fullurl += "?"
         }
 
+        #Display (Full)url when verbose (not longer available with PS 7.2.x...)
+        Write-Verbose $fullurl
+
         try {
             if ($body) {
 
