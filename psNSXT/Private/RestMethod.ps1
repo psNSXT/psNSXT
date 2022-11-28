@@ -55,12 +55,15 @@ function Invoke-NSXTRestMethod {
             $fullurl += "?"
         }
 
+        #Display (Full)url when verbose (not longer available with PS 7.2.x...)
+        Write-Verbose $fullurl
+
         try {
             if ($body) {
 
                 Write-Verbose ($body | ConvertTo-Json -Depth 10)
 
-                $response = Invoke-RestMethod $fullurl -Method $method -body ($body | ConvertTo-Json -Depth 10) -Headers $headers @invokeParams
+                $response = Invoke-RestMethod $fullurl -Method $method -body ($body | ConvertTo-Json -Depth 10 -Compress) -Headers $headers @invokeParams
             }
             else {
                 $response = Invoke-RestMethod $fullurl -Method $method -Headers $headers @invokeParams
